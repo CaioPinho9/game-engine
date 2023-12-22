@@ -1,6 +1,6 @@
 package org.caiopinho;
 
-import org.caiopinho.window.Window;
+import org.caiopinho.core.Window;
 
 public class Main {
 	public static void main(String[] args) {
