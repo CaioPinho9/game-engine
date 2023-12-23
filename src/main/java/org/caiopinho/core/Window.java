@@ -1,8 +1,9 @@
 package org.caiopinho.core;
 
-import lombok.Getter;
 import lombok.Setter;
 
+import org.caiopinho.scene.LevelEditorScene;
+import org.caiopinho.scene.Scene;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -16,11 +17,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-@Getter
 @Setter
 public class Window {
 	private int width = 1366, height = 720;
 	private String title = "Hello World!";
+
+	private static Scene currentScene = new LevelEditorScene();
 
 	private static Window instance = null;
 	private long glfwWindow;
@@ -103,6 +105,10 @@ public class Window {
 	}
 
 	private void loop() {
+		float beginTime = (float) glfwGetTime();
+		float endTime;
+		float deltaTime = -1.0f;
+
 		// This line is critical for LWJGL's interoperation with GLFW's
 		// OpenGL context, or any context that is managed externally.
 		// LWJGL detects the context that is current in the current thread,
@@ -118,17 +124,44 @@ public class Window {
 		while (!glfwWindowShouldClose(glfwWindow)) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
+			if (deltaTime >= 0 && currentScene != null)
+				currentScene.update(deltaTime);
+
+			KeyListener.endFrame();
+			MouseListener.endFrame();
 			glfwSwapBuffers(glfwWindow); // swap the color buffers
+
+			endTime = (float) glfwGetTime();
+			deltaTime = endTime - beginTime;
+			beginTime = endTime;
 
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
-
-			// Refresh the width and height based in the window
-			int[] widthPointer = new int[1], heightPointer = new int[1];
-			glfwGetWindowSize(glfwWindow, widthPointer, heightPointer);
-			this.width = widthPointer[0];
-			this.height = heightPointer[0];
 		}
+	}
+
+	public static int getWidth() {
+		Window instance = get();
+		int[] widthPointer = new int[1];
+		glfwGetWindowSize(instance.glfwWindow, widthPointer, new int[1]);
+		instance.width = widthPointer[0];
+		return instance.width;
+	}
+
+	public static int getHeight() {
+		Window instance = get();
+		int[] heightPointer = new int[1];
+		glfwGetWindowSize(instance.glfwWindow, new int[1], heightPointer);
+		instance.height = heightPointer[0];
+		return instance.height;
+	}
+
+	public static String getTitle() {
+		return get().title;
+	}
+
+	public static void setCurrentScene(Scene currentScene) {
+		Window.currentScene = currentScene;
 	}
 }
