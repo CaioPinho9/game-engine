@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LevelScene extends Scene {
 
+	@Override public void start() {
+
+	}
+
 	@Override
 	public void update(float deltaTime) {
 

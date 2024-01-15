@@ -39,7 +39,7 @@ public class Window {
 	public void run() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
-		init();
+		start();
 		loop();
 
 		// Free the window callbacks and destroy the window
@@ -51,7 +51,7 @@ public class Window {
 		glfwSetErrorCallback(null).free();
 	}
 
-	private void init() {
+	private void start() {
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -102,6 +102,7 @@ public class Window {
 
 		// Make the window visible
 		glfwShowWindow(glfwWindow);
+
 	}
 
 	private void loop() {
@@ -115,6 +116,8 @@ public class Window {
 		// creates the GLCapabilities instance and makes the OpenGL
 		// bindings available for use.
 		GL.createCapabilities();
+
+		currentScene.start();
 
 		// Set the clear color
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
