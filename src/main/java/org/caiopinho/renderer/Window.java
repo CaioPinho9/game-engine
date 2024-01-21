@@ -51,7 +51,7 @@ import org.lwjgl.system.MemoryStack;
 
 @Setter
 public class Window {
-	private int width = 1920, height = 1080;
+	public int width = 1920, height = 1080;
 	private String title = "Hello World!";
 
 	private static Scene currentScene = new LevelEditorScene();
