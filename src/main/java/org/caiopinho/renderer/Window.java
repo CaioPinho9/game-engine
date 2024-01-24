@@ -157,6 +157,7 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 
+		currentScene.init();
 		currentScene.start();
 
 		// Set the clear color

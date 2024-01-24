@@ -24,6 +24,8 @@ import java.nio.IntBuffer;
 
 import lombok.NoArgsConstructor;
 
+import org.caiopinho.component.SpriteRenderer;
+import org.caiopinho.core.GameObject;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Shader;
 import org.caiopinho.renderer.Texture;
@@ -53,7 +55,11 @@ import org.lwjgl.BufferUtils;
 
 	private int vaoId, vboId, eboId;
 
-	@Override public void start() {
+	public void init() {
+		GameObject gameObject = new GameObject("Test");
+		gameObject.addComponent(new SpriteRenderer());
+		this.addGameObjectToScene(gameObject);
+
 		this.camera = new Camera(new Vector2f(0, 0));
 		this.defaultShader = new Shader("assets/shaders/default.glsl");
 		this.defaultShader.compile();
@@ -123,5 +129,8 @@ import org.lwjgl.BufferUtils;
 
 		this.defaultShader.detach();
 
+		for (GameObject gameObject : this.gameObjects) {
+			gameObject.update(deltaTime);
+		}
 	}
 }

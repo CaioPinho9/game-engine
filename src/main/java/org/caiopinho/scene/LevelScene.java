@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LevelScene extends Scene {
 
-	@Override public void start() {
+	public void init() {
 
 	}
 
