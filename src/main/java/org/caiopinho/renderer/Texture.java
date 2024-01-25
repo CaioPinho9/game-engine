@@ -32,18 +32,18 @@ public class Texture {
 
 	public Texture(String filePath) {
 
-		//Generate texture on GPU
+		// Generate texture on GPU
 		this.textureId = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, this.textureId);
 
-		//Set texture parameters
-		//Repeat image in both directions
+		// Set texture parameters
+		// Repeat image in both directions
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		//When stretching the image, pixelate
+		// When stretching the image, pixelate
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//When shrinking an image, pixelate
+		// When shrinking an image, pixelate
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		IntBuffer width = BufferUtils.createIntBuffer(1);

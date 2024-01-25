@@ -119,7 +119,7 @@ public class Shader {
 	}
 
 	public void use() {
-		//Bind shader program
+		// Bind shader program
 		if (!this.beingUsed) {
 			glUseProgram(this.shaderProgramId);
 			this.beingUsed = true;
@@ -174,7 +174,7 @@ public class Shader {
 		this.use();
 		glUniform1i(variableLocation, value);
 	}
-	
+
 	public void uploadTexture(String variableName, int slot) {
 		int variableLocation = glGetUniformLocation(this.shaderProgramId, variableName);
 		this.use();

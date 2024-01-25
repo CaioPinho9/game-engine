@@ -3,11 +3,15 @@ package org.caiopinho.scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.caiopinho.core.GameObject;
 import org.caiopinho.renderer.Camera;
+import org.caiopinho.renderer.Renderer;
 
 public abstract class Scene {
-	protected Camera camera;
+	@Getter protected Camera camera;
+	Renderer renderer = new Renderer();
 	private boolean isRunning;
 	protected List<GameObject> gameObjects = new ArrayList<>();
 
@@ -17,6 +21,7 @@ public abstract class Scene {
 	public void start() {
 		for (GameObject gameObject : this.gameObjects) {
 			gameObject.start();
+			this.renderer.add(gameObject);
 		}
 		this.isRunning = true;
 	}
@@ -29,6 +34,7 @@ public abstract class Scene {
 		this.gameObjects.add(gameObject);
 		if (this.isRunning) {
 			gameObject.start();
+			this.renderer.add(gameObject);
 		}
 	}
 }

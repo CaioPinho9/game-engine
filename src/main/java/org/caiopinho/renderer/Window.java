@@ -54,7 +54,7 @@ public class Window {
 	public int width = 1920, height = 1080;
 	private String title = "Hello World!";
 
-	private static Scene currentScene = new LevelEditorScene();
+	private Scene currentScene = new LevelEditorScene();
 
 	private static Window instance = null;
 	private long glfwWindow;
@@ -157,8 +157,8 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 
-		currentScene.init();
-		currentScene.start();
+		window.currentScene.init();
+		window.currentScene.start();
 
 		// Set the clear color
 		glClearColor(1, 1, 1, 1);
@@ -168,8 +168,8 @@ public class Window {
 		while (!glfwWindowShouldClose(window.glfwWindow)) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-			if (deltaTime >= 0 && currentScene != null) {
-				currentScene.update(deltaTime);
+			if (deltaTime >= 0 && window.currentScene != null) {
+				window.currentScene.update(deltaTime);
 			}
 
 			KeyListener.endFrame();
@@ -206,7 +206,11 @@ public class Window {
 		return get().title;
 	}
 
+	public static Scene getScene() {
+		return get().currentScene;
+	}
+
 	public static void setCurrentScene(Scene currentScene) {
-		Window.currentScene = currentScene;
+		get().currentScene = currentScene;
 	}
 }
