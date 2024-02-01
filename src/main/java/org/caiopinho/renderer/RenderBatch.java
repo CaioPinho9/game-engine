@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import org.caiopinho.component.SpriteRenderer;
+import org.caiopinho.core.AssetPool;
 import org.joml.Vector4f;
 
 public class RenderBatch {
@@ -35,18 +36,17 @@ public class RenderBatch {
 	private final int VERTEX_SIZE = this.POSITION_SIZE + this.COLOR_SIZE;
 	private final int VERTEX_SIZE_BYTES = this.VERTEX_SIZE * Float.BYTES;
 
-	private SpriteRenderer[] sprites;
+	private final SpriteRenderer[] sprites;
 	private int spriteCount;
 	private boolean hasSpace;
-	private float[] vertices;
+	private final float[] vertices;
 
 	private int vaoId, vboId;
-	private int maxBatchSize;
-	private Shader shader;
+	private final int maxBatchSize;
+	private final Shader shader;
 
 	public RenderBatch(int maxBatchSize) {
-		this.shader = new Shader("assets/shaders/default.glsl");
-		this.shader.compile();
+		this.shader = AssetPool.getShader("assets/shaders/default.glsl");
 		this.sprites = new SpriteRenderer[maxBatchSize];
 		this.maxBatchSize = maxBatchSize;
 
