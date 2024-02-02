@@ -21,6 +21,7 @@ import static org.lwjgl.opengl.GL11C.glTexImage2D;
 import static org.lwjgl.opengl.GL11C.glTexParameteri;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
 import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -49,6 +50,9 @@ public class Texture {
 		IntBuffer width = BufferUtils.createIntBuffer(1);
 		IntBuffer height = BufferUtils.createIntBuffer(1);
 		IntBuffer channels = BufferUtils.createIntBuffer(1);
+
+		stbi_set_flip_vertically_on_load(true);
+
 		ByteBuffer image = stbi_load(filePath, width, height, channels, 0);
 
 		assert image != null : "Failed to load texture: '" + filePath + "'";
