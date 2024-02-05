@@ -27,7 +27,7 @@ in vec4 fColor;
 in vec2 fTextureCoordinates;
 in float fTextureId;
 
-uniform sampler2D uTextures[8];
+uniform sampler2D uTextures;
 
 out vec4 color;
 
@@ -36,22 +36,8 @@ void main()
     color = fColor;
     if (fTextureId > 0) {
         int textureId = int(fTextureId);
-        if (textureId == 0) {
-            color *= texture(uTextures[0], fTextureCoordinates);
-        } else if (textureId == 1) {
-            color *= texture(uTextures[1], fTextureCoordinates);
-        } else if (textureId == 2) {
-            color *= texture(uTextures[2], fTextureCoordinates);
-        } else if (textureId == 3) {
-            color *= texture(uTextures[3], fTextureCoordinates);
-        } else if (textureId == 4) {
-            color *= texture(uTextures[4], fTextureCoordinates);
-        } else if (textureId == 5) {
-            color *= texture(uTextures[5], fTextureCoordinates);
-        } else if (textureId == 6) {
-            color *= texture(uTextures[6], fTextureCoordinates);
-        } else if (textureId == 7) {
-            color *= texture(uTextures[7], fTextureCoordinates);
+        if (textureId != 0) {
+            color *= texture(uTextures, fTextureCoordinates);
         }
     }
 }

@@ -104,6 +104,51 @@ public class RenderBatch {
 		glEnableVertexAttribArray(3);
 	}
 
+	public void render() {
+		//  Rebuffer all data every frame
+		glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
+
+		Camera camera = Window.getScene().getCamera();
+		//  Use shader
+		this.shader.use();
+		this.shader.uploadMatrix4f("uProjection", camera.getProjectionMatrix());
+		this.shader.uploadMatrix4f("uView", camera.getViewMatrix());
+
+		int textureId = 0;
+		for (int i = 0; i < this.textures.size(); i++) {
+			glActiveTexture(GL_TEXTURE0 + i);
+			this.textures.get(i).bind();
+			textureId = i;
+		}
+		this.shader.uploadTexture("uTextures", textureId);
+
+		// Bind the VAO
+		glBindVertexArray(this.vaoId);
+
+		// Enable the vertex attribute pointers
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
+
+		glDrawElements(GL_TRIANGLES, this.spriteCount * 6, GL_UNSIGNED_INT, 0);
+
+		// Unbind everything
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+
+		glBindVertexArray(0);
+
+		for (Texture texture : this.textures) {
+			texture.unbind();
+		}
+
+		this.shader.detach();
+	}
+
 	public int[] generateIndices() {
 		//  6 indices per quad (3 per triangle)
 		int[] elements = new int[this.maxBatchSize * 6];
@@ -119,53 +164,36 @@ public class RenderBatch {
 
 		//  3, 2, 0, 0, 2, 1			7, 6, 4, 4, 6, 5
 		//  Triangle 1
-		elements[offset] = vertex;
-		elements[offset + 1] = vertex + 1;
-		elements[offset + 2] = vertex + 2;
+		elements[offset] = vertex + 3;
+		elements[offset + 1] = vertex + 2;
+		elements[offset + 2] = vertex;
 
-		//  Triangle 2
-		elements[offset + 3] = vertex + 2;
-		elements[offset + 4] = vertex + 3;
-		elements[offset + 5] = vertex;
+		// Triangle 2
+		elements[offset + 3] = vertex;
+		elements[offset + 4] = vertex + 2;
+		elements[offset + 5] = vertex + 1;
 	}
 
-	public void render() {
-		//  Rebuffer all data every frame
-		glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
+	public void addSprite(SpriteRenderer spriteRenderer) {
+		// Get index and add renderObject
+		int index = this.spriteCount;
+		this.sprites[index] = spriteRenderer;
+		this.spriteCount++;
 
-		Camera camera = Window.getScene().getCamera();
-		//  Use shader
-		this.shader.use();
-		this.shader.uploadMatrix4f("uProjection", camera.getProjectionMatrix());
-		this.shader.uploadMatrix4f("uView", camera.getViewMatrix());
-
-		for (int i = 0; i < this.textures.size(); i++) {
-			glActiveTexture(GL_TEXTURE0 + i);
-			this.textures.get(i).bind();
-		}
-		this.shader.uploadIntArray("uTextures", this.textureSlot);
-
-		// Bind the VAO
-		glBindVertexArray(this.vaoId);
-
-		// Enable the vertex attribute pointers
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-
-		glDrawElements(GL_TRIANGLES, this.spriteCount * 6, GL_UNSIGNED_INT, 0);
-
-		// Unbind everything
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-
-		glBindVertexArray(0);
-
-		for (Texture texture : this.textures) {
-			texture.unbind();
+		Texture texture = spriteRenderer.getTexture();
+		if (texture != null) {
+			if (!this.textures.contains(texture)) {
+				this.textures.add(texture);
+			}
 		}
 
-		this.shader.detach();
+		// Add properties to local vertices array
+		this.loadVertexProperties(index);
+
+		if (this.spriteCount >= this.maxBatchSize) {
+			this.hasSpace = false;
+		}
+
 	}
 
 	private void loadVertexProperties(int index) {
@@ -212,27 +240,5 @@ public class RenderBatch {
 
 			offset += this.VERTEX_SIZE;
 		}
-	}
-
-	public void addSprite(SpriteRenderer spriteRenderer) {
-		// Get index and add renderObject
-		int index = this.spriteCount;
-		this.sprites[index] = spriteRenderer;
-		this.spriteCount++;
-
-		Texture texture = spriteRenderer.getTexture();
-		if (texture != null) {
-			if (!this.textures.contains(texture)) {
-				this.textures.add(texture);
-			}
-		}
-
-		// Add properties to local vertices array
-		this.loadVertexProperties(index);
-
-		if (this.spriteCount >= this.maxBatchSize) {
-			this.hasSpace = false;
-		}
-
 	}
 }

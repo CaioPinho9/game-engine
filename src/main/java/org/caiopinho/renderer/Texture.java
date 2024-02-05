@@ -29,13 +29,12 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 
 public class Texture {
-	private final int textureId;
+	private final int id;
 
 	public Texture(String filePath) {
-
 		// Generate texture on GPU
-		this.textureId = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, this.textureId);
+		this.id = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, this.id);
 
 		// Set texture parameters
 		// Repeat image in both directions
@@ -47,22 +46,25 @@ public class Texture {
 		// When shrinking an image, pixelate
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		IntBuffer width = BufferUtils.createIntBuffer(1);
-		IntBuffer height = BufferUtils.createIntBuffer(1);
+		// Load image
+		IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+		IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
 		IntBuffer channels = BufferUtils.createIntBuffer(1);
 
 		stbi_set_flip_vertically_on_load(true);
 
-		ByteBuffer image = stbi_load(filePath, width, height, channels, 0);
+		ByteBuffer image = stbi_load(filePath, widthBuffer, heightBuffer, channels, 0);
+		int width = widthBuffer.get(0);
+		int height = heightBuffer.get(0);
 
 		assert image != null : "Failed to load texture: '" + filePath + "'";
 
 		if (channels.get(0) == 3) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		} else if (channels.get(0) == 4) {
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 		} else {
 			assert false : "Unknown number of channels '" + channels.get(0) + "' in file '" + filePath + "'";
 		}
@@ -71,7 +73,7 @@ public class Texture {
 	}
 
 	public void bind() {
-		glBindTexture(GL_TEXTURE_2D, this.textureId);
+		glBindTexture(GL_TEXTURE_2D, this.id);
 	}
 
 	public void unbind() {
