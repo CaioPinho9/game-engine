@@ -3,6 +3,8 @@ package org.caiopinho.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.caiopinho.component.Component;
+
 public class GameObject {
 
 	private String name;

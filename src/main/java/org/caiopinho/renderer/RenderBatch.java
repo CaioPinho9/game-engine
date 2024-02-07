@@ -23,8 +23,10 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.caiopinho.assets.AssetPool;
+import org.caiopinho.assets.Shader;
+import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
-import org.caiopinho.core.AssetPool;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -105,9 +107,21 @@ public class RenderBatch {
 	}
 
 	public void render() {
-		//  Rebuffer all data every frame
-		glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
+		boolean rebufferData = false;
+		for (int i = 0; i < this.spriteCount; i++) {
+			SpriteRenderer spriteRenderer = this.sprites[i];
+			if (spriteRenderer.isDirty()) {
+				this.loadVertexProperties(i);
+				spriteRenderer.setClean();
+				rebufferData = true;
+			}
+		}
+
+		if (rebufferData) {
+			// Rebuffer all data only when have dirty data
+			glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
+		}
 
 		Camera camera = Window.getScene().getCamera();
 		//  Use shader

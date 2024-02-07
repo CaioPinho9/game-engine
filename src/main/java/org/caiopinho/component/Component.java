@@ -1,4 +1,6 @@
-package org.caiopinho.core;
+package org.caiopinho.component;
+
+import org.caiopinho.core.GameObject;
 
 public abstract class Component {
 
@@ -10,4 +12,3 @@ public abstract class Component {
 	public abstract void update(float deltaTime);
 
 }
-

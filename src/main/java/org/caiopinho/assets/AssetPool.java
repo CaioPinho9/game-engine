@@ -1,15 +1,13 @@
-package org.caiopinho.core;
+package org.caiopinho.assets;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.caiopinho.renderer.Shader;
-import org.caiopinho.renderer.Texture;
-
 public class AssetPool {
 	private static final Map<String, Shader> shaders = new HashMap<>();
 	private static final Map<String, Texture> textures = new HashMap<>();
+	private static final Map<String, Spritesheet> spritesheets = new HashMap<>();
 
 	public static Shader getShader(String shaderPath) {
 		File file = new File(shaderPath);
@@ -34,4 +32,19 @@ public class AssetPool {
 		}
 	}
 
+	public static void addSpriteSheet(String resourceName, Spritesheet spritesheet) {
+		File file = new File(resourceName);
+		if (!spritesheets.containsKey(file.getAbsolutePath())) {
+			spritesheets.put(file.getAbsolutePath(), spritesheet);
+		}
+	}
+
+	public static Spritesheet getSpritesheet(String resourceName) {
+		File file = new File(resourceName);
+		Spritesheet spritesheet = spritesheets.getOrDefault(file.getAbsolutePath(), null);
+
+		assert spritesheet != null : "Error: Spritesheet not found: " + resourceName;
+
+		return spritesheet;
+	}
 }

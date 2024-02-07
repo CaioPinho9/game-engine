@@ -1,8 +1,7 @@
-package org.caiopinho.component;
+package org.caiopinho.assets;
 
 import lombok.Getter;
 
-import org.caiopinho.renderer.Texture;
 import org.joml.Vector2f;
 
 @Getter

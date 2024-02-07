@@ -3,12 +3,13 @@ package org.caiopinho.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 
 public class Renderer {
 	private final int MAX_BATCH_SIZE = 1000;
-	private List<RenderBatch> batches;
+	private final List<RenderBatch> batches;
 
 	public Renderer() {
 		this.batches = new ArrayList<>();
