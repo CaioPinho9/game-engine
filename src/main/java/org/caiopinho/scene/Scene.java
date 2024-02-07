@@ -37,4 +37,10 @@ public abstract class Scene {
 			this.renderer.add(gameObject);
 		}
 	}
+
+	public void addGameObjectsToScene(List<GameObject> gameObjects) {
+		for (GameObject gameObject : gameObjects) {
+			this.addGameObjectToScene(gameObject);
+		}
+	}
 }

@@ -24,8 +24,11 @@ public class Renderer {
 	private void addToRenderBatch(SpriteRenderer spriteRenderer) {
 		for (RenderBatch batch : this.batches) {
 			if (batch.hasSpace()) {
-				batch.addSprite(spriteRenderer);
-				return;
+				Texture texture = spriteRenderer.getTexture();
+				if (texture == null || (batch.hasTexture(texture) || batch.hasTextureSpace())) {
+					batch.addSprite(spriteRenderer);
+					return;
+				}
 			}
 		}
 

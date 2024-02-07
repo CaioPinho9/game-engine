@@ -1,6 +1,7 @@
 package org.caiopinho.component;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.caiopinho.core.Component;
 import org.caiopinho.renderer.Texture;
@@ -8,35 +9,35 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 @Getter
+@Setter
 public class SpriteRenderer extends Component {
 	private Vector4f color;
-	private Texture texture;
-	private Vector2f[] texCoordinates;
+	private Sprite sprite;
 
 	public SpriteRenderer(Vector4f color) {
 		this.color = color;
+		this.sprite = null;
 	}
 
-	public SpriteRenderer(Texture texture) {
+	public SpriteRenderer(Sprite sprite) {
 		this.color = new Vector4f(1, 1, 1, 1);
-		this.texture = texture;
+		this.sprite = sprite;
 	}
 
-	public SpriteRenderer(Vector4f color, Texture texture) {
+	public SpriteRenderer(Vector4f color, Sprite sprite) {
 		this.color = color;
-		this.texture = texture;
+		this.sprite = sprite;
 	}
 
 	@Override public void update(float deltaTime) {
 
 	}
 
-	public Vector2f[] getTextureCoordinates() {
-		return new Vector2f[] {
-				new Vector2f(1, 1),
-				new Vector2f(1, 0),
-				new Vector2f(0, 0),
-				new Vector2f(0, 1)
-		};
+	public Texture getTexture() {
+		return this.sprite.getTexture();
+	}
+
+	public Vector2f[] getTexCoords() {
+		return this.sprite.getTexCoords();
 	}
 }

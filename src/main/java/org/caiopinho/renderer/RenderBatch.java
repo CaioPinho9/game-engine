@@ -47,7 +47,7 @@ public class RenderBatch {
 
 	private final SpriteRenderer[] sprites;
 	private final List<Texture> textures;
-	private final int[] textureSlot = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	private final int[] textureSlots = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	private final float[] vertices;
 
 	private final int maxBatchSize;
@@ -115,13 +115,11 @@ public class RenderBatch {
 		this.shader.uploadMatrix4f("uProjection", camera.getProjectionMatrix());
 		this.shader.uploadMatrix4f("uView", camera.getViewMatrix());
 
-		int textureId = 0;
 		for (int i = 0; i < this.textures.size(); i++) {
-			glActiveTexture(GL_TEXTURE0 + i);
+			glActiveTexture(GL_TEXTURE0 + i + 1);
 			this.textures.get(i).bind();
-			textureId = i;
 		}
-		this.shader.uploadTexture("uTextures", textureId);
+		this.shader.uploadIntArray("uTextures", this.textureSlots);
 
 		// Bind the VAO
 		glBindVertexArray(this.vaoId);
@@ -197,18 +195,18 @@ public class RenderBatch {
 	}
 
 	private void loadVertexProperties(int index) {
-		SpriteRenderer sprite = this.sprites[index];
+		SpriteRenderer spriteRenderer = this.sprites[index];
 
 		// Find offset within array (4 vertices per sprite)
 		int offset = index * 4 * this.VERTEX_SIZE;
 		int textureId = 0;
 		// [texture, texture, texture, texture, ...]
-		if (sprite.getTexture() != null) {
-			textureId = this.textures.indexOf(sprite.getTexture()) + 1;
+		if (spriteRenderer.getTexture() != null) {
+			textureId = this.textures.indexOf(spriteRenderer.getTexture()) + 1;
 		}
 
-		Vector4f color = sprite.getColor();
-		Vector2f[] textureCoordinates = sprite.getTextureCoordinates();
+		Vector4f color = spriteRenderer.getColor();
+		Vector2f[] texCoords = spriteRenderer.getTexCoords();
 
 		float xAdd = 1;
 		float yAdd = 1;
@@ -222,8 +220,8 @@ public class RenderBatch {
 			}
 
 			// Load position
-			this.vertices[offset] = sprite.gameObject.transform.position.x + (xAdd * sprite.gameObject.transform.scale.x);
-			this.vertices[offset + 1] = sprite.gameObject.transform.position.y + (yAdd * sprite.gameObject.transform.scale.y);
+			this.vertices[offset] = spriteRenderer.gameObject.transform.position.x + (xAdd * spriteRenderer.gameObject.transform.scale.x);
+			this.vertices[offset + 1] = spriteRenderer.gameObject.transform.position.y + (yAdd * spriteRenderer.gameObject.transform.scale.y);
 
 			// Load colors
 			this.vertices[offset + 2] = color.x;
@@ -232,13 +230,21 @@ public class RenderBatch {
 			this.vertices[offset + 5] = color.w;
 
 			// Load texture coordinates
-			this.vertices[offset + 6] = textureCoordinates[i].x;
-			this.vertices[offset + 7] = textureCoordinates[i].y;
+			this.vertices[offset + 6] = texCoords[i].x;
+			this.vertices[offset + 7] = texCoords[i].y;
 
 			// Load texture id
 			this.vertices[offset + 8] = textureId;
 
 			offset += this.VERTEX_SIZE;
 		}
+	}
+
+	public boolean hasTextureSpace() {
+		return this.textures.size() < 8;
+	}
+
+	public boolean hasTexture(Texture texture) {
+		return this.textures.contains(texture);
 	}
 }
