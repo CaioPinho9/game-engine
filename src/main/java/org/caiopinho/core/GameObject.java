@@ -3,6 +3,8 @@ package org.caiopinho.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.caiopinho.component.Component;
 
 public class GameObject {
@@ -10,19 +12,25 @@ public class GameObject {
 	private String name;
 	private List<Component> components;
 	public Transform transform;
+	@Getter private int zIndex;
 
 	public GameObject(String name) {
-		this.init(name, new Transform());
+		this.init(name, new Transform(), 0);
 	}
 
 	public GameObject(String name, Transform transform) {
-		this.init(name, transform);
+		this.init(name, transform, 0);
 	}
 
-	public void init(String name, Transform transform) {
+	public GameObject(String name, Transform transform, int zIndex) {
+		this.init(name, transform, zIndex);
+	}
+
+	public void init(String name, Transform transform, int zIndex) {
 		this.name = name;
 		this.components = new ArrayList<>();
 		this.transform = transform;
+		this.zIndex = zIndex;
 	}
 
 	public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -64,4 +72,5 @@ public class GameObject {
 			}
 		}
 	}
+
 }

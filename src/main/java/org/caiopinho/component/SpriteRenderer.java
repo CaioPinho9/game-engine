@@ -12,7 +12,7 @@ import org.joml.Vector4f;
 public class SpriteRenderer extends Component {
 	private Vector4f color;
 	private Sprite sprite;
-	private boolean isDirty = false;
+	private boolean isDirty = true;
 
 	private Transform lastTransform;
 
@@ -43,10 +43,21 @@ public class SpriteRenderer extends Component {
 	}
 
 	public Texture getTexture() {
+		if (this.sprite == null) {
+			return null;
+		}
 		return this.sprite.getTexture();
 	}
 
 	public Vector2f[] getTexCoords() {
+		if (this.sprite == null) {
+			return new Vector2f[] {
+					new Vector2f(0, 0),
+					new Vector2f(0, 0),
+					new Vector2f(0, 0),
+					new Vector2f(0, 0)
+			};
+		}
 		return this.sprite.getTexCoords();
 	}
 

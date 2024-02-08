@@ -9,6 +9,7 @@ import org.caiopinho.core.GameObject;
 import org.caiopinho.core.Transform;
 import org.caiopinho.renderer.Camera;
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 @NoArgsConstructor
 public class LevelEditorScene extends Scene {
@@ -17,11 +18,14 @@ public class LevelEditorScene extends Scene {
 		this.camera = new Camera(new Vector2f());
 		this.loadResources();
 
-		for (int i = 0; i < 26; i++) {
-			GameObject gameObject = new GameObject("Object " + i, new Transform(new Vector2f(i * 25 + 25, 25), new Vector2f(25, 25)));
-			gameObject.addComponent(new SpriteRenderer(AssetPool.getSpritesheet("character").getSprite(i)));
-			this.addGameObjectToScene(gameObject);
-		}
+		GameObject gameObject1 = new GameObject("Test Object1", new Transform(new Vector2f(100, 100), new Vector2f(100, 100)), 1);
+		gameObject1.addComponent(new SpriteRenderer(new Vector4f(1, 0, 0, .8f)));
+
+		GameObject gameObject2 = new GameObject("Test Object2", new Transform(new Vector2f(180, 100), new Vector2f(100, 100)));
+		gameObject2.addComponent(new SpriteRenderer(new Vector4f(0, 1, 0, .8f)));
+
+		this.addGameObjectToScene(gameObject1);
+		this.addGameObjectToScene(gameObject2);
 	}
 
 	private void loadResources() {

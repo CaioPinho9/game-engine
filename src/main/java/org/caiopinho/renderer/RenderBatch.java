@@ -23,6 +23,8 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 import org.caiopinho.assets.AssetPool;
 import org.caiopinho.assets.Shader;
 import org.caiopinho.assets.Texture;
@@ -30,7 +32,7 @@ import org.caiopinho.component.SpriteRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch> {
 	// Vertex
 
 	// Pos 				Color							Texture Coordinates	Texture id
@@ -58,8 +60,10 @@ public class RenderBatch {
 	private boolean hasSpace;
 	private int vaoId, vboId;
 	private final Shader shader;
+	@Getter private final int zIndex;
 
-	public RenderBatch(int maxBatchSize) {
+	public RenderBatch(int maxBatchSize, int zIndex) {
+		this.zIndex = zIndex;
 		this.shader = AssetPool.getShader("assets/shaders/default.glsl");
 		this.sprites = new SpriteRenderer[maxBatchSize];
 		this.textures = new ArrayList<>();
@@ -260,5 +264,9 @@ public class RenderBatch {
 
 	public boolean hasTexture(Texture texture) {
 		return this.textures.contains(texture);
+	}
+
+	@Override public int compareTo(RenderBatch o) {
+		return Integer.compare(this.getZIndex(), o.getZIndex());
 	}
 }

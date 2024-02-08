@@ -1,6 +1,7 @@
 package org.caiopinho.renderer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.caiopinho.assets.Texture;
@@ -24,7 +25,7 @@ public class Renderer {
 
 	private void addToRenderBatch(SpriteRenderer spriteRenderer) {
 		for (RenderBatch batch : this.batches) {
-			if (batch.hasSpace()) {
+			if (batch.hasSpace() && batch.getZIndex() == spriteRenderer.gameObject.getZIndex()) {
 				Texture texture = spriteRenderer.getTexture();
 				if (texture == null || (batch.hasTexture(texture) || batch.hasTextureSpace())) {
 					batch.addSprite(spriteRenderer);
@@ -33,10 +34,11 @@ public class Renderer {
 			}
 		}
 
-		RenderBatch newBatch = new RenderBatch(this.MAX_BATCH_SIZE);
+		RenderBatch newBatch = new RenderBatch(this.MAX_BATCH_SIZE, spriteRenderer.gameObject.getZIndex());
 		newBatch.start();
 		this.batches.add(newBatch);
 		newBatch.addSprite(spriteRenderer);
+		Collections.sort(this.batches);
 	}
 
 	public void render() {
