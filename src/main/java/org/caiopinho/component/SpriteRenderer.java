@@ -8,12 +8,15 @@ import org.caiopinho.core.Transform;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import imgui.ImGui;
+import imgui.enums.ImGuiColorEditFlags;
+
 @Getter
 public class SpriteRenderer extends Component {
 	private Vector4f color;
 	private Sprite sprite;
-	private boolean isDirty = true;
 
+	private boolean isDirty = true;
 	private Transform lastTransform;
 
 	public SpriteRenderer(Vector4f color) {
@@ -68,6 +71,14 @@ public class SpriteRenderer extends Component {
 		}
 	}
 
+	public void setColor(float x, float y, float z, float w) {
+		Vector4f color = new Vector4f(x, y, z, w);
+		if (!this.color.equals(color)) {
+			this.isDirty = true;
+			this.color = color;
+		}
+	}
+
 	public void setSprite(Sprite sprite) {
 		//TODO: Dirty sprite logic
 		this.sprite = sprite;
@@ -76,5 +87,21 @@ public class SpriteRenderer extends Component {
 
 	public void setClean() {
 		this.isDirty = false;
+	}
+
+	@Override public void imgui() {
+		ImGui.begin("Sprite Renderer"); // Begin ImGui window
+		ImGui.text("Color Picker");
+		// Temporary storage for color editing
+		float[] newColor = { this.color.x, this.color.y, this.color.z, this.color.w };
+
+		// Color picker widget
+		int flags = ImGuiColorEditFlags.AlphaBar | ImGuiColorEditFlags.AlphaPreviewHalf | ImGuiColorEditFlags.DisplayRGB | ImGuiColorEditFlags.DisplayHex;
+		if (ImGui.colorPicker4("Color", newColor, flags)) {
+			// Update the color vector if the color picker value changes
+			this.setColor(newColor[0], newColor[1], newColor[2], newColor[3]);
+		}
+
+		ImGui.end(); // End ImGui window
 	}
 }

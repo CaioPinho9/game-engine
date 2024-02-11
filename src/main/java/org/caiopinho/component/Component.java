@@ -11,4 +11,7 @@ public abstract class Component {
 
 	public abstract void update(float deltaTime);
 
+	public void imgui() {
+	}
+
 }

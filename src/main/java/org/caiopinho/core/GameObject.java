@@ -64,6 +64,12 @@ public class GameObject {
 		}
 	}
 
+	public void imgui() {
+		for (Component component : this.components) {
+			component.imgui();
+		}
+	}
+
 	public <T extends Component> void removeComponent(Class<T> componentClass) {
 		for (Component component : this.components) {
 			if (component.getClass().equals(componentClass)) {

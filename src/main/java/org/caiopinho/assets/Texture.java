@@ -25,6 +25,7 @@ import lombok.Getter;
 
 import org.lwjgl.BufferUtils;
 
+@Getter
 public class Texture {
 	private final int id;
 	@Getter private final int width;

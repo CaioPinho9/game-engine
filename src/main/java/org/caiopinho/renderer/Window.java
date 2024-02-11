@@ -156,7 +156,7 @@ public class Window {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		this.imguiLayer = new ImGUILayer(this.glfwWindow);
-		this.imguiLayer.initImGui();
+		this.imguiLayer.start();
 
 		Window.changeScene(0);
 	}
@@ -180,7 +180,7 @@ public class Window {
 			KeyListener.endFrame();
 			MouseListener.endFrame();
 
-			this.imguiLayer.update(deltaTime);
+			this.imguiLayer.update(deltaTime, currentScene);
 			glfwSwapBuffers(this.glfwWindow);
 
 			endTime = (float) glfwGetTime();
