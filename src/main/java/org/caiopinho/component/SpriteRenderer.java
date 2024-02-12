@@ -13,26 +13,11 @@ import imgui.enums.ImGuiColorEditFlags;
 
 @Getter
 public class SpriteRenderer extends Component {
-	private Vector4f color;
-	private Sprite sprite;
+	private Vector4f color = new Vector4f(1, 1, 1, 1);
+	private Sprite sprite = new Sprite();
 
-	private boolean isDirty = true;
-	private Transform lastTransform;
-
-	public SpriteRenderer(Vector4f color) {
-		this.color = color;
-		this.sprite = null;
-	}
-
-	public SpriteRenderer(Sprite sprite) {
-		this.color = new Vector4f(1, 1, 1, 1);
-		this.sprite = sprite;
-	}
-
-	public SpriteRenderer(Vector4f color, Sprite sprite) {
-		this.color = color;
-		this.sprite = sprite;
-	}
+	private transient boolean isDirty = true;
+	private transient Transform lastTransform;
 
 	@Override public void start() {
 		this.lastTransform = this.gameObject.transform.copy();
@@ -90,7 +75,6 @@ public class SpriteRenderer extends Component {
 	}
 
 	@Override public void imgui() {
-		ImGui.begin("Sprite Renderer"); // Begin ImGui window
 		ImGui.text("Color Picker");
 		// Temporary storage for color editing
 		float[] newColor = { this.color.x, this.color.y, this.color.z, this.color.w };
@@ -101,7 +85,5 @@ public class SpriteRenderer extends Component {
 			// Update the color vector if the color picker value changes
 			this.setColor(newColor[0], newColor[1], newColor[2], newColor[3]);
 		}
-
-		ImGui.end(); // End ImGui window
 	}
 }

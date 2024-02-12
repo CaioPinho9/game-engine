@@ -46,4 +46,8 @@ public class Renderer {
 			batch.render();
 		}
 	}
+
+	public void clear() {
+		this.batches.clear();
+	}
 }

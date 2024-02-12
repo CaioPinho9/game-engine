@@ -27,11 +27,11 @@ import org.lwjgl.BufferUtils;
 
 @Getter
 public class Texture {
-	private final int id;
-	@Getter private final int width;
-	@Getter private final int height;
+	private int id;
+	@Getter private int width;
+	@Getter private int height;
 
-	public Texture(String filePath) {
+	public void init(String filePath) {
 		// Generate texture on GPU
 		this.id = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, this.id);
