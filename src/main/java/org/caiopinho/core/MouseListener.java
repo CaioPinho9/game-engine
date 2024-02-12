@@ -3,6 +3,9 @@ package org.caiopinho.core;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
+import org.caiopinho.renderer.Window;
+import org.joml.Vector4f;
+
 public class MouseListener {
 
 	private double scrollX = 0, scrollY = 0;
@@ -16,8 +19,9 @@ public class MouseListener {
 	}
 
 	public static synchronized MouseListener get() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new MouseListener();
+		}
 		return instance;
 	}
 
@@ -78,6 +82,22 @@ public class MouseListener {
 		return (float) (get().lastPositionY - get().positionY);
 	}
 
+	public static float getOrthoX() {
+		float currentX = (getX() / (float) Window.getWidth()) * 2 - 1;
+		Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
+		tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+		currentX = tmp.x;
+		return currentX;
+	}
+
+	public static float getOrthoY() {
+		float currentY = (getY() / (float) Window.getHeight()) * 2 - 1;
+		Vector4f tmp = new Vector4f(0, currentY, 0, 1);
+		tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+		currentY = tmp.y;
+		return currentY;
+	}
+
 	public static float getScrollX() {
 		return (float) get().scrollX;
 	}
@@ -91,8 +111,22 @@ public class MouseListener {
 	}
 
 	public static boolean isButtonDown(int button) {
-		if (button >= get().mouseButtonPressed.length)
+		if (button >= get().mouseButtonPressed.length) {
 			return false;
+		}
 		return get().mouseButtonPressed[button];
 	}
+
+	public static boolean isButtonUp(int button) {
+		return !isButtonDown(button);
+	}
+
+	public static boolean isButtonPressed(int button) {
+		return isButtonDown(button) && get().isDragging;
+	}
+
+	public static boolean isButtonReleased(int button) {
+		return isButtonUp(button) && !get().isDragging;
+	}
+
 }

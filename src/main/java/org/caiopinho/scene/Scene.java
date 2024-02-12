@@ -1,5 +1,7 @@
 package org.caiopinho.scene;
 
+import static org.caiopinho.core.MouseListener.getOrthoX;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,6 +54,7 @@ public abstract class Scene {
 
 	public void update(float deltaTime) {
 		System.out.print("FPS: " + 1 / deltaTime + "\r");
+		getOrthoX();
 		for (GameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
 		}

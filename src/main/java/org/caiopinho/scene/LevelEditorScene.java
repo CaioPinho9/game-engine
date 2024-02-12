@@ -14,9 +14,12 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 
 @NoArgsConstructor
 public class LevelEditorScene extends Scene {
+
+	private Spritesheet sprites;
 
 	@Override public void init() {
 		this.camera = new Camera(new Vector2f());
@@ -72,12 +75,44 @@ public class LevelEditorScene extends Scene {
 		AssetPool.getShader("assets/shaders/default.glsl");
 		AssetPool.getTexture("assets/textures/logo.png");
 		AssetPool.getTexture("assets/textures/ubuntu dices.png");
-		Spritesheet spritesheet = new Spritesheet(AssetPool.getTexture("assets/textures/spritesheet.png"), 16, 16, 26, 0);
-		AssetPool.addSpriteSheet("character", spritesheet);
+		this.sprites = new Spritesheet(AssetPool.getTexture("assets/textures/spritesheet.png"), 16, 16, 26, 0);
+		AssetPool.addSpriteSheet("character", this.sprites);
 	}
 
 	@Override public void imgui() {
 		ImGui.begin("Test window");
+
+		ImVec2 windowPos = new ImVec2();
+		ImGui.getWindowPos(windowPos);
+		ImVec2 windowSize = new ImVec2();
+		ImGui.getWindowSize(windowSize);
+		ImVec2 itemSpacing = new ImVec2();
+		ImGui.getStyle().getItemSpacing(itemSpacing);
+
+		float windowX2 = windowPos.x + windowSize.x;
+		for (int i = 0; i < this.sprites.size(); i++) {
+			Sprite sprite = this.sprites.getSprite(i);
+			float spriteWidth = sprite.getWidth() * 3;
+			float spriteHeight = sprite.getHeight() * 3;
+			int id = sprite.getTextureId();
+			Vector2f[] texCoords = sprite.getTexCoords();
+
+			ImGui.pushID(i);
+			if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y)) {
+				System.out.println("Clicked on sprite " + i);
+			}
+			ImGui.popID();
+
+			ImVec2 lastButtonPos = new ImVec2();
+			ImGui.getItemRectMax(lastButtonPos);
+			float lastButtonX2 = lastButtonPos.x;
+			float nextButtonX2 = lastButtonX2 + itemSpacing.x + spriteWidth;
+			if (i + 1 < this.sprites.size() && nextButtonX2 < windowX2) {
+				ImGui.sameLine();
+			}
+
+		}
+
 		ImGui.text("Hello, world!");
 		ImGui.end();
 	}
