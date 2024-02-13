@@ -78,4 +78,14 @@ public class Texture {
 	public void unbind() {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
+	@Override public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+		if (!(object instanceof Texture texture)) {
+			return false;
+		}
+		return this.id == texture.id && this.width == texture.width && this.height == texture.height;
+	}
 }

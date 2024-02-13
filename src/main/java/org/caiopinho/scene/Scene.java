@@ -41,9 +41,6 @@ public abstract class Scene {
 	public void init() {
 	}
 
-	private void loadResources() {
-	}
-
 	public void start() {
 		for (GameObject gameObject : this.gameObjects) {
 			gameObject.start();
@@ -85,7 +82,7 @@ public abstract class Scene {
 
 	public void save() {
 		try {
-			FileWriter writer = new FileWriter("level.txt");
+			FileWriter writer = new FileWriter("saves/" + this.getClass().getCanonicalName() + ".txt");
 			writer.write(this.gson.toJson(this.gameObjects));
 			writer.close();
 		} catch (IOException e) {
@@ -93,11 +90,15 @@ public abstract class Scene {
 		}
 	}
 
+	protected void loadResources() {
+	}
+
 	public void load() {
+		this.loadResources();
 		String text = "";
 
 		try {
-			text = new String(Files.readAllBytes(Paths.get("level.txt")));
+			text = new String(Files.readAllBytes(Paths.get("saves/" + this.getClass().getCanonicalName() + ".txt")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

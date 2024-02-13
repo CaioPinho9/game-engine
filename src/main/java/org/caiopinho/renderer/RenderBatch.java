@@ -145,16 +145,12 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		// Enable the vertex attribute pointers
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-		glEnableVertexAttribArray(3);
 
 		glDrawElements(GL_TRIANGLES, this.spriteCount * 6, GL_UNSIGNED_INT, 0);
 
 		// Unbind everything
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glDisableVertexAttribArray(3);
 
 		glBindVertexArray(0);
 

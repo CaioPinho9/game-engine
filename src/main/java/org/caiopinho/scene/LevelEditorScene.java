@@ -26,7 +26,6 @@ public class LevelEditorScene extends Scene {
 
 	@Override public void init() {
 		this.camera = new Camera(new Vector2f());
-		this.loadResources();
 
 		if (this.wasLoaded) {
 			System.out.println("Scene was loaded");
@@ -79,7 +78,7 @@ public class LevelEditorScene extends Scene {
 		super.update(deltaTime);
 	}
 
-	private void loadResources() {
+	@Override protected void loadResources() {
 		AssetPool.getShader("assets/shaders/default.glsl");
 		AssetPool.getTexture("assets/textures/logo.png");
 		AssetPool.getTexture("assets/textures/ubuntu dices.png");
