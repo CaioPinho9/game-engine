@@ -10,6 +10,7 @@
         "y": 100.0
       }
     },
+    "uid": 0,
     "name": "Object1",
     "components": [
       {
@@ -22,6 +23,8 @@
             "w": 0.8
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "texCoords": [
               {
                 "x": 1.0,
@@ -40,19 +43,21 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 0
         }
       },
       {
         "type": "org.caiopinho.component.RigidBody",
         "properties": {
-          "colliderType": 2,
-          "mass": 2000.0,
+          "colliderType": 0,
+          "mass": 1.0,
           "velocity": {
             "x": 0.0,
             "y": 0.0,
             "z": 0.0
-          }
+          },
+          "uid": 1
         }
       }
     ],
@@ -69,6 +74,7 @@
         "y": 100.0
       }
     },
+    "uid": 1,
     "name": "Object2",
     "components": [
       {
@@ -81,6 +87,8 @@
             "w": 0.8
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "texCoords": [
               {
                 "x": 1.0,
@@ -99,7 +107,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 2
         }
       }
     ],
@@ -116,6 +125,7 @@
         "y": 100.0
       }
     },
+    "uid": 2,
     "name": "Object3",
     "components": [
       {
@@ -128,6 +138,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "texture": {
               "id": 2,
               "width": 500,
@@ -151,7 +163,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 3
         }
       }
     ],
@@ -168,6 +181,7 @@
         "y": 168.75
       }
     },
+    "uid": 3,
     "name": "Object4",
     "components": [
       {
@@ -180,6 +194,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 0.0,
+            "height": 0.0,
             "texture": {
               "id": 3,
               "width": 2000,
@@ -203,7 +219,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 4
         }
       }
     ],
@@ -220,6 +237,7 @@
         "y": 25.0
       }
     },
+    "uid": 4,
     "name": "Object 5",
     "components": [
       {
@@ -232,6 +250,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -255,7 +275,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 5
         }
       }
     ],
@@ -272,6 +293,7 @@
         "y": 25.0
       }
     },
+    "uid": 5,
     "name": "Object 6",
     "components": [
       {
@@ -284,6 +306,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -307,7 +331,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 6
         }
       }
     ],
@@ -324,6 +349,7 @@
         "y": 25.0
       }
     },
+    "uid": 6,
     "name": "Object 7",
     "components": [
       {
@@ -336,6 +362,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -359,7 +387,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 7
         }
       }
     ],
@@ -376,6 +405,7 @@
         "y": 25.0
       }
     },
+    "uid": 7,
     "name": "Object 8",
     "components": [
       {
@@ -388,6 +418,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -411,7 +443,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 8
         }
       }
     ],
@@ -428,6 +461,7 @@
         "y": 25.0
       }
     },
+    "uid": 8,
     "name": "Object 9",
     "components": [
       {
@@ -440,6 +474,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -463,7 +499,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 9
         }
       }
     ],
@@ -480,6 +517,7 @@
         "y": 25.0
       }
     },
+    "uid": 9,
     "name": "Object 10",
     "components": [
       {
@@ -492,6 +530,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -515,7 +555,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 10
         }
       }
     ],
@@ -532,6 +573,7 @@
         "y": 25.0
       }
     },
+    "uid": 10,
     "name": "Object 11",
     "components": [
       {
@@ -544,6 +586,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -567,7 +611,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 11
         }
       }
     ],
@@ -584,6 +629,7 @@
         "y": 25.0
       }
     },
+    "uid": 11,
     "name": "Object 12",
     "components": [
       {
@@ -596,6 +642,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -619,7 +667,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 12
         }
       }
     ],
@@ -636,6 +685,7 @@
         "y": 25.0
       }
     },
+    "uid": 12,
     "name": "Object 13",
     "components": [
       {
@@ -648,6 +698,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -671,7 +723,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 13
         }
       }
     ],
@@ -688,6 +741,7 @@
         "y": 25.0
       }
     },
+    "uid": 13,
     "name": "Object 14",
     "components": [
       {
@@ -700,6 +754,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -723,7 +779,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 14
         }
       }
     ],
@@ -740,6 +797,7 @@
         "y": 25.0
       }
     },
+    "uid": 14,
     "name": "Object 15",
     "components": [
       {
@@ -752,6 +810,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -775,7 +835,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 15
         }
       }
     ],
@@ -792,6 +853,7 @@
         "y": 25.0
       }
     },
+    "uid": 15,
     "name": "Object 16",
     "components": [
       {
@@ -804,6 +866,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -827,7 +891,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 16
         }
       }
     ],
@@ -844,6 +909,7 @@
         "y": 25.0
       }
     },
+    "uid": 16,
     "name": "Object 17",
     "components": [
       {
@@ -856,6 +922,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -879,7 +947,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 17
         }
       }
     ],
@@ -896,6 +965,7 @@
         "y": 25.0
       }
     },
+    "uid": 17,
     "name": "Object 18",
     "components": [
       {
@@ -908,6 +978,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -931,7 +1003,8 @@
                 "y": 1.0
               }
             ]
-          }
+          },
+          "uid": 18
         }
       }
     ],
@@ -948,6 +1021,7 @@
         "y": 25.0
       }
     },
+    "uid": 18,
     "name": "Object 19",
     "components": [
       {
@@ -960,6 +1034,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -983,7 +1059,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 19
         }
       }
     ],
@@ -1000,6 +1077,7 @@
         "y": 25.0
       }
     },
+    "uid": 19,
     "name": "Object 20",
     "components": [
       {
@@ -1012,6 +1090,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1035,7 +1115,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 20
         }
       }
     ],
@@ -1052,6 +1133,7 @@
         "y": 25.0
       }
     },
+    "uid": 20,
     "name": "Object 21",
     "components": [
       {
@@ -1064,6 +1146,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1087,7 +1171,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 21
         }
       }
     ],
@@ -1104,6 +1189,7 @@
         "y": 25.0
       }
     },
+    "uid": 21,
     "name": "Object 22",
     "components": [
       {
@@ -1116,6 +1202,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1139,7 +1227,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 22
         }
       }
     ],
@@ -1156,6 +1245,7 @@
         "y": 25.0
       }
     },
+    "uid": 22,
     "name": "Object 23",
     "components": [
       {
@@ -1168,6 +1258,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1191,7 +1283,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 23
         }
       }
     ],
@@ -1208,6 +1301,7 @@
         "y": 25.0
       }
     },
+    "uid": 23,
     "name": "Object 24",
     "components": [
       {
@@ -1220,6 +1314,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1243,7 +1339,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 24
         }
       }
     ],
@@ -1260,6 +1357,7 @@
         "y": 25.0
       }
     },
+    "uid": 24,
     "name": "Object 25",
     "components": [
       {
@@ -1272,6 +1370,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1295,7 +1395,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 25
         }
       }
     ],
@@ -1312,6 +1413,7 @@
         "y": 25.0
       }
     },
+    "uid": 25,
     "name": "Object 26",
     "components": [
       {
@@ -1324,6 +1426,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1347,7 +1451,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 26
         }
       }
     ],
@@ -1364,6 +1469,7 @@
         "y": 25.0
       }
     },
+    "uid": 26,
     "name": "Object 27",
     "components": [
       {
@@ -1376,6 +1482,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1399,7 +1507,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 27
         }
       }
     ],
@@ -1416,6 +1525,7 @@
         "y": 25.0
       }
     },
+    "uid": 27,
     "name": "Object 28",
     "components": [
       {
@@ -1428,6 +1538,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1451,7 +1563,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 28
         }
       }
     ],
@@ -1468,6 +1581,7 @@
         "y": 25.0
       }
     },
+    "uid": 28,
     "name": "Object 29",
     "components": [
       {
@@ -1480,6 +1594,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1503,7 +1619,8 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 29
         }
       }
     ],
@@ -1520,6 +1637,7 @@
         "y": 25.0
       }
     },
+    "uid": 29,
     "name": "Object 30",
     "components": [
       {
@@ -1532,6 +1650,8 @@
             "w": 1.0
           },
           "sprite": {
+            "width": 16.0,
+            "height": 16.0,
             "texture": {
               "id": 4,
               "width": 224,
@@ -1555,7 +1675,848 @@
                 "y": 0.5
               }
             ]
-          }
+          },
+          "uid": 30
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 418.0,
+        "y": 285.90424
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 30,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 31
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 465.33334,
+        "y": 286.58026
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 31,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 32
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 510.6667,
+        "y": 286.58026
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 32,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 33
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 465.33334,
+        "y": 307.53802
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 33,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.2857143,
+                "y": 0.5
+              },
+              {
+                "x": 0.2857143,
+                "y": 0.0
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 34
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 428.0,
+        "y": 361.6225
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 34,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.5714286,
+                "y": 1.0
+              },
+              {
+                "x": 0.5714286,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 0.5
+              },
+              {
+                "x": 0.5,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 35
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 496.66663,
+        "y": 363.6507
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 35,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.64285713,
+                "y": 1.0
+              },
+              {
+                "x": 0.64285713,
+                "y": 0.5
+              },
+              {
+                "x": 0.5714286,
+                "y": 0.5
+              },
+              {
+                "x": 0.5714286,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 36
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 382.6667,
+        "y": 323.76337
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 36,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.71428573,
+                "y": 1.0
+              },
+              {
+                "x": 0.71428573,
+                "y": 0.5
+              },
+              {
+                "x": 0.64285713,
+                "y": 0.5
+              },
+              {
+                "x": 0.64285713,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 37
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 335.33334,
+        "y": 308.2141
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 37,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.14285715,
+                "y": 1.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              },
+              {
+                "x": 0.071428575,
+                "y": 0.5
+              },
+              {
+                "x": 0.071428575,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 38
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 554.0,
+        "y": 337.96057
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 38,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.85714287,
+                "y": 1.0
+              },
+              {
+                "x": 0.85714287,
+                "y": 0.5
+              },
+              {
+                "x": 0.78571427,
+                "y": 0.5
+              },
+              {
+                "x": 0.78571427,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 39
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 599.3333,
+        "y": 315.6507
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 39,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 1.0,
+                "y": 1.0
+              },
+              {
+                "x": 1.0,
+                "y": 0.5
+              },
+              {
+                "x": 0.9285714,
+                "y": 0.5
+              },
+              {
+                "x": 0.9285714,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 40
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 648.0,
+        "y": 296.04504
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 40,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.2857143,
+                "y": 1.0
+              },
+              {
+                "x": 0.2857143,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 41
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 336.0,
+        "y": 308.89014
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 41,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.14285715,
+                "y": 1.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              },
+              {
+                "x": 0.071428575,
+                "y": 0.5
+              },
+              {
+                "x": 0.071428575,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 42
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 277.3333,
+        "y": 303.4817
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 42,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.42857143,
+                "y": 1.0
+              },
+              {
+                "x": 0.42857143,
+                "y": 0.5
+              },
+              {
+                "x": 0.35714287,
+                "y": 0.5
+              },
+              {
+                "x": 0.35714287,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 43
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 650.0,
+        "y": 280.4958
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 43,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 44
+        }
+      }
+    ],
+    "zIndex": 0
+  },
+  {
+    "transform": {
+      "position": {
+        "x": 334.66666,
+        "y": 286.58026
+      },
+      "scale": {
+        "x": 48.0,
+        "y": 48.0
+      }
+    },
+    "uid": 44,
+    "name": "Sprite",
+    "components": [
+      {
+        "type": "org.caiopinho.component.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "id": 4,
+              "width": 224,
+              "height": 32
+            },
+            "texCoords": [
+              {
+                "x": 0.21428572,
+                "y": 0.5
+              },
+              {
+                "x": 0.21428572,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.0
+              },
+              {
+                "x": 0.14285715,
+                "y": 0.5
+              }
+            ]
+          },
+          "uid": 45
         }
       }
     ],

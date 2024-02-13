@@ -8,6 +8,8 @@ import org.caiopinho.assets.Spritesheet;
 import org.caiopinho.component.RigidBody;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
+import org.caiopinho.core.MouseControls;
+import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
 import org.caiopinho.renderer.Camera;
 import org.joml.Vector2f;
@@ -20,6 +22,7 @@ import imgui.ImVec2;
 public class LevelEditorScene extends Scene {
 
 	private Spritesheet sprites;
+	MouseControls mouseControls = new MouseControls();
 
 	@Override public void init() {
 		this.camera = new Camera(new Vector2f());
@@ -71,6 +74,11 @@ public class LevelEditorScene extends Scene {
 
 	}
 
+	@Override public void update(float deltaTime) {
+		this.mouseControls.update(deltaTime);
+		super.update(deltaTime);
+	}
+
 	private void loadResources() {
 		AssetPool.getShader("assets/shaders/default.glsl");
 		AssetPool.getTexture("assets/textures/logo.png");
@@ -98,8 +106,9 @@ public class LevelEditorScene extends Scene {
 			Vector2f[] texCoords = sprite.getTexCoords();
 
 			ImGui.pushID(i);
-			if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y)) {
-				System.out.println("Clicked on sprite " + i);
+			if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y)) {
+				GameObject object = Prefabs.createSpriteObject(sprite, spriteWidth, spriteHeight);
+				this.mouseControls.pickGameObject(object);
 			}
 			ImGui.popID();
 

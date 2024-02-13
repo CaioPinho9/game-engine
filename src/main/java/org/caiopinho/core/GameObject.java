@@ -12,7 +12,9 @@ import org.caiopinho.component.Component;
 @Setter
 public class GameObject {
 
+	private static int ID_COUNTER = 0;
 	public Transform transform;
+	private int uid = -1;
 	private String name;
 	private List<Component> components;
 	private int zIndex;
@@ -22,6 +24,8 @@ public class GameObject {
 		this.components = new ArrayList<>();
 		this.transform = transform;
 		this.zIndex = zIndex;
+
+		this.uid = ID_COUNTER++;
 	}
 
 	public <T extends Component> T getComponent(Class<T> componentClass) {
@@ -41,6 +45,7 @@ public class GameObject {
 	public <T extends Component> void addComponent(T component) {
 		this.components.add(component);
 		component.gameObject = this;
+		component.generateId();
 	}
 
 	public <T extends Component> void start() {
@@ -70,4 +75,7 @@ public class GameObject {
 		}
 	}
 
+	public static void init(int maxId) {
+		ID_COUNTER = maxId;
+	}
 }

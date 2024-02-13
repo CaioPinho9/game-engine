@@ -3,6 +3,8 @@ package org.caiopinho.component;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import lombok.Getter;
+
 import org.caiopinho.core.GameObject;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -10,6 +12,8 @@ import org.joml.Vector4f;
 import imgui.ImGui;
 
 public abstract class Component {
+	@Getter private int uid = -1;
+	private static int ID_COUNTER = 0;
 
 	public transient GameObject gameObject;
 
@@ -84,4 +88,13 @@ public abstract class Component {
 		}
 	}
 
+	public void generateId() {
+		if (this.uid == -1) {
+			this.uid = ID_COUNTER++;
+		}
+	}
+
+	public static void init(int maxId) {
+		ID_COUNTER = maxId;
+	}
 }

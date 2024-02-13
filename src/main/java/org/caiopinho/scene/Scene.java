@@ -30,7 +30,7 @@ public abstract class Scene {
 	protected boolean wasLoaded;
 	protected List<GameObject> gameObjects = new ArrayList<>();
 
-	protected GameObject activeGameObject = null;
+	public GameObject activeGameObject = null;
 
 	private final Gson gson = new GsonBuilder()
 			.setPrettyPrinting()
@@ -103,12 +103,24 @@ public abstract class Scene {
 		}
 
 		if (!text.isEmpty()) {
+			int maxGameObjectId = -1;
+			int maxComponentId = -1;
 			GameObject[] gameObjects = this.gson.fromJson(text, GameObject[].class);
 			this.gameObjects.clear();
 			this.renderer.clear();
 			for (GameObject gameObject : gameObjects) {
 				this.addGameObjectToScene(gameObject);
+				if (gameObject.getUid() > maxGameObjectId) {
+					maxGameObjectId = gameObject.getUid();
+				}
+				for (Component component : gameObject.getComponents()) {
+					if (component.getUid() > maxComponentId) {
+						maxComponentId = component.getUid();
+					}
+				}
 			}
+			GameObject.init(++maxGameObjectId);
+			Component.init(++maxComponentId);
 			this.wasLoaded = true;
 			this.activeGameObject = gameObjects[0];
 		}
