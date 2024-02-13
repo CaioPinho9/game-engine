@@ -12,6 +12,7 @@ import org.caiopinho.core.MouseControls;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
 import org.caiopinho.renderer.Camera;
+import org.caiopinho.renderer.DebugDraw;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -74,6 +75,8 @@ public class LevelEditorScene extends Scene {
 	}
 
 	@Override public void update(float deltaTime) {
+		DebugDraw.addLine2D(new Vector2f(100, 500), new Vector2f(200, 200), new Vector4f(1, 0, 0, 1));
+
 		this.mouseControls.update(deltaTime);
 		super.update(deltaTime);
 	}

@@ -169,10 +169,13 @@ public class Window {
 			// Poll events
 			glfwPollEvents();
 
+			DebugDraw.beginFrame();
+
 			glClearColor(this.r, this.g, this.b, this.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			if (deltaTime >= 0) {
+				DebugDraw.render();
 				currentScene.update(deltaTime);
 			}
 

@@ -1,24 +1,16 @@
 package org.caiopinho.renderer;
 
 import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11C.GL_FLOAT;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11C.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferSubData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL15C.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15C.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15C.glBufferData;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,32 +74,22 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
 	public void start() {
 		//  Create Vertex Array Object
-		this.vaoId = glGenVertexArrays();
-		glBindVertexArray(this.vaoId);
+		this.vaoId = OpenGLHelper.createVAO();
 
 		//  Allocate the space for vertices
-		this.vboId = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
-		glBufferData(GL_ARRAY_BUFFER, (long) this.vertices.length * Float.BYTES, GL_DYNAMIC_DRAW);
+		this.vboId = OpenGLHelper.createVBO((long) this.vertices.length * Float.BYTES);
+
+		OpenGLHelper.createEBO();
 
 		//  Create the indices and upload
-		int eboId = glGenBuffers();
 		int[] indices = this.generateIndices();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
 		//  Add the vertex attribute pointers
-		glVertexAttribPointer(0, this.POSITION_SIZE, GL_FLOAT, false, this.VERTEX_SIZE_BYTES, this.POSITION_OFFSET);
-		glEnableVertexAttribArray(0);
-
-		glVertexAttribPointer(1, this.COLOR_SIZE, GL_FLOAT, false, this.VERTEX_SIZE_BYTES, this.COLOR_OFFSET);
-		glEnableVertexAttribArray(1);
-
-		glVertexAttribPointer(2, this.TEXTURE_COORDINATES_SIZE, GL_FLOAT, false, this.VERTEX_SIZE_BYTES, this.TEXTURE_COORDINATES_OFFSET);
-		glEnableVertexAttribArray(2);
-
-		glVertexAttribPointer(3, this.TEXTURE_ID_SIZE, GL_FLOAT, false, this.VERTEX_SIZE_BYTES, this.TEXTURE_ID_OFFSET);
-		glEnableVertexAttribArray(3);
+		OpenGLHelper.addVertexAttribPointer(0, this.POSITION_SIZE, this.VERTEX_SIZE_BYTES, this.POSITION_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(1, this.COLOR_SIZE, this.VERTEX_SIZE_BYTES, this.COLOR_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(2, this.TEXTURE_COORDINATES_SIZE, this.VERTEX_SIZE_BYTES, this.TEXTURE_COORDINATES_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(3, this.TEXTURE_ID_SIZE, this.VERTEX_SIZE_BYTES, this.TEXTURE_ID_OFFSET);
 	}
 
 	public void render() {
@@ -123,21 +105,17 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
 		if (rebufferData) {
 			// Rebuffer all data only when have dirty data
-			glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
+			OpenGLHelper.bufferData(this.vboId, this.vertices);
 		}
 
-		Camera camera = Window.getScene().getCamera();
-		//  Use shader
 		this.shader.use();
-		this.shader.uploadMatrix4f("uProjection", camera.getProjectionMatrix());
-		this.shader.uploadMatrix4f("uView", camera.getViewMatrix());
+		OpenGLHelper.setShaderCameraUniforms(this.shader);
+		this.shader.uploadIntArray("uTextures", this.textureSlots);
 
 		for (int i = 0; i < this.textures.size(); i++) {
 			glActiveTexture(GL_TEXTURE0 + i + 1);
 			this.textures.get(i).bind();
 		}
-		this.shader.uploadIntArray("uTextures", this.textureSlots);
 
 		// Bind the VAO
 		glBindVertexArray(this.vaoId);
