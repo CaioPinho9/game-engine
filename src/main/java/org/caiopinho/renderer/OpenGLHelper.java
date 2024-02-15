@@ -7,7 +7,6 @@ import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL15C.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15C.glBufferData;
-import static org.lwjgl.opengl.GL15C.glBufferSubData;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -48,8 +47,4 @@ public class OpenGLHelper {
 		glEnableVertexAttribArray(index);
 	}
 
-	public static void bufferData(int vboId, float[] vertexArray) {
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, vertexArray);
-	}
 }

@@ -74,9 +74,16 @@ public class LevelEditorScene extends Scene {
 
 	}
 
-	@Override public void update(float deltaTime) {
-		DebugDraw.addLine2D(new Vector2f(100, 500), new Vector2f(200, 200), new Vector4f(1, 0, 0, 1));
+	float angle = 0;
+	float percent = 0;
 
+	@Override public void update(float deltaTime) {
+		this.angle += 40 * deltaTime;
+		this.percent += .05f * deltaTime;
+		this.percent %= 1;
+		DebugDraw.addLine2D(new Vector2f(100, 500), new Vector2f(200, 200), new Vector4f(1, 0, 0, 1));
+		DebugDraw.addBox2D(new Transform(new Vector2f(400, 400), new Vector2f(100, 200), this.angle), new Vector4f(0, 1, 0, 1), 1);
+		DebugDraw.addCircle2D(new Transform(new Vector2f(600, 400), new Vector2f(50, 50), this.angle / 2), new Vector4f(0, 0, 1, 1), 1000, 1, this.percent);
 		this.mouseControls.update(deltaTime);
 		super.update(deltaTime);
 	}

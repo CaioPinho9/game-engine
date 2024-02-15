@@ -5,9 +5,12 @@ import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11C.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15C.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15C.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15C.glBufferData;
+import static org.lwjgl.opengl.GL15C.glBufferSubData;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -105,7 +108,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
 		if (rebufferData) {
 			// Rebuffer all data only when have dirty data
-			OpenGLHelper.bufferData(this.vboId, this.vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, this.vboId);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, this.vertices);
 		}
 
 		this.shader.use();
