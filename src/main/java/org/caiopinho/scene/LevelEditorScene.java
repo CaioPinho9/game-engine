@@ -11,8 +11,9 @@ import org.caiopinho.core.GameObject;
 import org.caiopinho.core.MouseControls;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
+import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
-import org.caiopinho.renderer.DebugDraw;
+import org.caiopinho.renderer.debug.DebugDraw;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -78,13 +79,24 @@ public class LevelEditorScene extends Scene {
 	float percent = 0;
 
 	@Override public void update(float deltaTime) {
-		this.angle += 40 * deltaTime;
+		this.angle += 6 * deltaTime;
 		this.percent += .05f * deltaTime;
 		this.percent %= 1;
 		DebugDraw.addLine2D(new Vector2f(100, 500), new Vector2f(200, 200), new Vector4f(1, 0, 0, 1));
-		DebugDraw.addBox2D(new Transform(new Vector2f(400, 400), new Vector2f(100, 200), this.angle), new Vector4f(0, 1, 0, 1), 1);
+		DebugDraw.addBox2D(new Transform(new Vector2f(400, 400), new Vector2f(100, 200), this.angle), new Vector4f(0, 1, 0, 1), 5);
 		DebugDraw.addCircle2D(new Transform(new Vector2f(600, 400), new Vector2f(50, 50), this.angle / 2), new Vector4f(0, 0, 1, 1), 1000, 1, this.percent);
 		this.mouseControls.update(deltaTime);
+
+		Vector2f center = new Vector2f(800, 300);
+		Vector2f end1 = new Vector2f(center).add(new Vector2f(0, 50));
+		MathHelper.rotate(end1, -this.angle, center);
+		DebugDraw.addLine2D(center, end1);
+
+		Vector2f end2 = new Vector2f(center).add(new Vector2f(0, 40));
+		MathHelper.rotate(end2, -this.angle / 60, center);
+		DebugDraw.addLine2D(center, end2);
+		DebugDraw.addCircle2D(new Transform(center, new Vector2f(60, 60)));
+
 		super.update(deltaTime);
 	}
 

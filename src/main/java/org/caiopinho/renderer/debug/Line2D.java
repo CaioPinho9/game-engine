@@ -1,4 +1,4 @@
-package org.caiopinho.renderer;
+package org.caiopinho.renderer.debug;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,8 @@ public class Line2D {
 	private Vector2f to;
 	private Vector4f color;
 	private int lifetime;
+	private float width;
+	private int zIndex;
 
 	public int beginFrame() {
 		return --this.lifetime;

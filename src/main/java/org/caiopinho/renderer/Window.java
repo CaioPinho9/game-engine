@@ -38,6 +38,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import org.caiopinho.core.ImGUILayer;
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
+import org.caiopinho.renderer.debug.DebugDraw;
 import org.caiopinho.scene.LevelEditorScene;
 import org.caiopinho.scene.LevelScene;
 import org.caiopinho.scene.Scene;
