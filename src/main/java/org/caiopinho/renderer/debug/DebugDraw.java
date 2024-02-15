@@ -21,17 +21,12 @@ public class DebugDraw {
 	private static final List<DebugBatch> batches = new ArrayList<>();
 	private static int lineCount = 0;
 
-	public static void beginFrame() {
+	public static void render() {
 		lineCount = 0;
 		for (DebugBatch batch : batches) {
 			batch.beginFrame();
-			lineCount += batch.getLineCount();
-		}
-	}
-
-	public static void render() {
-		for (DebugBatch batch : batches) {
 			batch.render();
+			lineCount += batch.getLineCount();
 		}
 	}
 
@@ -51,6 +46,7 @@ public class DebugDraw {
 		}
 
 		DebugBatch newBatch = new DebugBatch(MAX_LINES, width, zIndex);
+		newBatch.start();
 		batches.add(newBatch);
 		newBatch.addLine(line);
 		Collections.sort(batches);

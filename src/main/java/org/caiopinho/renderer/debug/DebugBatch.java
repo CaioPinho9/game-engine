@@ -33,7 +33,6 @@ public class DebugBatch implements Comparable<DebugBatch> {
 	private final float[] vertexArray;
 	private final Shader shader = AssetPool.getShader("assets/shaders/debugLine2D.glsl");
 	private int vaoId, vboId;
-	private boolean started = false;
 
 	private final int maxBatchSize;
 	private final List<Line2D> lines;
@@ -76,11 +75,6 @@ public class DebugBatch implements Comparable<DebugBatch> {
 	}
 
 	public void beginFrame() {
-		if (!this.started) {
-			this.start();
-			this.started = true;
-		}
-
 		for (int i = 0; i < this.lineCount; i++) {
 			if (this.lines.get(i).beginFrame() < 0) {
 				this.lines.remove(i--);

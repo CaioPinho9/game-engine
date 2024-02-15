@@ -22,7 +22,8 @@ public class Camera {
 
 	public void adjustProjection() {
 		this.projectionMatrix.identity();
-		this.projectionMatrix.ortho(0, 32 * 40, 0, 32 * 21, -1, 100);
+		//TODO: Fix projection
+		this.projectionMatrix.ortho(0, 32 * 38, 0, 32 * 21, -1, 100);
 		this.projectionMatrix.invert(this.inverseProjection);
 	}
 
