@@ -125,9 +125,9 @@ public class DebugBatch implements Comparable<DebugBatch> {
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 
-		glDrawArrays(GL_LINES, 0, this.lines.size() * 2);
-
 		glLineWidth(this.lineWidth);
+
+		glDrawArrays(GL_LINES, 0, this.lines.size() * 2);
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -137,7 +137,12 @@ public class DebugBatch implements Comparable<DebugBatch> {
 	}
 
 	@Override public int compareTo(DebugBatch o) {
-		return Integer.compare(this.getZIndex(), o.getZIndex());
+		int zIndexComparison = Integer.compare(this.getZIndex(), o.getZIndex());
+		if (zIndexComparison == 0) {
+			return Float.compare(this.getLineWidth(), o.getLineWidth());
+		} else {
+			return zIndexComparison;
+		}
 	}
 
 	public boolean hasSpace() {

@@ -61,6 +61,18 @@ public class DebugDraw {
 		addLine2D(from, to, DEFAULT_COLOR, lifetime, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
 	}
 
+	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime, float width) {
+		addLine2D(from, to, color, lifetime, width, DEFAULT_Z_INDEX);
+	}
+
+	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, float width) {
+		addLine2D(from, to, color, DEFAULT_LIFETIME, width, DEFAULT_Z_INDEX);
+	}
+
+	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime) {
+		addLine2D(from, to, color, lifetime, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
+	}
+
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color) {
 		addLine2D(from, to, color, DEFAULT_LIFETIME, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
 	}

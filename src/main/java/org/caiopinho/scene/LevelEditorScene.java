@@ -90,12 +90,18 @@ public class LevelEditorScene extends Scene {
 		Vector2f center = new Vector2f(800, 300);
 		Vector2f end1 = new Vector2f(center).add(new Vector2f(0, 50));
 		MathHelper.rotate(end1, -this.angle, center);
-		DebugDraw.addLine2D(center, end1);
+		DebugDraw.addLine2D(center, end1, new Vector4f(1, 0, 0, .5f), 1, 1, -1);
 
-		Vector2f end2 = new Vector2f(center).add(new Vector2f(0, 40));
+		Vector2f end2 = new Vector2f(center).add(new Vector2f(0, 45));
 		MathHelper.rotate(end2, -this.angle / 60, center);
-		DebugDraw.addLine2D(center, end2);
-		DebugDraw.addCircle2D(new Transform(center, new Vector2f(60, 60)));
+		DebugDraw.addLine2D(center, end2, new Vector4f(.75f, 0, 0, 1), 1, 2, 0);
+
+		Vector2f end3 = new Vector2f(center).add(new Vector2f(0, 40));
+		MathHelper.rotate(end2, -this.angle / 360, center);
+		DebugDraw.addLine2D(center, end3, new Vector4f(0, 0, 0, 1), 1, 1.5f, 1);
+		DebugDraw.addCircle2D(new Transform(center, new Vector2f(60, 60)), new Vector4f(0, .5f, 0, 1), 30, 1, 1, 1);
+
+		DebugDraw.addCircle2D(new Transform(new Vector2f(400, 400), new Vector2f(200, 200)), new Vector4f(0, 0, 1, 1), 30, 1, 1, 10);
 
 		super.update(deltaTime);
 	}
