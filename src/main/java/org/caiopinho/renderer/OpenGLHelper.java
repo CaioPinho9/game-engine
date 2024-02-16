@@ -23,14 +23,14 @@ public class OpenGLHelper {
 	}
 
 	public static int createVAO() {
-		//  Create Vertex Array Object
+		// Create Vertex Array Object
 		int vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 		return vaoId;
 	}
 
 	public static int createVBO(long bufferSize) {
-		//  Allocate the space for vertices
+		// Allocate the space for vertices
 		int vboId = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, bufferSize, GL_DYNAMIC_DRAW);

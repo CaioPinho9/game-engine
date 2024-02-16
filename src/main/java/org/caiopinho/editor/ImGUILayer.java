@@ -1,4 +1,4 @@
-package org.caiopinho.core;
+package org.caiopinho.editor;
 
 import static org.lwjgl.glfw.GLFW.GLFW_ARROW_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
@@ -57,6 +57,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
 import java.util.Objects;
 
+import org.caiopinho.core.MouseListener;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
 
@@ -65,13 +66,18 @@ import imgui.ImFontConfig;
 import imgui.ImGui;
 import imgui.ImGuiFreeType;
 import imgui.ImGuiIO;
-import imgui.callbacks.ImStrConsumer;
-import imgui.callbacks.ImStrSupplier;
-import imgui.enums.ImGuiBackendFlags;
-import imgui.enums.ImGuiConfigFlags;
-import imgui.enums.ImGuiKey;
-import imgui.enums.ImGuiMouseCursor;
+import imgui.ImVec2;
+import imgui.callback.ImStrConsumer;
+import imgui.callback.ImStrSupplier;
+import imgui.flag.ImGuiBackendFlags;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiConfigFlags;
+import imgui.flag.ImGuiKey;
+import imgui.flag.ImGuiMouseCursor;
+import imgui.flag.ImGuiStyleVar;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.type.ImBoolean;
 
 public class ImGUILayer {
 	private final long glfwWindow;
@@ -89,6 +95,8 @@ public class ImGUILayer {
 		this.startFrame(deltaTime);
 		// Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
 		ImGui.newFrame();
+		this.setupDockSpace();
+		GameViewWindow.imgui();
 		currentScene.sceneImgui();
 		ImGui.showDemoWindow();
 		ImGui.render();
@@ -102,16 +110,17 @@ public class ImGUILayer {
 		// This line is critical for Dear ImGui to work.
 		ImGui.createContext();
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// Initialize ImGuiIO config
 		final ImGuiIO io = ImGui.getIO();
 
 		io.setIniFilename("imgui.ini"); // We don't want to save .ini file
 		io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
+		io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 		io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
 		io.setBackendPlatformName("imgui_java_impl_glfw");
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
 		final int[] keyMap = new int[ImGuiKey.COUNT];
 		keyMap[ImGuiKey.Tab] = GLFW_KEY_TAB;
@@ -138,7 +147,7 @@ public class ImGUILayer {
 		keyMap[ImGuiKey.Z] = GLFW_KEY_Z;
 		io.setKeyMap(keyMap);
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// Mouse cursors mapping
 		this.mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
 		this.mouseCursors[ImGuiMouseCursor.TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
@@ -150,7 +159,7 @@ public class ImGUILayer {
 		this.mouseCursors[ImGuiMouseCursor.Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
 		this.mouseCursors[ImGuiMouseCursor.NotAllowed] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// GLFW callbacks to handle user input
 
 		glfwSetKeyCallback(this.glfwWindow, (w, key, scancode, action, mods) -> {
@@ -187,7 +196,7 @@ public class ImGUILayer {
 				ImGui.setWindowFocus(null);
 			}
 
-			if (!io.getWantCaptureMouse()) {
+			if (!io.getWantCaptureMouse() || GameViewWindow.getWantCaptureMouse()) {
 				MouseListener.mouseButtonCallback(w, button, action, mods);
 			}
 		});
@@ -212,7 +221,7 @@ public class ImGUILayer {
 			}
 		});
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// Fonts configuration
 		// Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
 
@@ -232,7 +241,7 @@ public class ImGUILayer {
 
 		fontConfig.destroy(); // After all fonts were added we don't need this config more
 
-		// ------------------------------------------------------------
+		//------------------------------------------------------------
 		// Use freetype instead of stb_truetype to build a fonts texture
 		ImGuiFreeType.buildFontAtlas(fontAtlas, ImGuiFreeType.RasterizerFlags.LightHinting);
 
@@ -275,6 +284,38 @@ public class ImGUILayer {
 	private void destroyImGui() {
 		this.imGuiGl3.dispose();
 		ImGui.destroyContext();
+	}
+
+	private void setupDockSpace() {
+		int windowFlags = ImGuiWindowFlags.MenuBar;
+		windowFlags |= ImGuiWindowFlags.NoDocking;
+		windowFlags |= ImGuiWindowFlags.NoTitleBar;
+		windowFlags |= ImGuiWindowFlags.NoCollapse;
+		windowFlags |= ImGuiWindowFlags.NoResize;
+		windowFlags |= ImGuiWindowFlags.NoMove;
+		windowFlags |= ImGuiWindowFlags.NoBringToFrontOnFocus;
+		windowFlags |= ImGuiWindowFlags.NoNavFocus;
+
+		ImGui.setNextWindowPos(0, 0, ImGuiCond.Always);
+		ImGui.setNextWindowSize(Window.getWidth(), Window.getHeight());
+		ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+		ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+
+		ImGui.begin("DockSpace", new ImBoolean(true), windowFlags);
+		ImGui.popStyleVar(2);
+
+		// DockSpace
+		ImGui.dockSpace(ImGui.getID("DockSpace"));
+		ImGui.end();
+	}
+
+	public static ImVec2 getWindowSizeNoScroll() {
+		ImVec2 windowSize = new ImVec2();
+		ImGui.getContentRegionAvail(windowSize);
+		windowSize.x -= ImGui.getScrollX();
+		windowSize.y -= ImGui.getScrollY();
+
+		return windowSize;
 	}
 
 }

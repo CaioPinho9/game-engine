@@ -64,7 +64,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		this.textures = new ArrayList<>();
 		this.maxBatchSize = maxBatchSize;
 
-		//  4 vertices quads
+		// 4 vertices quads
 		this.vertices = new float[maxBatchSize * 4 * this.VERTEX_SIZE];
 
 		this.spriteCount = 0;
@@ -76,19 +76,19 @@ public class RenderBatch implements Comparable<RenderBatch> {
 	}
 
 	public void start() {
-		//  Create Vertex Array Object
+		// Create Vertex Array Object
 		this.vaoId = OpenGLHelper.createVAO();
 
-		//  Allocate the space for vertices
+		// Allocate the space for vertices
 		this.vboId = OpenGLHelper.createVBO((long) this.vertices.length * Float.BYTES);
 
 		OpenGLHelper.createEBO();
 
-		//  Create the indices and upload
+		// Create the indices and upload
 		int[] indices = this.generateIndices();
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
-		//  Add the vertex attribute pointers
+		// Add the vertex attribute pointers
 		OpenGLHelper.addVertexAttribPointer(0, this.POSITION_SIZE, this.VERTEX_SIZE_BYTES, this.POSITION_OFFSET);
 		OpenGLHelper.addVertexAttribPointer(1, this.COLOR_SIZE, this.VERTEX_SIZE_BYTES, this.COLOR_OFFSET);
 		OpenGLHelper.addVertexAttribPointer(2, this.TEXTURE_COORDINATES_SIZE, this.VERTEX_SIZE_BYTES, this.TEXTURE_COORDINATES_OFFSET);
@@ -144,7 +144,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 	}
 
 	public int[] generateIndices() {
-		//  6 indices per quad (3 per triangle)
+		// 6 indices per quad (3 per triangle)
 		int[] elements = new int[this.maxBatchSize * 6];
 		for (int i = 0; i < this.maxBatchSize; i++) {
 			this.loadElementIndices(elements, i);
@@ -156,8 +156,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		int offset = index * 6;
 		int vertex = index * 4;
 
-		//  3, 2, 0, 0, 2, 1			7, 6, 4, 4, 6, 5
-		//  Triangle 1
+		// 3, 2, 0, 0, 2, 1			7, 6, 4, 4, 6, 5
+		// Triangle 1
 		elements[offset] = vertex + 3;
 		elements[offset + 1] = vertex + 2;
 		elements[offset + 2] = vertex;

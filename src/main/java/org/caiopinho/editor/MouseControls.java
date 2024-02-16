@@ -1,8 +1,10 @@
-package org.caiopinho.core;
+package org.caiopinho.editor;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import org.caiopinho.component.Component;
+import org.caiopinho.core.GameObject;
+import org.caiopinho.core.MouseListener;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
 

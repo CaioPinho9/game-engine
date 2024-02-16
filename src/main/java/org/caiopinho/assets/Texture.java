@@ -27,11 +27,37 @@ import org.lwjgl.BufferUtils;
 
 @Getter
 public class Texture {
-	private int id;
-	@Getter private int width;
-	@Getter private int height;
+	private transient int id;
+	private int width;
+	private int height;
+	private String filepath;
+
+	public Texture() {
+	}
+
+	public Texture(int width, int height) {
+		this.filepath = "Generated";
+
+		this.width = width;
+		this.height = height;
+
+		// Generate texture on GPU
+		this.id = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, this.id);
+
+		// Set texture parameters
+		// When stretching the image, pixelate
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		// When shrinking an image, pixelate
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		// Create empty texture
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this.width, this.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	}
 
 	public void init(String filePath) {
+		this.filepath = filePath;
+
 		// Generate texture on GPU
 		this.id = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, this.id);
@@ -86,6 +112,6 @@ public class Texture {
 		if (!(object instanceof Texture texture)) {
 			return false;
 		}
-		return this.id == texture.id && this.width == texture.width && this.height == texture.height;
+		return this.id == texture.id && this.width == texture.width && this.height == texture.height && this.filepath.equals(texture.filepath);
 	}
 }

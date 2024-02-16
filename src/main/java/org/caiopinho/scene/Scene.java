@@ -11,7 +11,9 @@ import java.util.List;
 
 import lombok.Getter;
 
+import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.Component;
+import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Renderer;
@@ -69,7 +71,6 @@ public abstract class Scene {
 	}
 
 	public void imgui() {
-
 	}
 
 	public void addGameObjectToScene(GameObject gameObject) {
@@ -94,8 +95,9 @@ public abstract class Scene {
 	}
 
 	public void load() {
-		this.loadResources();
 		String text = "";
+
+		this.loadResources();
 
 		try {
 			text = new String(Files.readAllBytes(Paths.get("saves/" + this.getClass().getCanonicalName() + ".txt")));
@@ -123,7 +125,21 @@ public abstract class Scene {
 			GameObject.init(++maxGameObjectId);
 			Component.init(++maxComponentId);
 			this.wasLoaded = true;
-			this.activeGameObject = gameObjects[0];
+
+			if (gameObjects.length > 0) {
+				this.activeGameObject = gameObjects[0];
+			}
+		}
+
+		this.loadGameObjectTextures();
+	}
+
+	private void loadGameObjectTextures() {
+		for (GameObject gameObject : this.gameObjects) {
+			SpriteRenderer spriteRenderer = gameObject.getComponent(SpriteRenderer.class);
+			if (spriteRenderer != null && spriteRenderer.getTexture() != null) {
+				spriteRenderer.setTexture(AssetPool.getTexture(spriteRenderer.getTexture().getFilepath()));
+			}
 		}
 	}
 }

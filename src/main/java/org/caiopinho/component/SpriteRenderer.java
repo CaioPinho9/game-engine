@@ -9,7 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import imgui.ImGui;
-import imgui.enums.ImGuiColorEditFlags;
+import imgui.flag.ImGuiColorEditFlags;
 
 @Getter
 public class SpriteRenderer extends Component {
@@ -65,7 +65,7 @@ public class SpriteRenderer extends Component {
 	}
 
 	public void setSprite(Sprite sprite) {
-		//TODO: Dirty sprite logic
+		// TODO: Dirty sprite logic
 		this.sprite = sprite;
 		this.isDirty = true;
 	}
@@ -85,5 +85,10 @@ public class SpriteRenderer extends Component {
 			// Update the color vector if the color picker value changes
 			this.setColor(newColor[0], newColor[1], newColor[2], newColor[3]);
 		}
+	}
+
+	public void setTexture(Texture texture) {
+		this.sprite.setTexture(texture);
+		this.isDirty = true;
 	}
 }

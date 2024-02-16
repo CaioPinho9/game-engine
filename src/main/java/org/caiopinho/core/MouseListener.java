@@ -3,7 +3,11 @@ package org.caiopinho.core;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
+import lombok.Setter;
+
 import org.caiopinho.renderer.Window;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class MouseListener {
@@ -12,6 +16,8 @@ public class MouseListener {
 	private double positionX = 0, positionY = 0, lastPositionX = 0, lastPositionY = 0;
 	private final boolean[] mouseButtonPressed = new boolean[5];
 	private boolean isDragging = false;
+	@Setter private static Vector2f gameViewportSize;
+	@Setter private static Vector2f gameViewportPosition;
 
 	private static MouseListener instance = null;
 
@@ -83,17 +89,21 @@ public class MouseListener {
 	}
 
 	public static float getOrthoX() {
-		float currentX = (getX() / (float) Window.getWidth()) * 2 - 1;
+		float currentX = ((getX() - gameViewportPosition.x) / gameViewportSize.x) * 2 - 1;
 		Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
-		tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+		Matrix4f viewProjection = new Matrix4f();
+		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjection);
+		tmp.mul(viewProjection);
 		currentX = tmp.x;
 		return currentX;
 	}
 
 	public static float getOrthoY() {
-		float currentY = ((Window.getHeight() - getY()) / (float) Window.getHeight()) * 2 - 1;
+		float currentY = -(((getY() - gameViewportPosition.y) / gameViewportSize.y) * 2 - 1);
 		Vector4f tmp = new Vector4f(0, currentY, 0, 1);
-		tmp.mul(Window.getScene().getCamera().getInverseProjection()).mul(Window.getScene().getCamera().getInverseView());
+		Matrix4f viewProjection = new Matrix4f();
+		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjection);
+		tmp.mul(viewProjection);
 		currentY = tmp.y;
 		return currentY;
 	}

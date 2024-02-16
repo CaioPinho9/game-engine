@@ -20,7 +20,7 @@ import org.gradle.internal.os.OperatingSystem
 
 project.ext.lwjglVersion = "3.3.3"
 project.ext.jomlVersion = "1.10.5"
-project.ext.imguiVersion = '1.76-0.9'
+project.ext.imguiVersion = '1.77-0.17.1'
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
@@ -28,17 +28,15 @@ switch (OperatingSystem.current()) {
         break
     case OperatingSystem.WINDOWS:
         def osArch = System.getProperty("os.arch")
-        project.ext.lwjglNatives = osArch.contains("64")
-                ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
-                : "natives-windows-x86"
+        project.ext.lwjglNatives = osArch.contains("64") ? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}" : "natives-windows-x86"
         break
 }
 
 dependencies {
-    //GSON
+    // GSON
     implementation 'com.google.code.gson:gson:2.8.8'
 
-    //ImgGUI
+    // ImgGUI
     implementation "io.imgui.java:binding:$imguiVersion"
     implementation "io.imgui.java:lwjgl3:$imguiVersion"
 
@@ -53,7 +51,7 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    //Lombok
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 

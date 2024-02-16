@@ -63,13 +63,13 @@ public class DebugBatch implements Comparable<DebugBatch> {
 	}
 
 	public void start() {
-		//  Create Vertex Array Object
+		// Create Vertex Array Object
 		this.vaoId = OpenGLHelper.createVAO();
 
-		//  Allocate the space for vertices
+		// Allocate the space for vertices
 		this.vboId = OpenGLHelper.createVBO((long) this.vertexArray.length * Float.BYTES);
 
-		//  Add the vertex attribute pointers
+		// Add the vertex attribute pointers
 		OpenGLHelper.addVertexAttribPointer(0, this.POSITION_SIZE, this.VERTEX_SIZE_BYTES, this.POSITION_OFFSET);
 		OpenGLHelper.addVertexAttribPointer(1, this.COLOR_SIZE, this.VERTEX_SIZE_BYTES, this.COLOR_OFFSET);
 	}

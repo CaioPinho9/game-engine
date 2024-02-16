@@ -6,8 +6,8 @@ import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class Line2D {
 	private Vector2f from;
 	private Vector2f to;

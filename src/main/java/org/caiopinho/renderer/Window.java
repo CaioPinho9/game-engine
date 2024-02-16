@@ -32,12 +32,15 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11C.GL_SRC_ALPHA;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-import org.caiopinho.core.ImGUILayer;
+import lombok.Getter;
+
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
+import org.caiopinho.editor.ImGUILayer;
 import org.caiopinho.renderer.debug.DebugDraw;
 import org.caiopinho.scene.LevelEditorScene;
 import org.caiopinho.scene.LevelScene;
@@ -48,6 +51,7 @@ import org.lwjgl.opengl.GL;
 
 public class Window {
 	private int width, height;
+	private float aspectRatio;
 	private String title;
 	private long glfwWindow;
 	private ImGUILayer imguiLayer;
@@ -57,10 +61,12 @@ public class Window {
 	private static Window instance = null;
 
 	private static Scene currentScene;
+	@Getter private static Framebuffer framebuffer;
 
 	private Window() {
 		this.width = 1920;
 		this.height = 1080;
+		this.aspectRatio = (float) this.width / this.height;
 		this.title = "Hello World";
 		this.r = 1;
 		this.b = 1;
@@ -91,6 +97,10 @@ public class Window {
 		}
 
 		return instance;
+	}
+
+	public static float getAspectRatio() {
+		return get().aspectRatio;
 	}
 
 	public void run() {
@@ -155,6 +165,10 @@ public class Window {
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		framebuffer = new Framebuffer(this.width, this.height);
+		glViewport(0, 0, this.width, this.height);
+
 		this.imguiLayer = new ImGUILayer(this.glfwWindow);
 		this.imguiLayer.start();
 
@@ -170,6 +184,8 @@ public class Window {
 			// Poll events
 			glfwPollEvents();
 
+			framebuffer.bind();
+
 			glClearColor(this.r, this.g, this.b, this.a);
 			glClear(GL_COLOR_BUFFER_BIT);
 
@@ -177,6 +193,7 @@ public class Window {
 				DebugDraw.render();
 				currentScene.update(deltaTime);
 			}
+			framebuffer.unbind();
 
 			KeyListener.endFrame();
 			MouseListener.endFrame();
