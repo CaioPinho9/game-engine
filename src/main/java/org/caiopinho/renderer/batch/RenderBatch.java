@@ -1,4 +1,4 @@
-package org.caiopinho.renderer;
+package org.caiopinho.renderer.batch;
 
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
@@ -18,61 +18,41 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-
 import org.caiopinho.assets.AssetPool;
-import org.caiopinho.assets.Shader;
 import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
+import org.caiopinho.renderer.OpenGLHelper;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-public class RenderBatch implements Comparable<RenderBatch> {
+public class RenderBatch extends Batch<SpriteRenderer> {
 	// Vertex
 
 	// Pos 				Color							Texture Coordinates	Texture id
 	// float, float		float, float, float, float		float, float	float
-	private final int POSITION_SIZE = 2;
-	private final int COLOR_SIZE = 4;
-	private final int TEXTURE_COORDINATES_SIZE = 2;
-	private final int TEXTURE_ID_SIZE = 1;
+	private static final int POSITION_SIZE = 2;
+	private static final int COLOR_SIZE = 4;
+	private static final int TEXTURE_COORDINATES_SIZE = 2;
+	private static final int TEXTURE_ID_SIZE = 1;
 
-	private final int POSITION_OFFSET = 0;
-	private final int COLOR_OFFSET = this.POSITION_OFFSET + this.POSITION_SIZE * Float.BYTES;
-	private final int TEXTURE_COORDINATES_OFFSET = this.COLOR_OFFSET + this.COLOR_SIZE * Float.BYTES;
-	private final int TEXTURE_ID_OFFSET = this.TEXTURE_COORDINATES_OFFSET + this.TEXTURE_COORDINATES_SIZE * Float.BYTES;
-	private final int VERTEX_SIZE = this.POSITION_SIZE + this.COLOR_SIZE + this.TEXTURE_COORDINATES_SIZE + this.TEXTURE_ID_SIZE;
-	private final int VERTEX_SIZE_BYTES = this.VERTEX_SIZE * Float.BYTES;
+	private static final int POSITION_OFFSET = 0;
+	private static final int COLOR_OFFSET = POSITION_OFFSET + POSITION_SIZE * Float.BYTES;
+	private static final int TEXTURE_COORDINATES_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
+	private static final int TEXTURE_ID_OFFSET = TEXTURE_COORDINATES_OFFSET + TEXTURE_COORDINATES_SIZE * Float.BYTES;
+	private static final int VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE + TEXTURE_COORDINATES_SIZE + TEXTURE_ID_SIZE;
+	private static final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
+	private static final int VERTICES_PER_SPRITE = 4;
+	private static final int INDICES_PER_SPRITE = 6;
+	private static final String SHADER_PATH = "assets/shaders/default.glsl";
 
-	private final SpriteRenderer[] sprites;
-	private final List<Texture> textures;
+	private final List<Texture> textures = new ArrayList<>();
 	private final int[] textureSlots = { 0, 1, 2, 3, 4, 5, 6, 7 };
-	private final float[] vertices;
-
-	private final int maxBatchSize;
-
-	private int spriteCount;
-	private boolean hasSpace;
-	private int vaoId, vboId;
-	private final Shader shader;
-	@Getter private final int zIndex;
 
 	public RenderBatch(int maxBatchSize, int zIndex) {
-		this.zIndex = zIndex;
-		this.shader = AssetPool.getShader("assets/shaders/default.glsl");
-		this.sprites = new SpriteRenderer[maxBatchSize];
-		this.textures = new ArrayList<>();
-		this.maxBatchSize = maxBatchSize;
+		super(maxBatchSize, zIndex, AssetPool.getShader(SHADER_PATH), new SpriteRenderer[maxBatchSize]);
 
 		// 4 vertices quads
-		this.vertices = new float[maxBatchSize * 4 * this.VERTEX_SIZE];
-
-		this.spriteCount = 0;
-		this.hasSpace = true;
-	}
-
-	public boolean hasSpace() {
-		return this.hasSpace;
+		this.vertices = new float[maxBatchSize * VERTICES_PER_SPRITE * VERTEX_SIZE];
 	}
 
 	public void start() {
@@ -89,16 +69,16 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
 		// Add the vertex attribute pointers
-		OpenGLHelper.addVertexAttribPointer(0, this.POSITION_SIZE, this.VERTEX_SIZE_BYTES, this.POSITION_OFFSET);
-		OpenGLHelper.addVertexAttribPointer(1, this.COLOR_SIZE, this.VERTEX_SIZE_BYTES, this.COLOR_OFFSET);
-		OpenGLHelper.addVertexAttribPointer(2, this.TEXTURE_COORDINATES_SIZE, this.VERTEX_SIZE_BYTES, this.TEXTURE_COORDINATES_OFFSET);
-		OpenGLHelper.addVertexAttribPointer(3, this.TEXTURE_ID_SIZE, this.VERTEX_SIZE_BYTES, this.TEXTURE_ID_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(0, POSITION_SIZE, VERTEX_SIZE_BYTES, POSITION_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(1, COLOR_SIZE, VERTEX_SIZE_BYTES, COLOR_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(2, TEXTURE_COORDINATES_SIZE, VERTEX_SIZE_BYTES, TEXTURE_COORDINATES_OFFSET);
+		OpenGLHelper.addVertexAttribPointer(3, TEXTURE_ID_SIZE, VERTEX_SIZE_BYTES, TEXTURE_ID_OFFSET);
 	}
 
-	public void render() {
+	@Override public void render() {
 		boolean rebufferData = false;
-		for (int i = 0; i < this.spriteCount; i++) {
-			SpriteRenderer spriteRenderer = this.sprites[i];
+		for (int i = 0; i < this.elementCount; i++) {
+			SpriteRenderer spriteRenderer = this.elements[i];
 			if (spriteRenderer.isDirty()) {
 				this.loadVertexProperties(i);
 				spriteRenderer.setClean();
@@ -128,7 +108,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 
-		glDrawElements(GL_TRIANGLES, this.spriteCount * 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, this.elementCount * INDICES_PER_SPRITE, GL_UNSIGNED_INT, 0);
 
 		// Unbind everything
 		glDisableVertexAttribArray(0);
@@ -145,7 +125,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
 	public int[] generateIndices() {
 		// 6 indices per quad (3 per triangle)
-		int[] elements = new int[this.maxBatchSize * 6];
+		int[] elements = new int[this.maxBatchSize * INDICES_PER_SPRITE];
 		for (int i = 0; i < this.maxBatchSize; i++) {
 			this.loadElementIndices(elements, i);
 		}
@@ -153,8 +133,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
 	}
 
 	public void loadElementIndices(int[] elements, int index) {
-		int offset = index * 6;
-		int vertex = index * 4;
+		int offset = index * INDICES_PER_SPRITE;
+		int vertex = index * VERTICES_PER_SPRITE;
 
 		// 3, 2, 0, 0, 2, 1			7, 6, 4, 4, 6, 5
 		// Triangle 1
@@ -168,11 +148,11 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		elements[offset + 5] = vertex + 1;
 	}
 
-	public void addSprite(SpriteRenderer spriteRenderer) {
+	@Override public void addElement(SpriteRenderer spriteRenderer) {
 		// Get index and add renderObject
-		int index = this.spriteCount;
-		this.sprites[index] = spriteRenderer;
-		this.spriteCount++;
+		int index = this.elementCount;
+		this.elements[index] = spriteRenderer;
+		this.elementCount++;
 
 		Texture texture = spriteRenderer.getTexture();
 		if (texture != null) {
@@ -184,17 +164,16 @@ public class RenderBatch implements Comparable<RenderBatch> {
 		// Add properties to local vertices array
 		this.loadVertexProperties(index);
 
-		if (this.spriteCount >= this.maxBatchSize) {
+		if (this.elementCount >= this.maxBatchSize) {
 			this.hasSpace = false;
 		}
-
 	}
 
 	private void loadVertexProperties(int index) {
-		SpriteRenderer spriteRenderer = this.sprites[index];
+		SpriteRenderer spriteRenderer = this.elements[index];
 
 		// Find offset within array (4 vertices per sprite)
-		int offset = index * 4 * this.VERTEX_SIZE;
+		int offset = index * VERTICES_PER_SPRITE * VERTEX_SIZE;
 		int textureId = 0;
 		// [texture, texture, texture, texture, ...]
 		if (spriteRenderer.getTexture() != null) {
@@ -206,7 +185,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
 		float xAdd = 1;
 		float yAdd = 1;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < VERTICES_PER_SPRITE; i++) {
 			if (i == 1) {
 				yAdd = 0;
 			} else if (i == 2) {
@@ -232,19 +211,16 @@ public class RenderBatch implements Comparable<RenderBatch> {
 			// Load texture id
 			this.vertices[offset + 8] = textureId;
 
-			offset += this.VERTEX_SIZE;
+			offset += VERTEX_SIZE;
 		}
 	}
 
 	public boolean hasTextureSpace() {
-		return this.textures.size() < 8;
+		return this.textures.size() < this.textureSlots.length;
 	}
 
 	public boolean hasTexture(Texture texture) {
 		return this.textures.contains(texture);
 	}
 
-	@Override public int compareTo(RenderBatch o) {
-		return Integer.compare(this.getZIndex(), o.getZIndex());
-	}
 }

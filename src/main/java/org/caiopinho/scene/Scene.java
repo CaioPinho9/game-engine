@@ -26,7 +26,7 @@ import imgui.ImGui;
 
 public abstract class Scene {
 	@Getter protected Camera camera;
-	protected Renderer renderer = new Renderer();
+	@Getter protected Renderer renderer = new Renderer();
 	private boolean isRunning;
 	protected boolean wasLoaded;
 	protected List<GameObject> gameObjects = new ArrayList<>();

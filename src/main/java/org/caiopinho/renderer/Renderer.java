@@ -7,10 +7,14 @@ import java.util.List;
 import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
+import org.caiopinho.renderer.batch.Batch;
+import org.caiopinho.renderer.batch.DebugBatch;
+import org.caiopinho.renderer.batch.RenderBatch;
+import org.caiopinho.renderer.debug.Line2D;
 
 public class Renderer {
 	private final int MAX_BATCH_SIZE = 1000;
-	private final List<RenderBatch> batches;
+	private final List<Batch<?>> batches;
 
 	public Renderer() {
 		this.batches = new ArrayList<>();
@@ -24,11 +28,15 @@ public class Renderer {
 	}
 
 	private void addToRenderBatch(SpriteRenderer spriteRenderer) {
-		for (RenderBatch batch : this.batches) {
-			if (batch.hasSpace() && batch.getZIndex() == spriteRenderer.gameObject.getZIndex()) {
+		for (Batch<?> batch : this.batches) {
+			if (!(batch instanceof RenderBatch renderBatch)) {
+				continue;
+			}
+
+			if (renderBatch.hasSpace() && renderBatch.getZIndex() == spriteRenderer.gameObject.getZIndex()) {
 				Texture texture = spriteRenderer.getTexture();
-				if (texture == null || (batch.hasTexture(texture) || batch.hasTextureSpace())) {
-					batch.addSprite(spriteRenderer);
+				if (texture == null || (renderBatch.hasTexture(texture) || renderBatch.hasTextureSpace())) {
+					renderBatch.addElement(spriteRenderer);
 					return;
 				}
 			}
@@ -37,12 +45,38 @@ public class Renderer {
 		RenderBatch newBatch = new RenderBatch(this.MAX_BATCH_SIZE, spriteRenderer.gameObject.getZIndex());
 		newBatch.start();
 		this.batches.add(newBatch);
-		newBatch.addSprite(spriteRenderer);
+		newBatch.addElement(spriteRenderer);
+		Collections.sort(this.batches);
+	}
+
+	public void addDebugLine2D(Line2D line) {
+		for (Batch<?> batch : this.batches) {
+			if (!(batch instanceof DebugBatch debugBatch)) {
+				continue;
+			}
+
+			if (debugBatch.hasSpace() && debugBatch.getZIndex() == line.getZIndex() && debugBatch.getLineWidth() == line.getWidth()) {
+				debugBatch.addElement(line);
+				return;
+			}
+		}
+
+		DebugBatch newBatch = new DebugBatch(this.MAX_BATCH_SIZE, line.getWidth(), line.getZIndex());
+		newBatch.start();
+		this.batches.add(newBatch);
+		newBatch.addElement(line);
 		Collections.sort(this.batches);
 	}
 
 	public void render() {
-		for (RenderBatch batch : this.batches) {
+		for (int i = 0; i < this.batches.size(); i++) {
+			Batch<?> batch = this.batches.get(i);
+
+			if (batch.getElementCount() == 0) {
+				this.batches.remove(i--);
+				continue;
+			}
+
 			batch.render();
 		}
 	}

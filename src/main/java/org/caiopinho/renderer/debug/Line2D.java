@@ -19,4 +19,12 @@ public class Line2D {
 	public int beginFrame() {
 		return --this.lifetime;
 	}
+
+	public boolean equals(Line2D other) {
+		if (other == null) {
+			return false;
+		}
+
+		return this.from.equals(other.from) && this.to.equals(other.to) && this.color.equals(other.color) && this.width == other.width;
+	}
 }

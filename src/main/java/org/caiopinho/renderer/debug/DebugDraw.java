@@ -1,16 +1,12 @@
 package org.caiopinho.renderer.debug;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.caiopinho.core.Transform;
 import org.caiopinho.math.MathHelper;
+import org.caiopinho.renderer.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class DebugDraw {
-	private static final int MAX_LINES = 10000;
 	private static final Vector4f DEFAULT_COLOR = new Vector4f(0, 0, 0, 1);
 	private static final int DEFAULT_LIFETIME = 1;
 	private static final float DEFAULT_CIRCLE_RATIO = 1;
@@ -18,46 +14,10 @@ public class DebugDraw {
 	private static final float DEFAULT_WIDTH = 2;
 	private static final int DEFAULT_Z_INDEX = 0;
 
-	private static final List<DebugBatch> batches = new ArrayList<>();
-	private static int lineCount = 0;
-
-	public static void render() {
-		lineCount = 0;
-		for (int i = 0; i < batches.size(); i++) {
-			DebugBatch batch = batches.get(i);
-
-			if (batch.getLineCount() == 0) {
-				batches.remove(i--);
-				continue;
-			}
-
-			batch.beginFrame();
-			batch.render();
-			lineCount += batch.getLineCount();
-		}
-	}
-
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime, float width, int zIndex) {
-		if (lineCount >= MAX_LINES) {
-			return;
-		}
-
 		Line2D line = new Line2D(from, to, color, lifetime, width, zIndex);
 
-		for (DebugBatch batch : batches) {
-			if (batch.hasSpace() && batch.getZIndex() == zIndex && batch.getLineWidth() == width) {
-				batch.addLine(line);
-				lineCount++;
-				return;
-			}
-		}
-
-		DebugBatch newBatch = new DebugBatch(MAX_LINES, width, zIndex);
-		newBatch.start();
-		batches.add(newBatch);
-		newBatch.addLine(line);
-		Collections.sort(batches);
-		lineCount++;
+		Window.getScene().getRenderer().addDebugLine2D(line);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, int lifetime) {

@@ -41,7 +41,6 @@ import lombok.Getter;
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
 import org.caiopinho.editor.ImGUILayer;
-import org.caiopinho.renderer.debug.DebugDraw;
 import org.caiopinho.scene.LevelEditorScene;
 import org.caiopinho.scene.LevelScene;
 import org.caiopinho.scene.Scene;
@@ -190,7 +189,6 @@ public class Window {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			if (deltaTime >= 0) {
-				DebugDraw.render();
 				currentScene.update(deltaTime);
 			}
 			framebuffer.unbind();
