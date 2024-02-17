@@ -23,7 +23,14 @@ public class DebugDraw {
 
 	public static void render() {
 		lineCount = 0;
-		for (DebugBatch batch : batches) {
+		for (int i = 0; i < batches.size(); i++) {
+			DebugBatch batch = batches.get(i);
+
+			if (batch.getLineCount() == 0) {
+				batches.remove(i--);
+				continue;
+			}
+
 			batch.beginFrame();
 			batch.render();
 			lineCount += batch.getLineCount();

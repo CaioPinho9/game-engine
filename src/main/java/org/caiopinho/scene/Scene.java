@@ -1,13 +1,12 @@
 package org.caiopinho.scene;
 
-import static org.caiopinho.core.MouseListener.getOrthoX;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import lombok.Getter;
 
@@ -53,7 +52,6 @@ public abstract class Scene {
 
 	public void update(float deltaTime) {
 		System.out.print("FPS: " + 1 / deltaTime + "\r");
-		getOrthoX();
 		for (GameObject gameObject : this.gameObjects) {
 			gameObject.update(deltaTime);
 		}
@@ -126,8 +124,10 @@ public abstract class Scene {
 			Component.init(++maxComponentId);
 			this.wasLoaded = true;
 
-			if (gameObjects.length > 0) {
-				this.activeGameObject = gameObjects[0];
+			for (GameObject gameObject : gameObjects) {
+				if (!Objects.equals(gameObject.getName(), "LevelEditor")) {
+					this.activeGameObject = gameObject;
+				}
 			}
 		}
 

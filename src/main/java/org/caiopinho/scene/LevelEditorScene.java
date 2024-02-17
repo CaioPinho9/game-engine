@@ -1,5 +1,7 @@
 package org.caiopinho.scene;
 
+import java.util.Objects;
+
 import lombok.NoArgsConstructor;
 
 import org.caiopinho.assets.AssetPool;
@@ -10,6 +12,7 @@ import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
+import org.caiopinho.editor.GridTools;
 import org.caiopinho.editor.MouseControls;
 import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
@@ -22,17 +25,26 @@ import imgui.ImVec2;
 
 @NoArgsConstructor
 public class LevelEditorScene extends Scene {
-
 	private Spritesheet sprites;
-	MouseControls mouseControls = new MouseControls();
+	private GameObject levelEditor;
 
 	@Override public void init() {
 		this.camera = new Camera(new Vector2f());
+
+		for (GameObject object : this.gameObjects) {
+			if (Objects.equals(object.getName(), "LevelEditor")) {
+				this.levelEditor = object;
+			}
+		}
 
 		if (this.wasLoaded) {
 			System.out.println("Scene was loaded");
 			return;
 		}
+		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
+		this.levelEditor.addComponent(new MouseControls());
+		this.levelEditor.addComponent(new GridTools());
+		this.addGameObjectToScene(this.levelEditor);
 
 		GameObject gameObject1 = new GameObject("Object1", new Transform(new Vector2f(100, 100), new Vector2f(100, 100)), 1);
 		SpriteRenderer spriteRenderer1 = new SpriteRenderer();
@@ -82,10 +94,11 @@ public class LevelEditorScene extends Scene {
 		this.angle += 6 * deltaTime;
 		this.percent += .05f * deltaTime;
 		this.percent %= 1;
+
 		DebugDraw.addLine2D(new Vector2f(100, 500), new Vector2f(200, 200), new Vector4f(1, 0, 0, 1));
 		DebugDraw.addBox2D(new Transform(new Vector2f(400, 400), new Vector2f(100, 200), this.angle), new Vector4f(0, 1, 0, 1), 5);
 		DebugDraw.addCircle2D(new Transform(new Vector2f(600, 400), new Vector2f(50, 50), this.angle / 2), new Vector4f(0, 0, 1, 1), 1000, 1, this.percent);
-		this.mouseControls.update(deltaTime);
+		this.levelEditor.getComponent(MouseControls.class).update(deltaTime);
 
 		Vector2f center = new Vector2f(800, 300);
 		Vector2f end1 = new Vector2f(center).add(new Vector2f(0, 50));
@@ -113,6 +126,10 @@ public class LevelEditorScene extends Scene {
 	}
 
 	@Override public void imgui() {
+		ImGui.begin("Level Editor");
+		this.levelEditor.imgui();
+		ImGui.end();
+
 		ImGui.begin("Test window");
 
 		ImVec2 windowPos = new ImVec2();
@@ -133,7 +150,7 @@ public class LevelEditorScene extends Scene {
 			ImGui.pushID(i);
 			if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y)) {
 				GameObject object = Prefabs.createSpriteObject(sprite, spriteWidth, spriteHeight);
-				this.mouseControls.pickGameObject(object);
+				this.levelEditor.getComponent(MouseControls.class).pickGameObject(object);
 			}
 			ImGui.popID();
 

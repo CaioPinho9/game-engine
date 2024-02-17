@@ -1,5 +1,7 @@
 package org.caiopinho.editor;
 
+import lombok.Getter;
+
 import org.caiopinho.core.MouseListener;
 import org.caiopinho.renderer.Window;
 import org.joml.Vector2f;
@@ -10,6 +12,8 @@ import imgui.flag.ImGuiWindowFlags;
 
 public class GameViewWindow {
 	private static float leftX, rightX, topY, bottomY;
+	@Getter private static Vector2f gameViewportPosition = new Vector2f();
+	@Getter private static Vector2f gameViewportSize = new Vector2f();
 
 	public static void imgui() {
 		int windowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
@@ -25,8 +29,10 @@ public class GameViewWindow {
 		topLeft.x -= ImGui.getScrollX();
 		topLeft.y -= ImGui.getScrollY();
 
-		MouseListener.setGameViewportPosition(new Vector2f(topLeft.x, topLeft.y));
-		MouseListener.setGameViewportSize(new Vector2f(viewportPanelSize.x, viewportPanelSize.y));
+		gameViewportPosition = new Vector2f(topLeft.x, topLeft.y);
+		gameViewportSize = new Vector2f(viewportPanelSize.x, viewportPanelSize.y);
+		MouseListener.setGameViewportPosition(gameViewportPosition);
+		MouseListener.setGameViewportSize(gameViewportSize);
 
 		leftX = topLeft.x;
 		bottomY = topLeft.y;

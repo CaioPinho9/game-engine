@@ -55,11 +55,16 @@ import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Objects;
 
 import org.caiopinho.core.MouseListener;
+import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
@@ -316,6 +321,136 @@ public class ImGUILayer {
 		windowSize.y -= ImGui.getScrollY();
 
 		return windowSize;
+	}
+
+	public static void genericFieldBehavior(Field field, Object object) {
+		try {
+			if (Modifier.isTransient(field.getModifiers())) {
+				return;
+			}
+
+			boolean isPrivate = Modifier.isPrivate(field.getModifiers());
+			if (isPrivate) {
+				field.setAccessible(true);
+			}
+
+			Class<?> type = field.getType();
+			Object rawValue = field.get(object);
+			String name = field.getName();
+			FieldConfig config = FieldConfig.findByFieldName(name, object.getClass());
+
+			if (field.isSynthetic()) {
+				return;
+			}
+
+			if (type == int.class) {
+				handleIntField(field, object, name, rawValue, config);
+			} else if (type == float.class) {
+				handleFloatField(field, object, name, rawValue, config);
+			} else if (type == boolean.class) {
+				handleBooleanField(field, object, name, rawValue, config);
+			} else if (type == Vector3f.class) {
+				handleVector3fField(name, rawValue, config);
+			} else if (type == Vector4f.class) {
+				handleVector4fField(name, rawValue, config);
+			} else {
+				System.out.println("Component.imgui: Unknown type " + type);
+			}
+
+			if (isPrivate) {
+				field.setAccessible(false);
+			}
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void handleIntField(Field field, Object object, String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+		int value = (int) rawValue;
+		int[] arr = { value };
+		if (config != null) {
+			if (ImGui.dragInt(config.getUserFriendlyName(), arr, (config.getMax() - config.getMin()) * .01f, config.getMin(), config.getMax())) {
+				arr[0] = (int) MathHelper.clamp(arr[0], config.getMin(), config.getMax());
+				field.setInt(object, arr[0]);
+			}
+			return;
+		}
+		if (ImGui.dragInt(name, arr)) {
+			field.setInt(object, arr[0]);
+		}
+	}
+
+	private static void handleFloatField(Field field, Object object, String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+		float value = (float) rawValue;
+		float[] arr = { value };
+		if (config != null) {
+			if (ImGui.dragFloat(config.getUserFriendlyName(), arr, (config.getMax() - config.getMin()) * .01f, config.getMin(), config.getMax())) {
+				arr[0] = MathHelper.clamp(arr[0], config.getMin(), config.getMax());
+				field.setFloat(object, arr[0]);
+			}
+			return;
+		}
+		if (ImGui.dragFloat(name, arr)) {
+			field.setFloat(object, arr[0]);
+		}
+	}
+
+	private static void handleBooleanField(Field field, Object object, String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+		boolean value = (boolean) rawValue;
+
+		name = config != null ? config.getUserFriendlyName() : name;
+
+		if (ImGui.checkbox(name, value)) {
+			field.setBoolean(object, !value);
+		}
+	}
+
+	private static void handleVector3fField(String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+		Vector3f value = (Vector3f) rawValue;
+		float[] arr = new float[] { value.x, value.y, value.z };
+		if (config != null) {
+			if (ImGui.dragFloat3(config.getUserFriendlyName(), arr, (config.getMax() - config.getMin()) * .01f, config.getMin(), config.getMax())) {
+				arr = MathHelper.clamp(arr, config.getMin(), config.getMax());
+				value.set(arr[0], arr[1], arr[2]);
+			}
+			return;
+		}
+		if (ImGui.dragFloat3(name, arr)) {
+			value.set(arr[0], arr[1], arr[2]);
+		}
+	}
+
+	private static void handleVector4fField(String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+		Vector4f value = (Vector4f) rawValue;
+		float[] arr = new float[] { value.x, value.y, value.z, value.w };
+		if (config != null) {
+			if (ImGui.dragFloat4(config.getUserFriendlyName(), arr, (config.getMax() - config.getMin()) * .01f, config.getMin(), config.getMax())) {
+				arr = MathHelper.clamp(arr, config.getMin(), config.getMax());
+				value.set(arr[0], arr[1], arr[2], arr[3]);
+			}
+			return;
+		}
+		if (ImGui.dragFloat4(name, arr)) {
+			value.set(arr[0], arr[1], arr[2], arr[3]);
+		}
+	}
+
+	public static void genericGenerateImguiFieldsFromObjectAttributes(Object object) {
+		ImGui.text(object.getClass().getSimpleName());
+		Field[] fields = object.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			ImGUILayer.genericFieldBehavior(field, object);
+		}
+		ImGui.newLine();
+	}
+
+	public static void genericGenerateImguiFieldsFromObjectAttributes(Object object, String title) {
+		ImGui.text(title);
+		Field[] fields = object.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			ImGUILayer.genericFieldBehavior(field, object);
+		}
+		ImGui.newLine();
 	}
 
 }

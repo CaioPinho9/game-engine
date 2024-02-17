@@ -19,4 +19,27 @@ public class MathHelper {
 		vector.x = xPrime;
 		vector.y = yPrime;
 	}
+
+	public static boolean isInsideRange(float value, float min, float max) {
+		return value >= min && value <= max;
+	}
+
+	public static float clamp(float value, float min, float max) {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static int clamp(int value, int min, int max) {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static float[] clamp(float[] vector, float min, float max) {
+		float[] newVector = new float[vector.length];
+
+		for (int i = 0; i < vector.length; i++) {
+			newVector[i] = clamp(vector[i], min, max);
+		}
+
+		return newVector;
+	}
+
 }

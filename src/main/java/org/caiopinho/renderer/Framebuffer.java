@@ -20,11 +20,16 @@ import lombok.Getter;
 
 import org.caiopinho.assets.Texture;
 
+@Getter
 public class Framebuffer {
-	@Getter private final int fboId;
+	private final int fboId;
+	private final int width, height;
 	private final Texture texture;
 
 	public Framebuffer(int width, int height) {
+		this.width = width;
+		this.height = height;
+
 		// Create Framebuffer
 		this.fboId = glGenFramebuffers();
 		glBindFramebuffer(GL_FRAMEBUFFER, this.fboId);

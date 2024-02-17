@@ -10,6 +10,8 @@ import org.joml.Vector3f;
 public class Camera {
 	private Matrix4f projectionMatrix, viewMatrix, inverseProjection, inverseView;
 	public Vector2f position;
+	// TODO: Fix projection
+	private Vector2f projectionSize = new Vector2f(32 * 38, 32 * 21);
 
 	public Camera(Vector2f position) {
 		this.position = position;
@@ -22,8 +24,7 @@ public class Camera {
 
 	public void adjustProjection() {
 		this.projectionMatrix.identity();
-		//TODO: Fix projection
-		this.projectionMatrix.ortho(0, 32 * 38, 0, 32 * 21, -1, 100);
+		this.projectionMatrix.ortho(0, this.projectionSize.x, 0, this.projectionSize.y, -1, 100);
 		this.projectionMatrix.invert(this.inverseProjection);
 	}
 
@@ -40,4 +41,14 @@ public class Camera {
 		return this.viewMatrix;
 	}
 
+	public void moveCameraTo(float x, float y, float deltaTime) {
+		Vector2f newPosition = new Vector2f(x, y);
+		Vector2f delta = new Vector2f(newPosition.x - this.position.x, newPosition.y - this.position.y);
+		this.position.add(delta.x * deltaTime, delta.y * deltaTime);
+	}
+
+	public void addDeltaMoveCamera(float x, float y, float deltaTime) {
+		Vector2f delta = new Vector2f(x, y);
+		this.position.add(delta.x * deltaTime, delta.y * deltaTime);
+	}
 }
