@@ -3,6 +3,8 @@ package org.caiopinho.core;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
+import java.util.Arrays;
+
 import lombok.Setter;
 
 import org.caiopinho.renderer.Window;
@@ -16,12 +18,21 @@ public class MouseListener {
 	private double positionX = 0, positionY = 0, lastPositionX = 0, lastPositionY = 0;
 	private final boolean[] mouseButtonPressed = new boolean[5];
 	private boolean isDragging = false;
+
+	// Variables for double-click detection
+	private final long[] lastClickTime = new long[5];
+	private final static long DOUBLE_CLICK_INTERVAL = 300; // 300 milliseconds for double-click
+	private final boolean[] mouseClicked = new boolean[5];
+
 	@Setter private static Vector2f gameViewportSize;
 	@Setter private static Vector2f gameViewportPosition;
 
 	private static MouseListener instance = null;
 
 	private MouseListener() {
+		// Initialize lastClickTime and mouseClicked arrays
+		Arrays.fill(this.lastClickTime, -1); // Initialize with -1 to indicate no clicks yet
+		Arrays.fill(this.mouseClicked, false);
 	}
 
 	public static synchronized MouseListener get() {
@@ -50,11 +61,18 @@ public class MouseListener {
 	public static void mouseButtonCallback(long glfwWindow, int button, int action, int mods) {
 		MouseListener mouseListener = get();
 
-		if (action == GLFW_PRESS) {
-			mouseListener.mouseButtonPressed[button] = true;
-		} else if (action == GLFW_RELEASE) {
-			mouseListener.mouseButtonPressed[button] = false;
-			mouseListener.isDragging = false;
+		if (button < mouseListener.mouseButtonPressed.length) {
+			if (action == GLFW_PRESS) {
+				long currentTime = System.currentTimeMillis();// Reset the double-click flag for this button
+
+				// Check for double-click
+				mouseListener.mouseClicked[button] = currentTime - mouseListener.lastClickTime[button] <= DOUBLE_CLICK_INTERVAL; // Double-click detected
+				mouseListener.lastClickTime[button] = currentTime; // Update last click time
+				mouseListener.mouseButtonPressed[button] = true;
+			} else if (action == GLFW_RELEASE) {
+				mouseListener.mouseButtonPressed[button] = false;
+				mouseListener.isDragging = false;
+			}
 		}
 	}
 
@@ -70,6 +88,7 @@ public class MouseListener {
 		mouseListener.scrollY = 0;
 		mouseListener.lastPositionX = mouseListener.positionX;
 		mouseListener.lastPositionY = mouseListener.positionY;
+		Arrays.fill(mouseListener.mouseClicked, false);
 	}
 
 	public static float getX() {
@@ -139,4 +158,7 @@ public class MouseListener {
 		return isButtonUp(button) && !get().isDragging;
 	}
 
+	public static boolean isDoubleClick(int button) {
+		return get().mouseClicked[button];
+	}
 }

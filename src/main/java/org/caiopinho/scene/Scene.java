@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import lombok.Getter;
 
@@ -14,6 +13,7 @@ import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.Component;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
+import org.caiopinho.core.Settings;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Renderer;
 import org.caiopinho.serializer.ComponentSerializer;
@@ -29,7 +29,7 @@ public abstract class Scene {
 	@Getter protected Renderer renderer = new Renderer();
 	private boolean isRunning;
 	protected boolean wasLoaded;
-	protected List<GameObject> gameObjects = new ArrayList<>();
+	@Getter protected List<GameObject> gameObjects = new ArrayList<>();
 
 	public GameObject activeGameObject = null;
 
@@ -97,6 +97,10 @@ public abstract class Scene {
 
 		this.loadResources();
 
+		if (Settings.HARD_LEVEL_RELOAD) {
+			return;
+		}
+
 		try {
 			text = new String(Files.readAllBytes(Paths.get("saves/" + this.getClass().getCanonicalName() + ".txt")));
 		} catch (IOException e) {
@@ -123,12 +127,6 @@ public abstract class Scene {
 			GameObject.init(++maxGameObjectId);
 			Component.init(++maxComponentId);
 			this.wasLoaded = true;
-
-			for (GameObject gameObject : gameObjects) {
-				if (!Objects.equals(gameObject.getName(), "LevelEditor")) {
-					this.activeGameObject = gameObject;
-				}
-			}
 		}
 
 		this.loadGameObjectTextures();

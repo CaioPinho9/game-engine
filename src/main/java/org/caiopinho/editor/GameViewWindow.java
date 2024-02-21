@@ -3,6 +3,7 @@ package org.caiopinho.editor;
 import lombok.Getter;
 
 import org.caiopinho.core.MouseListener;
+import org.caiopinho.editor.imgui.ImGuiHelper;
 import org.caiopinho.renderer.Window;
 import org.joml.Vector2f;
 
@@ -11,16 +12,16 @@ import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 
 public class GameViewWindow {
-	private static float leftX, rightX, topY, bottomY;
-	@Getter private static Vector2f gameViewportPosition = new Vector2f();
-	@Getter private static Vector2f gameViewportSize = new Vector2f();
+	private float leftX, rightX, topY, bottomY;
+	@Getter private Vector2f gameViewportPosition = new Vector2f();
+	@Getter private Vector2f gameViewportSize = new Vector2f();
 
-	public static void imgui() {
+	public void imgui() {
 		int windowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
 		ImGui.begin("Game Viewport", windowFlags);
 
 		ImVec2 viewportPanelSize = getViewportPanelSize();
-		ImVec2 viewportPosition = getCenteredPositionViewport(viewportPanelSize);
+		ImVec2 viewportPosition = this.getCenteredPositionViewport(viewportPanelSize);
 
 		ImGui.setCursorPos(viewportPosition.x, viewportPosition.y);
 
@@ -29,15 +30,15 @@ public class GameViewWindow {
 		topLeft.x -= ImGui.getScrollX();
 		topLeft.y -= ImGui.getScrollY();
 
-		gameViewportPosition = new Vector2f(topLeft.x, topLeft.y);
-		gameViewportSize = new Vector2f(viewportPanelSize.x, viewportPanelSize.y);
-		MouseListener.setGameViewportPosition(gameViewportPosition);
-		MouseListener.setGameViewportSize(gameViewportSize);
+		this.gameViewportPosition = new Vector2f(topLeft.x, topLeft.y);
+		this.gameViewportSize = new Vector2f(viewportPanelSize.x, viewportPanelSize.y);
+		MouseListener.setGameViewportPosition(this.gameViewportPosition);
+		MouseListener.setGameViewportSize(this.gameViewportSize);
 
-		leftX = topLeft.x;
-		bottomY = topLeft.y;
-		rightX = topLeft.x + viewportPanelSize.x;
-		topY = topLeft.y + viewportPanelSize.y;
+		this.leftX = topLeft.x;
+		this.bottomY = topLeft.y;
+		this.rightX = topLeft.x + viewportPanelSize.x;
+		this.topY = topLeft.y + viewportPanelSize.y;
 
 		int textureId = Window.getFramebuffer().getTextureId();
 		ImGui.image(textureId, viewportPanelSize.x, viewportPanelSize.y, 0, 1, 1, 0);
@@ -46,7 +47,7 @@ public class GameViewWindow {
 	}
 
 	private static ImVec2 getViewportPanelSize() {
-		ImVec2 windowSize = ImGUILayer.getWindowSizeNoScroll();
+		ImVec2 windowSize = ImGuiHelper.getWindowSizeNoScroll();
 
 		float aspectWidth = windowSize.x;
 
@@ -59,8 +60,8 @@ public class GameViewWindow {
 		return new ImVec2(aspectWidth, aspectHeight);
 	}
 
-	private static ImVec2 getCenteredPositionViewport(ImVec2 viewportSize) {
-		ImVec2 windowSize = ImGUILayer.getWindowSizeNoScroll();
+	private ImVec2 getCenteredPositionViewport(ImVec2 viewportSize) {
+		ImVec2 windowSize = ImGuiHelper.getWindowSizeNoScroll();
 
 		float xPos = (windowSize.x - viewportSize.x) * 0.5f + ImGui.getCursorPosX();
 		float yPos = (windowSize.y - viewportSize.y) * 0.5f + ImGui.getCursorPosY();
@@ -68,7 +69,7 @@ public class GameViewWindow {
 		return new ImVec2(xPos, yPos);
 	}
 
-	public static boolean getWantCaptureMouse() {
-		return MouseListener.getX() >= leftX && MouseListener.getX() <= rightX && MouseListener.getY() >= bottomY && MouseListener.getY() <= topY;
+	public boolean getWantCaptureMouse() {
+		return MouseListener.getX() >= this.leftX && MouseListener.getX() <= this.rightX && MouseListener.getY() >= this.bottomY && MouseListener.getY() <= this.topY;
 	}
 }

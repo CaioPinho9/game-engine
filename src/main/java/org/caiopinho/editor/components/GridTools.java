@@ -1,6 +1,4 @@
-package org.caiopinho.editor;
-
-import static org.caiopinho.editor.ImGUILayer.genericGenerateImguiFieldsFromObjectAttributes;
+package org.caiopinho.editor.components;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +15,7 @@ import org.joml.Vector4f;
 public class GridTools extends Component {
 	private float width = 3;
 	private int zIndex = -1;
-	private int gridSize = 32;
+	private int gridSize = 30;
 	private boolean enabled = true;
 	private Vector4f color = new Vector4f(.4f, .4f, .4f, 1f);
 
@@ -56,9 +54,5 @@ public class GridTools extends Component {
 			x += this.gridSize;
 			y += this.gridSize;
 		}
-	}
-
-	@Override public void imgui() {
-		genericGenerateImguiFieldsFromObjectAttributes(this, "Grid");
 	}
 }

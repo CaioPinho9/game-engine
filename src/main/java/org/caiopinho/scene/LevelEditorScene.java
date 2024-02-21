@@ -12,8 +12,9 @@ import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
-import org.caiopinho.editor.GridTools;
-import org.caiopinho.editor.MouseControls;
+import org.caiopinho.editor.components.DebugView;
+import org.caiopinho.editor.components.GridTools;
+import org.caiopinho.editor.components.MouseControls;
 import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.debug.DebugDraw;
@@ -44,6 +45,7 @@ public class LevelEditorScene extends Scene {
 		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
 		this.levelEditor.addComponent(new MouseControls());
 		this.levelEditor.addComponent(new GridTools());
+		this.levelEditor.addComponent(new DebugView());
 		this.addGameObjectToScene(this.levelEditor);
 
 		GameObject gameObject1 = new GameObject("Object1", new Transform(new Vector2f(100, 100), new Vector2f(100, 100)), 1);
@@ -75,10 +77,9 @@ public class LevelEditorScene extends Scene {
 		this.addGameObjectToScene(gameObject2);
 		this.addGameObjectToScene(gameObject3);
 		this.addGameObjectToScene(gameObject4);
-		this.activeGameObject = gameObject1;
 
 		for (int i = 0; i < 26; i++) {
-			GameObject gameObject = new GameObject("Object " + (i + 5), new Transform(new Vector2f(i * 25 + 400, 0), new Vector2f(25, 25)), 0);
+			GameObject gameObject = new GameObject("Object " + (i + 5), new Transform(new Vector2f(i * 25 + 400, 0), new Vector2f(100, 100)), 0);
 			SpriteRenderer spriteRenderer5 = new SpriteRenderer();
 			spriteRenderer5.setSprite(AssetPool.getSpritesheet("character").getSprite(i));
 			gameObject.addComponent(spriteRenderer5);
@@ -150,7 +151,8 @@ public class LevelEditorScene extends Scene {
 			ImGui.pushID(i);
 			if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[2].x, texCoords[0].y, texCoords[0].x, texCoords[2].y)) {
 				GameObject object = Prefabs.createSpriteObject(sprite, spriteWidth, spriteHeight);
-				this.levelEditor.getComponent(MouseControls.class).pickGameObject(object);
+				this.addGameObjectToScene(object);
+				this.levelEditor.getComponent(MouseControls.class).setHoldingGameObject(object);
 			}
 			ImGui.popID();
 

@@ -40,7 +40,7 @@ import lombok.Getter;
 
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
-import org.caiopinho.editor.ImGUILayer;
+import org.caiopinho.editor.imgui.ImGuiLayer;
 import org.caiopinho.scene.LevelEditorScene;
 import org.caiopinho.scene.LevelScene;
 import org.caiopinho.scene.Scene;
@@ -53,7 +53,7 @@ public class Window {
 	private float aspectRatio;
 	private String title;
 	private long glfwWindow;
-	private ImGUILayer imguiLayer;
+	private ImGuiLayer imguiLayer;
 
 	public float r, g, b, a;
 
@@ -168,7 +168,7 @@ public class Window {
 		framebuffer = new Framebuffer(this.width, this.height);
 		glViewport(0, 0, this.width, this.height);
 
-		this.imguiLayer = new ImGUILayer(this.glfwWindow);
+		this.imguiLayer = new ImGuiLayer(this.glfwWindow);
 		this.imguiLayer.start();
 
 		Window.changeScene(0);
@@ -193,15 +193,15 @@ public class Window {
 			}
 			framebuffer.unbind();
 
-			KeyListener.endFrame();
-			MouseListener.endFrame();
-
 			this.imguiLayer.update(deltaTime, currentScene);
 			glfwSwapBuffers(this.glfwWindow);
 
 			endTime = (float) glfwGetTime();
 			deltaTime = endTime - beginTime;
 			beginTime = endTime;
+
+			KeyListener.endFrame();
+			MouseListener.endFrame();
 
 			// Poll for window events. The key callback above will only be
 			// invoked during window call.

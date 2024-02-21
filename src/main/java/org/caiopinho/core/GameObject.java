@@ -78,4 +78,16 @@ public class GameObject {
 	public static void init(int maxId) {
 		ID_COUNTER = maxId;
 	}
+
+	@Override public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (!(obj instanceof GameObject gameObject)) {
+			return false;
+		}
+
+		return gameObject.uid == this.uid;
+	}
 }

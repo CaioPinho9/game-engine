@@ -70,6 +70,7 @@ public class DebugBatch extends Batch<Line2D> {
 			if (this.elements[i].beginFrame() < 0) {
 				ArraysHelper.removeByIndex(this.elements, i--);
 				this.elementCount--;
+				this.hasSpace = true;
 			}
 		}
 	}

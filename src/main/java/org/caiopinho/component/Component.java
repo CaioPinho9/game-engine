@@ -1,10 +1,9 @@
 package org.caiopinho.component;
 
-import static org.caiopinho.editor.ImGUILayer.genericGenerateImguiFieldsFromObjectAttributes;
-
 import lombok.Getter;
 
 import org.caiopinho.core.GameObject;
+import org.caiopinho.editor.imgui.ImGuiHelper;
 
 public abstract class Component {
 	@Getter private int uid = -1;
@@ -18,7 +17,7 @@ public abstract class Component {
 	public abstract void update(float deltaTime);
 
 	public void imgui() {
-		genericGenerateImguiFieldsFromObjectAttributes(this);
+		ImGuiHelper.generateImguiFieldsFromObjectAttributes(this);
 	}
 
 	public void generateId() {
