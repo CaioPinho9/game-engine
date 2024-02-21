@@ -57,6 +57,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
 import java.util.Objects;
 
+import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
 import org.caiopinho.editor.GameViewWindow;
 import org.caiopinho.renderer.Window;
@@ -175,6 +176,7 @@ public class ImGuiLayer {
 			io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
 			io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
 			io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+			KeyListener.keyCallback(w, key, scancode, action, mods);
 		});
 
 		glfwSetCharCallback(this.glfwWindow, (w, c) -> {
@@ -206,6 +208,7 @@ public class ImGuiLayer {
 		glfwSetScrollCallback(this.glfwWindow, (w, xOffset, yOffset) -> {
 			io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
 			io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+			MouseListener.mouseScrollCallback(w, xOffset, yOffset);
 		});
 
 		io.setSetClipboardTextFn(new ImStrConsumer() {

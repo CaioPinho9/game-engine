@@ -3,7 +3,6 @@ package org.caiopinho.editor.components;
 import static org.caiopinho.editor.components.DebugView.drawGameObjectSelectionCircle;
 import static org.caiopinho.editor.components.DebugView.getBoxSelectionScale;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,17 +117,6 @@ public class MouseControls extends Component {
 				this.justSelected = false;
 				this.justDoubleClicked = false;
 			}
-		}
-
-		this.moveCamera(deltaTime);
-	}
-
-	private void moveCamera(float deltaTime) {
-		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_MIDDLE)) {
-			float x = MouseListener.getDeltaX() * 100;
-			float y = MouseListener.getDeltaY() * -100;
-
-			Window.getScene().getCamera().addDeltaMoveCamera(x, y, deltaTime);
 		}
 	}
 }

@@ -12,6 +12,7 @@ import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
+import org.caiopinho.editor.components.CameraControls;
 import org.caiopinho.editor.components.DebugView;
 import org.caiopinho.editor.components.GridTools;
 import org.caiopinho.editor.components.MouseControls;
@@ -46,6 +47,7 @@ public class LevelEditorScene extends Scene {
 		this.levelEditor.addComponent(new MouseControls());
 		this.levelEditor.addComponent(new GridTools());
 		this.levelEditor.addComponent(new DebugView());
+		this.levelEditor.addComponent(new CameraControls());
 		this.addGameObjectToScene(this.levelEditor);
 
 		GameObject gameObject1 = new GameObject("Object1", new Transform(new Vector2f(100, 100), new Vector2f(100, 100)), 1);

@@ -7,12 +7,12 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class DebugDraw {
-	private static final Vector4f DEFAULT_COLOR = new Vector4f(0, 0, 0, 1);
-	private static final int DEFAULT_LIFETIME = 1;
-	private static final float DEFAULT_CIRCLE_RATIO = 1;
-	private static final int DEFAULT_LINE_SEGMENTS = 50;
-	private static final float DEFAULT_WIDTH = 2;
-	private static final int DEFAULT_Z_INDEX = 0;
+	private static final Vector4f COLOR = new Vector4f(0, 0, 0, 1);
+	private static final int LIFETIME = 1;
+	private static final float CIRCLE_RATIO = 1;
+	private static final int LINE_SEGMENTS = 50;
+	private static final float WIDTH = 2;
+	private static final int Z_INDEX = 0;
 
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime, float width, int zIndex) {
 		Line2D line = new Line2D(from, to, color, lifetime, width, zIndex);
@@ -21,27 +21,27 @@ public class DebugDraw {
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, int lifetime) {
-		addLine2D(from, to, DEFAULT_COLOR, lifetime, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
+		addLine2D(from, to, COLOR, lifetime, WIDTH, Z_INDEX);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime, float width) {
-		addLine2D(from, to, color, lifetime, width, DEFAULT_Z_INDEX);
+		addLine2D(from, to, color, lifetime, width, Z_INDEX);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, float width) {
-		addLine2D(from, to, color, DEFAULT_LIFETIME, width, DEFAULT_Z_INDEX);
+		addLine2D(from, to, color, LIFETIME, width, Z_INDEX);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime) {
-		addLine2D(from, to, color, lifetime, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
+		addLine2D(from, to, color, lifetime, WIDTH, Z_INDEX);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color) {
-		addLine2D(from, to, color, DEFAULT_LIFETIME, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
+		addLine2D(from, to, color, LIFETIME, WIDTH, Z_INDEX);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to) {
-		addLine2D(from, to, DEFAULT_COLOR, DEFAULT_LIFETIME, DEFAULT_WIDTH, DEFAULT_Z_INDEX);
+		addLine2D(from, to, COLOR, LIFETIME, WIDTH, Z_INDEX);
 	}
 
 	public static void addBox2D(Transform transform, Vector4f color, int lifetime, float width) {
@@ -67,19 +67,19 @@ public class DebugDraw {
 	}
 
 	public static void addBox2D(Transform transform, Vector4f color, int lifetime) {
-		addBox2D(transform, color, lifetime, DEFAULT_WIDTH);
+		addBox2D(transform, color, lifetime, WIDTH);
 	}
 
 	public static void addBox2D(Transform transform, Vector4f color) {
-		addBox2D(transform, color, DEFAULT_LIFETIME, DEFAULT_WIDTH);
+		addBox2D(transform, color, LIFETIME, WIDTH);
 	}
 
 	public static void addBox2D(Transform transform, int lifetime) {
-		addBox2D(transform, DEFAULT_COLOR, lifetime, DEFAULT_WIDTH);
+		addBox2D(transform, COLOR, lifetime, WIDTH);
 	}
 
 	public static void addBox2D(Transform transform) {
-		addBox2D(transform, DEFAULT_COLOR, DEFAULT_LIFETIME, DEFAULT_WIDTH);
+		addBox2D(transform, COLOR, LIFETIME, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, Vector4f color, int lineSegments, int lifetime, float circleRatio, float width) {
@@ -131,38 +131,38 @@ public class DebugDraw {
 	}
 
 	public static void addCircle2D(Transform transform, Vector4f color, int lineSegments, int lifetime) {
-		addCircle2D(transform, color, lineSegments, lifetime, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, color, lineSegments, lifetime, CIRCLE_RATIO, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, Vector4f color, int lineSegments) {
-		addCircle2D(transform, color, lineSegments, DEFAULT_LIFETIME, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, color, lineSegments, LIFETIME, CIRCLE_RATIO, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, int lineSegments, int lifetime, float circleRatio) {
-		addCircle2D(transform, DEFAULT_COLOR, lineSegments, lifetime, circleRatio, DEFAULT_WIDTH);
+		addCircle2D(transform, COLOR, lineSegments, lifetime, circleRatio, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, int lineSegments, float circleRatio) {
-		addCircle2D(transform, DEFAULT_COLOR, lineSegments, DEFAULT_LIFETIME, circleRatio, DEFAULT_WIDTH);
+		addCircle2D(transform, COLOR, lineSegments, LIFETIME, circleRatio, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, Vector4f color, int lineSegments, int lifetime, float circleRatio) {
-		addCircle2D(transform, color, lineSegments, lifetime, circleRatio, DEFAULT_WIDTH);
+		addCircle2D(transform, color, lineSegments, lifetime, circleRatio, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, int lineSegments, int lifetime) {
-		addCircle2D(transform, DEFAULT_COLOR, lineSegments, lifetime, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, COLOR, lineSegments, lifetime, CIRCLE_RATIO, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, int lifetime) {
-		addCircle2D(transform, DEFAULT_COLOR, DEFAULT_LINE_SEGMENTS, lifetime, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, COLOR, LINE_SEGMENTS, lifetime, CIRCLE_RATIO, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform, Vector4f color) {
-		addCircle2D(transform, color, DEFAULT_LINE_SEGMENTS, DEFAULT_LIFETIME, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, color, LINE_SEGMENTS, LIFETIME, CIRCLE_RATIO, WIDTH);
 	}
 
 	public static void addCircle2D(Transform transform) {
-		addCircle2D(transform, DEFAULT_COLOR, DEFAULT_LINE_SEGMENTS, DEFAULT_LIFETIME, DEFAULT_CIRCLE_RATIO, DEFAULT_WIDTH);
+		addCircle2D(transform, COLOR, LINE_SEGMENTS, LIFETIME, CIRCLE_RATIO, WIDTH);
 	}
 }
