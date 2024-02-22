@@ -21,6 +21,7 @@ import java.util.List;
 import org.caiopinho.assets.AssetPool;
 import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
+import org.caiopinho.core.Transform;
 import org.caiopinho.renderer.OpenGLHelper;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -182,6 +183,7 @@ public class RenderBatch extends Batch<SpriteRenderer> {
 
 		Vector4f color = spriteRenderer.getColor();
 		Vector2f[] texCoords = spriteRenderer.getTexCoords();
+		Transform transform = spriteRenderer.getTransform();
 
 		float xAdd = 1;
 		float yAdd = 1;
@@ -195,8 +197,8 @@ public class RenderBatch extends Batch<SpriteRenderer> {
 			}
 
 			// Load position
-			this.vertices[offset] = spriteRenderer.gameObject.transform.position.x + (xAdd * spriteRenderer.gameObject.transform.scale.x);
-			this.vertices[offset + 1] = spriteRenderer.gameObject.transform.position.y + (yAdd * spriteRenderer.gameObject.transform.scale.y);
+			this.vertices[offset] = transform.position.x + (xAdd * transform.scale.x);
+			this.vertices[offset + 1] = transform.position.y + (yAdd * transform.scale.y);
 
 			// Load colors
 			this.vertices[offset + 2] = color.x;

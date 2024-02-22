@@ -23,17 +23,17 @@ public class Renderer {
 	public void add(GameObject gameObject) {
 		SpriteRenderer spriteRenderer = gameObject.getComponent(SpriteRenderer.class);
 		if (spriteRenderer != null) {
-			this.addToRenderBatch(spriteRenderer);
+			this.add(spriteRenderer);
 		}
 	}
 
-	private void addToRenderBatch(SpriteRenderer spriteRenderer) {
+	public void add(SpriteRenderer spriteRenderer) {
 		for (Batch<?> batch : this.batches) {
 			if (!(batch instanceof RenderBatch renderBatch)) {
 				continue;
 			}
 
-			if (renderBatch.hasSpace() && renderBatch.getZIndex() == spriteRenderer.gameObject.getZIndex()) {
+			if (renderBatch.hasSpace() && renderBatch.getZIndex() == spriteRenderer.getZIndex()) {
 				Texture texture = spriteRenderer.getTexture();
 				if (texture == null || (renderBatch.hasTexture(texture) || renderBatch.hasTextureSpace())) {
 					renderBatch.addElement(spriteRenderer);
@@ -42,14 +42,14 @@ public class Renderer {
 			}
 		}
 
-		RenderBatch newBatch = new RenderBatch(this.MAX_BATCH_SIZE, spriteRenderer.gameObject.getZIndex());
+		RenderBatch newBatch = new RenderBatch(this.MAX_BATCH_SIZE, spriteRenderer.getZIndex());
 		newBatch.start();
 		this.batches.add(newBatch);
 		newBatch.addElement(spriteRenderer);
 		Collections.sort(this.batches);
 	}
 
-	public void addDebugLine2D(Line2D line) {
+	public void add(Line2D line) {
 		for (Batch<?> batch : this.batches) {
 			if (!(batch instanceof DebugBatch debugBatch)) {
 				continue;

@@ -1,6 +1,7 @@
 package org.caiopinho.component;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.caiopinho.assets.Sprite;
 import org.caiopinho.assets.Texture;
@@ -13,6 +14,7 @@ import imgui.flag.ImGuiColorEditFlags;
 
 @Getter
 public class SpriteRenderer extends Component {
+	@Setter private transient Transform transform;
 	private Vector4f color = new Vector4f(1, 1, 1, 1);
 	private Sprite sprite = new Sprite();
 
@@ -20,6 +22,7 @@ public class SpriteRenderer extends Component {
 	private transient Transform lastTransform;
 
 	@Override public void start() {
+		this.transform = this.gameObject.transform;
 		this.lastTransform = this.gameObject.transform.copy();
 	}
 
@@ -90,5 +93,9 @@ public class SpriteRenderer extends Component {
 	public void setTexture(Texture texture) {
 		this.sprite.setTexture(texture);
 		this.isDirty = true;
+	}
+
+	public int getZIndex() {
+		return this.transform.zIndex;
 	}
 }

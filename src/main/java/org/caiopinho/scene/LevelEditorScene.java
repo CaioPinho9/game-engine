@@ -39,10 +39,17 @@ public class LevelEditorScene extends Scene {
 			}
 		}
 
+		SpriteRenderer spriteRenderer0 = new SpriteRenderer();
+		spriteRenderer0.setColor(new Vector4f(1, 0, 0, .8f));
+		spriteRenderer0.setTransform(new Transform(new Vector2f(0, 210), new Vector2f(100, 100)));
+		spriteRenderer0.setSprite(this.sprites.getSprite(0));
+		this.renderer.add(spriteRenderer0);
+
 		if (this.wasLoaded) {
 			System.out.println("Scene was loaded");
 			return;
 		}
+
 		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
 		this.levelEditor.addComponent(new MouseControls());
 		this.levelEditor.addComponent(new GridTools());

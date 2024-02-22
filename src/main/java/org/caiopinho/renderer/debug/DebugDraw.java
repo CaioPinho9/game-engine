@@ -17,7 +17,7 @@ public class DebugDraw {
 	public static void addLine2D(Vector2f from, Vector2f to, Vector4f color, int lifetime, float width, int zIndex) {
 		Line2D line = new Line2D(from, to, color, lifetime, width, zIndex);
 
-		Window.getScene().getRenderer().addDebugLine2D(line);
+		Window.getScene().getRenderer().add(line);
 	}
 
 	public static void addLine2D(Vector2f from, Vector2f to, int lifetime) {
