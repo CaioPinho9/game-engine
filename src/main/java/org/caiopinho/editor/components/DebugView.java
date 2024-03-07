@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import org.caiopinho.component.Component;
 import org.caiopinho.core.GameObject;
+import org.caiopinho.core.Gizmo;
 import org.caiopinho.core.Transform;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.renderer.debug.DebugDraw;
@@ -28,12 +29,16 @@ public class DebugView extends Component {
 
 	private void drawDebugView() {
 		for (GameObject gameObject : Window.getScene().getGameObjects()) {
-			drawGameObjectSelectionCircle(gameObject, SELECTION_COLOR);
+			if (gameObject instanceof Gizmo) {
+				continue;
+			}
+
+			drawGameObjectSelectionSquare(gameObject, SELECTION_COLOR);
 		}
 	}
 
-	public static void drawGameObjectSelectionCircle(GameObject gameObject, Vector4f color) {
-		Vector2f position = new Vector2f(gameObject.transform.position.x + gameObject.transform.scale.x / 2, gameObject.transform.position.y + gameObject.transform.scale.y / 2);
+	public static void drawGameObjectSelectionSquare(GameObject gameObject, Vector4f color) {
+		Vector2f position = new Vector2f(gameObject.transform.position.x, gameObject.transform.position.y);
 		int zIndex = color == SELECTION_COLOR ? SELECTION_Z_INDEX : SELECTION_Z_INDEX + 1;
 		Transform transform = new Transform(position, getBoxSelectionScale(gameObject), 0, zIndex);
 		DebugDraw.addBox2D(transform, color, 1, SELECTION_LINE_WIDTH);

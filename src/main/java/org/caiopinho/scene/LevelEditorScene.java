@@ -10,6 +10,7 @@ import org.caiopinho.assets.Spritesheet;
 import org.caiopinho.component.RigidBody;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
+import org.caiopinho.core.Gizmo;
 import org.caiopinho.core.Prefabs;
 import org.caiopinho.core.Transform;
 import org.caiopinho.editor.components.CameraControls;
@@ -49,6 +50,22 @@ public class LevelEditorScene extends Scene {
 			System.out.println("Scene was loaded");
 			return;
 		}
+
+		Gizmo gizmoVertical = new Gizmo("GizmoVertical", new Transform(new Vector2f(0, 0), new Vector2f(100, 100), 90));
+		Gizmo gizmoHorizontal = new Gizmo("GizmoHorizontal", new Transform(new Vector2f(0, 0), new Vector2f(100, 100)));
+		SpriteRenderer gizmoVerticalRender = new SpriteRenderer();
+		SpriteRenderer gizmoHorizontalRender = new SpriteRenderer();
+		gizmoVerticalRender.setTexture(AssetPool.getTexture("assets/textures/gizmo.png"));
+		gizmoHorizontalRender.setTexture(AssetPool.getTexture("assets/textures/gizmo.png"));
+
+		gizmoVerticalRender.setColor(1, 0, 0, 1);
+		gizmoHorizontalRender.setColor(0, 1, 0, 1);
+
+		gizmoVertical.addComponent(gizmoVerticalRender);
+		gizmoHorizontal.addComponent(gizmoHorizontalRender);
+
+		this.addGameObjectToScene(gizmoVertical);
+		this.addGameObjectToScene(gizmoHorizontal);
 
 		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
 		this.levelEditor.addComponent(new MouseControls());

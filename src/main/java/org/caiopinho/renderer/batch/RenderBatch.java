@@ -22,6 +22,7 @@ import org.caiopinho.assets.AssetPool;
 import org.caiopinho.assets.Texture;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.Transform;
+import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.OpenGLHelper;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -185,36 +186,64 @@ public class RenderBatch extends Batch<SpriteRenderer> {
 		Vector2f[] texCoords = spriteRenderer.getTexCoords();
 		Transform transform = spriteRenderer.getTransform();
 
-		float xAdd = 1;
-		float yAdd = 1;
-		for (int i = 0; i < VERTICES_PER_SPRITE; i++) {
-			if (i == 1) {
-				yAdd = 0;
-			} else if (i == 2) {
-				xAdd = 0;
-			} else if (i == 3) {
-				yAdd = 1;
-			}
+		// Vertex 0
+		Vector2f vertex0 = new Vector2f(transform.position.x + (.5f * transform.scale.x), transform.position.y + (.5f * transform.scale.y));
+		MathHelper.rotate(vertex0, transform.rotation, transform.position);
 
-			// Load position
-			this.vertices[offset] = transform.position.x + (xAdd * transform.scale.x);
-			this.vertices[offset + 1] = transform.position.y + (yAdd * transform.scale.y);
+		this.vertices[offset] = vertex0.x;
+		this.vertices[offset + 1] = vertex0.y;
+		this.vertices[offset + 2] = color.x;
+		this.vertices[offset + 3] = color.y;
+		this.vertices[offset + 4] = color.z;
+		this.vertices[offset + 5] = color.w;
+		this.vertices[offset + 6] = texCoords[0].x;
+		this.vertices[offset + 7] = texCoords[0].y;
+		this.vertices[offset + 8] = textureId;
+		offset += VERTEX_SIZE;
 
-			// Load colors
-			this.vertices[offset + 2] = color.x;
-			this.vertices[offset + 3] = color.y;
-			this.vertices[offset + 4] = color.z;
-			this.vertices[offset + 5] = color.w;
+		// Vertex 1
+		Vector2f vertex1 = new Vector2f(transform.position.x + (.5f * transform.scale.x), transform.position.y + (-.5f * transform.scale.y));
+		MathHelper.rotate(vertex1, transform.rotation, transform.position);
 
-			// Load texture coordinates
-			this.vertices[offset + 6] = texCoords[i].x;
-			this.vertices[offset + 7] = texCoords[i].y;
+		this.vertices[offset] = vertex1.x;
+		this.vertices[offset + 1] = vertex1.y;
+		this.vertices[offset + 2] = color.x;
+		this.vertices[offset + 3] = color.y;
+		this.vertices[offset + 4] = color.z;
+		this.vertices[offset + 5] = color.w;
+		this.vertices[offset + 6] = texCoords[1].x;
+		this.vertices[offset + 7] = texCoords[1].y;
+		this.vertices[offset + 8] = textureId;
+		offset += VERTEX_SIZE;
 
-			// Load texture id
-			this.vertices[offset + 8] = textureId;
+		// Vertex 2
+		Vector2f vertex2 = new Vector2f(transform.position.x + (-.5f * transform.scale.x), transform.position.y + (-.5f * transform.scale.y));
+		MathHelper.rotate(vertex2, transform.rotation, transform.position);
 
-			offset += VERTEX_SIZE;
-		}
+		this.vertices[offset] = vertex2.x;
+		this.vertices[offset + 1] = vertex2.y;
+		this.vertices[offset + 2] = color.x;
+		this.vertices[offset + 3] = color.y;
+		this.vertices[offset + 4] = color.z;
+		this.vertices[offset + 5] = color.w;
+		this.vertices[offset + 6] = texCoords[2].x;
+		this.vertices[offset + 7] = texCoords[2].y;
+		this.vertices[offset + 8] = textureId;
+		offset += VERTEX_SIZE;
+
+		// Vertex 3
+		Vector2f vertex3 = new Vector2f(transform.position.x + (-.5f * transform.scale.x), transform.position.y + (.5f * transform.scale.y));
+		MathHelper.rotate(vertex3, transform.rotation, transform.position);
+
+		this.vertices[offset] = vertex3.x;
+		this.vertices[offset + 1] = vertex3.y;
+		this.vertices[offset + 2] = color.x;
+		this.vertices[offset + 3] = color.y;
+		this.vertices[offset + 4] = color.z;
+		this.vertices[offset + 5] = color.w;
+		this.vertices[offset + 6] = texCoords[3].x;
+		this.vertices[offset + 7] = texCoords[3].y;
+		this.vertices[offset + 8] = textureId;
 	}
 
 	public boolean hasTextureSpace() {

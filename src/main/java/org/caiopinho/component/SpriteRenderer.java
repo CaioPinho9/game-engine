@@ -98,4 +98,8 @@ public class SpriteRenderer extends Component {
 	public int getZIndex() {
 		return this.transform.zIndex;
 	}
+
+	public void setAlpha(float alpha) {
+		this.color.z = alpha;
+	}
 }
