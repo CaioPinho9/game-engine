@@ -127,6 +127,10 @@ public class MouseListener {
 		return currentY;
 	}
 
+	public static Vector2f getOrtho() {
+		return new Vector2f(getOrthoX(), getOrthoY());
+	}
+
 	public static float getScrollX() {
 		return (float) get().scrollX;
 	}

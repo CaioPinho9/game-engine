@@ -1,9 +1,5 @@
 package org.caiopinho.scene;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +10,9 @@ import org.caiopinho.component.Component;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.core.Settings;
+import org.caiopinho.file.FileController;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Renderer;
-import org.caiopinho.serializer.ComponentSerializer;
-import org.caiopinho.serializer.GameObjectSerializer;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import imgui.ImGui;
 
@@ -32,12 +24,7 @@ public abstract class Scene {
 	@Getter protected List<GameObject> gameObjects = new ArrayList<>();
 
 	public GameObject activeGameObject = null;
-
-	private final Gson gson = new GsonBuilder()
-			.setPrettyPrinting()
-			.registerTypeAdapter(GameObject.class, new GameObjectSerializer())
-			.registerTypeAdapter(Component.class, new ComponentSerializer())
-			.create();
+	private final FileController<GameObject> fileController = new FileController<>();
 
 	public void init() {
 	}
@@ -80,37 +67,28 @@ public abstract class Scene {
 	}
 
 	public void save() {
-		try {
-			FileWriter writer = new FileWriter("saves/" + this.getClass().getCanonicalName() + ".txt");
-			writer.write(this.gson.toJson(this.gameObjects));
-			writer.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		List<GameObject> serializableGameObjects = this.gameObjects.stream()
+				.filter(GameObject::isSerializable)
+				.toList();
+		this.fileController.writeGSON("saves/", this.getClass().getCanonicalName() + ".txt", serializableGameObjects);
 	}
 
 	protected void loadResources() {
 	}
 
 	public void load() {
-		String text = "";
-
 		this.loadResources();
 
 		if (Settings.HARD_LEVEL_RELOAD) {
 			return;
 		}
 
-		try {
-			text = new String(Files.readAllBytes(Paths.get("saves/" + this.getClass().getCanonicalName() + ".txt")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		int maxGameObjectId = -1;
+		int maxComponentId = -1;
 
-		if (!text.isEmpty()) {
-			int maxGameObjectId = -1;
-			int maxComponentId = -1;
-			GameObject[] gameObjects = this.gson.fromJson(text, GameObject[].class);
+		GameObject[] gameObjects = this.fileController.readGSON("saves/" + this.getClass().getCanonicalName() + ".txt", GameObject[].class);
+
+		if (gameObjects != null) {
 			this.gameObjects.clear();
 			this.renderer.clear();
 			for (GameObject gameObject : gameObjects) {

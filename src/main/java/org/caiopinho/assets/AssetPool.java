@@ -25,6 +25,7 @@ public class AssetPool {
 	}
 
 	public static Texture getTexture(String texturePath) {
+		//TODO: fix file not found error
 		File file = new File(texturePath);
 		if (textures.containsKey(file.getAbsolutePath())) {
 			return textures.get(file.getAbsolutePath());
@@ -36,7 +37,7 @@ public class AssetPool {
 		}
 	}
 
-	public static void addSpriteSheet(String resourceName, Spritesheet spritesheet) {
+	public static void addSpritesheet(String resourceName, Spritesheet spritesheet) {
 		File file = new File(resourceName);
 		if (!spritesheets.containsKey(file.getAbsolutePath())) {
 			spritesheets.put(file.getAbsolutePath(), spritesheet);

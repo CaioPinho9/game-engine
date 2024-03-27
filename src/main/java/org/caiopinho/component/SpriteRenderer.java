@@ -100,6 +100,9 @@ public class SpriteRenderer extends Component {
 	}
 
 	public void setAlpha(float alpha) {
-		this.color.z = alpha;
+		if (this.color.w != alpha) {
+			this.color.w = alpha;
+			this.isDirty = true;
+		}
 	}
 }

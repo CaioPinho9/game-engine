@@ -1,5 +1,9 @@
 package org.caiopinho.math;
 
+import java.util.Objects;
+
+import org.caiopinho.component.SpriteRenderer;
+
 public class ArraysHelper {
 	// Checks if the array contains the specified element.
 	public static <T> boolean contains(T[] array, T element) {
@@ -31,5 +35,23 @@ public class ArraysHelper {
 	// Checks if the array is empty.
 	public static <T> boolean isEmpty(T[] array) {
 		return array == null || array.length == 0;
+	}
+
+	public static <T> void removeByValue(T[] array, T value) {
+		for (int i = 0; i < array.length; i++) {
+			if (Objects.equals(array[i], value)) {
+				removeByIndex(array, i);
+				return;
+			}
+		}
+	}
+
+	public static<T> int indexOf(SpriteRenderer[] elements, T value) {
+		for (int i = 0; i < elements.length; i++) {
+			if (Objects.equals(elements[i],value)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

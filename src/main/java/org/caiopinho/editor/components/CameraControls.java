@@ -7,19 +7,18 @@ import org.caiopinho.component.Component;
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
 import org.caiopinho.renderer.Camera;
-import org.caiopinho.renderer.Window;
 import org.joml.Vector2f;
 
 public class CameraControls extends Component {
 	public static final int DRAG_SENSITIVITY = 200;
 	private static final float SCROLL_SENSITIVITY = .1f;
 	private static final float MOUSE_SHIFT_SENSITIVITY = 50;
-	private transient Camera camera;
+	private final transient Camera camera;
 	private transient boolean isGoingToStartPosition;
 	private transient float lerpTime = 0;
 
-	@Override public void start() {
-		this.camera = Window.getScene().getCamera();
+	public CameraControls(Camera camera) {
+		this.camera = camera;
 	}
 
 	@Override public void update(float deltaTime) {

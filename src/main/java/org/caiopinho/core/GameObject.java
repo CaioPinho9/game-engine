@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.caiopinho.component.Component;
+import org.caiopinho.math.SquarePhysics;
+import org.joml.Vector2f;
 
-@Getter
-@Setter
-public class GameObject {
+@Getter @Setter public class GameObject {
 
 	private static int ID_COUNTER = 0;
 	public Transform transform;
@@ -19,11 +19,16 @@ public class GameObject {
 	private List<Component> components;
 	private int zIndex;
 
+	@Getter private boolean serializable = true;
+	@Getter @Setter private boolean selectable = true;
+	private float SELECTION_SIZE = 1;
+
 	public GameObject(String name, Transform transform, int zIndex) {
 		this.name = name;
 		this.components = new ArrayList<>();
 		this.transform = transform;
 		this.zIndex = zIndex;
+		transform.zIndex = zIndex;
 
 		this.uid = ID_COUNTER++;
 	}
@@ -89,5 +94,16 @@ public class GameObject {
 		}
 
 		return gameObject.uid == this.uid;
+	}
+
+	public boolean isPointInsideBoxSelection(Vector2f point) {
+		Vector2f boxPosition = new Vector2f(this.transform.position).add(new Vector2f(this.transform.scale).mul(-.5f));
+		return (SquarePhysics.isPointInsideRectangle(point, new Transform(boxPosition, this.getBoxSelectionScale())));
+	}
+
+	public Vector2f getBoxSelectionScale() {
+		Vector2f scale = new Vector2f(this.SELECTION_SIZE, this.SELECTION_SIZE);
+		scale.mul(this.transform.scale);
+		return scale;
 	}
 }
