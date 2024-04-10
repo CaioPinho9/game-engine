@@ -1,0 +1,62 @@
+package org.caiopinho.editor.gizmos;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+
+import org.caiopinho.assets.AssetPool;
+import org.caiopinho.component.SpriteRenderer;
+import org.caiopinho.core.MouseListener;
+import org.caiopinho.core.Transform;
+import org.caiopinho.editor.components.GridTools;
+import org.joml.Vector2f;
+
+public class TranslateGizmo extends Gizmo {
+	private final boolean isVertical;
+	private final GridTools gridTools;
+
+	public TranslateGizmo(String name, boolean isVertical, GridTools gridTools) {
+		super(name, new Transform(new Vector2f(), new Vector2f(1, 1), isVertical ? 180 : 90), GizmoMode.TRANSLATE);
+		this.isVertical = isVertical;
+		this.gridTools = gridTools;
+
+		SpriteRenderer spriteRenderer = new SpriteRenderer();
+		spriteRenderer.setColor(isVertical ? 1 : 0, isVertical ? 0 : 1, 0, 1);
+		spriteRenderer.setTexture(AssetPool.getTexture("assets/textures/gizmo_translation.png"));
+		this.addComponent(spriteRenderer);
+	}
+
+	@Override public void followTarget(float cameraZoom) {
+		this.target.transform.copy(this.transform);
+		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * cameraZoom * SCALE;
+		this.transform.scale = new Vector2f(scale, scale);
+		this.transform.position.add(this.isVertical ? 0 : this.transform.scale.y / 2, this.isVertical ? this.transform.scale.y / 2 : 0);
+		this.gizmoOffset = this.transform.scale.x / 1.5f;
+	}
+
+	@Override public void use() {
+		this.setDragging(this.isDragging() || this.isPointInsideBoxSelection(MouseListener.getOrtho()));
+
+		if (this.isDragging()) {
+			if (this.fixedMode) {
+				if (this.isVertical) {
+					this.target.transform.position.y = this.calculateGridCoordinate(MouseListener.getOrthoY());
+				} else {
+					this.target.transform.position.x = this.calculateGridCoordinate(MouseListener.getOrthoX());
+				}
+			} else {
+				if (this.isVertical) {
+					this.target.transform.position.y = MouseListener.getOrthoY() - this.gizmoOffset;
+				} else {
+					this.target.transform.position.x = MouseListener.getOrthoX() - this.gizmoOffset;
+				}
+			}
+		}
+
+		if (!MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			this.setDragging(false);
+		}
+	}
+
+	private float calculateGridCoordinate(float coordinate) {
+		return (int) ((coordinate - this.gizmoOffset) / this.gridTools.getGridSize()) * this.gridTools.getGridSize();
+	}
+}

@@ -1,4 +1,4 @@
-package org.caiopinho.editor.components;
+package org.caiopinho.editor.gizmos;
 
 public enum GizmoMode {
 	TRANSLATE,

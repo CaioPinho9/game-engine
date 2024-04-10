@@ -4,42 +4,40 @@ import static org.caiopinho.editor.components.DebugView.drawGameObjectSelectionS
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_1;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_2;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_3;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 
-import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.Component;
-import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.GameObject;
 import org.caiopinho.core.KeyListener;
 import org.caiopinho.core.MouseListener;
-import org.caiopinho.core.Transform;
+import org.caiopinho.editor.gizmos.Gizmo;
+import org.caiopinho.editor.gizmos.GizmoMode;
+import org.caiopinho.editor.gizmos.RotationGizmo;
+import org.caiopinho.editor.gizmos.TranslateGizmo;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
-import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class GizmoControls extends Component {
-	private static final int Z_INDEX = 10;
 	public static final Vector4f SELECTION_COLOR = new Vector4f(1, 0, 0, 1);
-	private static final float SCALE = .5f;
-	private transient final GridTools gridTools;
 	private transient final Scene scene;
 	private final Camera camera;
 	@Getter private Gizmo gizmoVertical;
 	@Getter private Gizmo gizmoHorizontal;
 	@Getter private Gizmo gizmoCircle;
+	private final List<Gizmo> gizmos = new ArrayList<>();
 
 	private final transient List<GameObject> selectQueue;
 	private transient boolean justDropped;
 	private transient boolean justDoubleClicked;
-	@Getter @Setter private boolean gridModeEnabled;
+	@Getter private boolean fixedMode;
 	@Getter private float gizmoOffset;
 	private transient GameObject target;
 
@@ -47,61 +45,46 @@ public class GizmoControls extends Component {
 
 	public GizmoControls(Camera camera, GridTools gridTools, Scene scene) {
 		this.camera = camera;
-		this.gridTools = gridTools;
 		this.scene = scene;
-		this.gridModeEnabled = false;
+		this.fixedMode = false;
 		this.target = null;
 		this.activeGizmoMode = GizmoMode.TRANSLATE;
 		this.selectQueue = new ArrayList<>();
 
-		this.gizmoVertical = new Gizmo("GizmoVertical", new Transform(new Vector2f(), new Vector2f(1, 1), 180), Z_INDEX, GizmoMode.TRANSLATE);
-		SpriteRenderer spriteRendererVertical = new SpriteRenderer();
-		spriteRendererVertical.setColor(1, 0, 0, 1);
-		spriteRendererVertical.setTexture(AssetPool.getTexture("assets/textures/gizmo_translation.png"));
-		this.gizmoVertical.addComponent(spriteRendererVertical);
+		this.gizmoVertical = new TranslateGizmo("GizmoVertical", true, gridTools);
+		this.gizmoHorizontal = new TranslateGizmo("GizmoHorizontal", false, gridTools);
+		this.gizmoCircle = new RotationGizmo("GizmoCircle");
 
-		this.gizmoHorizontal = new Gizmo("GizmoHorizontal", new Transform(new Vector2f(), new Vector2f(1, 1), 90), Z_INDEX, GizmoMode.TRANSLATE);
-		SpriteRenderer spriteRendererHorizontal = new SpriteRenderer();
-		spriteRendererHorizontal.setColor(0, 1, 0, 1);
-		spriteRendererHorizontal.setTexture(AssetPool.getTexture("assets/textures/gizmo_translation.png"));
-		this.gizmoHorizontal.addComponent(spriteRendererHorizontal);
-
-		this.gizmoCircle = new Gizmo("GizmoCircle", new Transform(new Vector2f(), new Vector2f(1, 1)), Z_INDEX, GizmoMode.ROTATE);
-		SpriteRenderer spriteRendererCircle = new SpriteRenderer();
-		spriteRendererCircle.setColor(0, .3f, 1, 1);
-		spriteRendererCircle.setTexture(AssetPool.getTexture("assets/textures/gizmo_rotation.png"));
-		this.gizmoCircle.addComponent(spriteRendererCircle);
-		this.gizmoCircle.setActive(false);
+		this.gizmos.add(this.gizmoVertical);
+		this.gizmos.add(this.gizmoHorizontal);
+		this.gizmos.add(this.gizmoCircle);
 	}
 
 	@Override public void start() {
 		super.start();
-		this.gizmoVertical.start();
-		this.gizmoHorizontal.start();
-		this.gizmoCircle.start();
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.start();
+		}
 	}
 
 	@Override public void update(float deltaTime) {
 		if (this.target != null) {
 			this.followTarget();
-			this.changeGizmo();
+			this.changeGizmoMode();
+			this.changeFixedMode();
 		}
 
 		if (!this.justDropped) {
 			this.selectGameObject();
 			this.handleDoubleClick();
 		}
+
 		if (this.target != null) {
 			drawGameObjectSelectionSquare(this.target, SELECTION_COLOR);
 
-			if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				this.moveObject();
-			}
+			this.useGizmos();
 
-			this.gizmoHorizontal.setDragging(this.gizmoHorizontal.isDragging() && this.gizmoHorizontal.isPointInsideBoxSelection(MouseListener.getOrtho()));
-			this.gizmoVertical.setDragging(this.gizmoVertical.isDragging() && this.gizmoVertical.isPointInsideBoxSelection(MouseListener.getOrtho()));
-
-			if (!this.getIsDragging() && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			if (!this.isAnyGizmoDragging() && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
 				this.placeGameObject();
 			}
 
@@ -109,50 +92,51 @@ public class GizmoControls extends Component {
 		this.resetFlags();
 	}
 
+	private void useGizmos() {
+		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			for (Gizmo gizmo : this.gizmos) {
+				gizmo.use();
+			}
+		}
+	}
+
 	private void toggleGizmos() {
-		this.gizmoHorizontal.setActive(this.activeGizmoMode);
-		this.gizmoVertical.setActive(this.activeGizmoMode);
-		this.gizmoCircle.setActive(this.activeGizmoMode);
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.setActive(this.activeGizmoMode);
+		}
 	}
 
 	private void followTarget() {
-		this.target.transform.copy(this.gizmoVertical.transform);
-		this.target.transform.copy(this.gizmoHorizontal.transform);
-		this.target.transform.copy(this.gizmoCircle.transform);
-		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * SCALE * this.camera.getZoom();
-		this.gizmoVertical.transform.scale = new Vector2f(scale, scale);
-		this.gizmoHorizontal.transform.scale = new Vector2f(scale, scale);
-		this.gizmoCircle.transform.scale = new Vector2f(scale * 3, scale * 3);
-		this.gizmoVertical.transform.position.add(0, this.gizmoHorizontal.transform.scale.y / 2);
-		this.gizmoHorizontal.transform.position.add(this.gizmoVertical.transform.scale.x / 2, 0);
-		this.gizmoOffset = this.gizmoHorizontal.transform.scale.x / 1.5f;
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.followTarget(this.camera.getZoom());
+		}
 	}
 
 	public void setTarget(GameObject target) {
 		this.target = target;
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.setTarget(this.target);
+		}
+
 		this.toggleGizmos();
 		this.followTarget();
 	}
 
 	public void endTarget() {
 		this.target = null;
-		this.gizmoVertical.setActive(false);
-		this.gizmoHorizontal.setActive(false);
-		this.gizmoCircle.setActive(false);
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.setTarget(null);
+			gizmo.setActive(false);
+		}
 	}
 
-	public boolean getIsDragging() {
-		return this.gizmoVertical.isDragging() || this.gizmoHorizontal.isDragging() || this.gizmoCircle.isDragging();
-	}
-
-	public void resetDragging() {
-		this.gizmoVertical.setDragging(false);
-		this.gizmoHorizontal.setDragging(false);
-		this.gizmoCircle.setDragging(false);
-	}
-
-	public boolean isAnyTranslateGizmoDragging() {
-		return this.gizmoVertical.isDragging() || this.gizmoHorizontal.isDragging();
+	public boolean isAnyGizmoDragging() {
+		for (Gizmo gizmo : this.gizmos) {
+			if (gizmo.isDragging()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setHoldingGameObject(GameObject gameObject) {
@@ -221,7 +205,6 @@ public class GizmoControls extends Component {
 	private void resetFlags() {
 		if (!MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
 			this.justDropped = false;
-			this.resetDragging();
 
 			if (!MouseListener.isDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
 				this.justDoubleClicked = false;
@@ -229,7 +212,7 @@ public class GizmoControls extends Component {
 		}
 	}
 
-	private void changeGizmo() {
+	private void changeGizmoMode() {
 		if (KeyListener.isKeyPressed(GLFW_KEY_1)) {
 			this.activeGizmoMode = GizmoMode.TRANSLATE;
 		} else if (KeyListener.isKeyPressed(GLFW_KEY_2)) {
@@ -240,31 +223,12 @@ public class GizmoControls extends Component {
 		this.toggleGizmos();
 	}
 
-	private void moveObject() {
-		this.gizmoHorizontal.setDragging(this.gizmoHorizontal.isDragging() || this.gizmoHorizontal.isPointInsideBoxSelection(MouseListener.getOrtho()));
-		this.gizmoVertical.setDragging(this.gizmoVertical.isDragging() || this.gizmoVertical.isPointInsideBoxSelection(MouseListener.getOrtho()));
-
-		if (this.isAnyTranslateGizmoDragging()) {
-			if (this.gridModeEnabled) {
-				this.target.transform.position = this.calculateGridPosition();
-			} else {
-				if (this.gizmoHorizontal.isDragging()) {
-					this.target.transform.position.x = MouseListener.getOrthoX() - this.gizmoOffset;
-				}
-				if (this.gizmoVertical.isDragging()) {
-					this.target.transform.position.y = MouseListener.getOrthoY() - this.gizmoOffset;
-				}
+	private void changeFixedMode() {
+		if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
+			this.fixedMode = !this.fixedMode;
+			for (Gizmo gizmo : this.gizmos) {
+				gizmo.setFixedMode(this.fixedMode);
 			}
 		}
-	}
-
-	private Vector2f calculateGridPosition() {
-		float x = this.gizmoHorizontal.isDragging() ? this.calculateGridCoordinate(MouseListener.getOrthoX()) : this.target.transform.position.x;
-		float y = this.gizmoVertical.isDragging() ? this.calculateGridCoordinate(MouseListener.getOrthoY()) : this.target.transform.position.y;
-		return new Vector2f(x, y);
-	}
-
-	private float calculateGridCoordinate(float coordinate) {
-		return (int) ((coordinate - this.getGizmoOffset()) / this.gridTools.getGridSize()) * this.gridTools.getGridSize();
 	}
 }
