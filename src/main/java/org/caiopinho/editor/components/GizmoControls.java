@@ -28,17 +28,18 @@ import org.joml.Vector4f;
 public class GizmoControls extends Component {
 	public static final Vector4f SELECTION_COLOR = new Vector4f(1, 0, 0, 1);
 	private transient final Scene scene;
-	private final Camera camera;
-	@Getter private Gizmo gizmoVertical;
-	@Getter private Gizmo gizmoHorizontal;
-	@Getter private Gizmo gizmoCircle;
-	private final List<Gizmo> gizmos = new ArrayList<>();
+	private transient final Camera camera;
+	private transient final List<Gizmo> gizmos = new ArrayList<>();
+	@Getter private transient Gizmo gizmoVertical;
+	@Getter private transient Gizmo gizmoHorizontal;
+	@Getter private transient Gizmo gizmoCircle;
 
-	private final transient List<GameObject> selectQueue;
+	private transient final List<GameObject> selectQueue;
+	private transient boolean justSelected;
 	private transient boolean justDropped;
 	private transient boolean justDoubleClicked;
 	@Getter private boolean fixedMode;
-	@Getter private float gizmoOffset;
+	@Getter transient private float gizmoOffset;
 	private transient GameObject target;
 
 	private transient GizmoMode activeGizmoMode;
@@ -84,11 +85,11 @@ public class GizmoControls extends Component {
 
 			this.useGizmos();
 
-			if (!this.isAnyGizmoDragging() && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			if (!this.justSelected && !this.isAnyGizmoDragging() && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
 				this.placeGameObject();
 			}
-
 		}
+
 		this.resetFlags();
 	}
 
@@ -96,6 +97,10 @@ public class GizmoControls extends Component {
 		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
 			for (Gizmo gizmo : this.gizmos) {
 				gizmo.use();
+			}
+		} else {
+			for (Gizmo gizmo : this.gizmos) {
+				gizmo.setDragging(false);
 			}
 		}
 	}
@@ -184,9 +189,9 @@ public class GizmoControls extends Component {
 				}
 			}
 			// The holding object is the first of the queue
-			if (!this.selectQueue.isEmpty() && this.target == null) {
+			if (!this.justSelected && !this.selectQueue.isEmpty() && this.target == null) {
 				this.setHoldingGameObject(this.selectQueue.getFirst());
-				System.out.println("Selected " + this.selectQueue.getFirst().getName());
+				this.justSelected = true;
 			}
 		}
 	}
@@ -198,12 +203,12 @@ public class GizmoControls extends Component {
 			this.selectQueue.add(gameObject); // Move the first object to the end.
 			this.setHoldingGameObject(this.selectQueue.getFirst()); // Set the new first object as the holding object.
 			this.justDoubleClicked = true;
-			System.out.println("Double clicked " + this.selectQueue.getFirst().getName());
 		}
 	}
 
 	private void resetFlags() {
 		if (!MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			this.justSelected = false;
 			this.justDropped = false;
 
 			if (!MouseListener.isDoubleClick(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -224,11 +229,16 @@ public class GizmoControls extends Component {
 	}
 
 	private void changeFixedMode() {
-		if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL)) {
-			this.fixedMode = !this.fixedMode;
-			for (Gizmo gizmo : this.gizmos) {
-				gizmo.setFixedMode(this.fixedMode);
-			}
+		boolean oldFixed = this.fixedMode;
+		this.fixedMode = KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
+		if (oldFixed != this.fixedMode) {
+			this.toggleFixedMode();
+		}
+	}
+
+	private void toggleFixedMode() {
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.setFixedMode(this.fixedMode);
 		}
 	}
 }

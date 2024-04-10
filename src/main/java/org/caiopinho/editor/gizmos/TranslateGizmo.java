@@ -1,7 +1,5 @@
 package org.caiopinho.editor.gizmos;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-
 import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.MouseListener;
@@ -49,10 +47,6 @@ public class TranslateGizmo extends Gizmo {
 					this.target.transform.position.x = MouseListener.getOrthoX() - this.gizmoOffset;
 				}
 			}
-		}
-
-		if (!MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-			this.setDragging(false);
 		}
 	}
 
