@@ -22,7 +22,8 @@ public class TranslateGizmo extends Gizmo {
 		this.addComponent(spriteRenderer);
 	}
 
-	@Override public void followTarget(float cameraZoom) {
+	@Override
+	public void followTarget(float cameraZoom) {
 		this.target.transform.copy(this.transform);
 		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * cameraZoom * SCALE;
 		this.transform.scale = new Vector2f(scale, scale);
@@ -30,7 +31,8 @@ public class TranslateGizmo extends Gizmo {
 		this.gizmoOffset = this.transform.scale.x / 1.5f;
 	}
 
-	@Override public void use() {
+	@Override
+	public void use() {
 		this.setDragging(this.isDragging() || this.isPointInsideBoxSelection(MouseListener.getOrtho()));
 
 		if (this.isDragging()) {

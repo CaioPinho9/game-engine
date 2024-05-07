@@ -44,7 +44,8 @@ public class Transform {
 		transform.scale.set(this.scale);
 	}
 
-	@Override public boolean equals(Object object) {
+	@Override
+	public boolean equals(Object object) {
 		if (object == null) {
 			return false;
 		}

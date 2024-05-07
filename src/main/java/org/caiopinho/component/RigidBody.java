@@ -8,6 +8,7 @@ public class RigidBody extends Component {
 	private Vector3f velocity = new Vector3f(0, 0, 0);
 	private transient boolean isGrounded = false;
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 	}
 }

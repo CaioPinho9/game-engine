@@ -13,7 +13,7 @@ public class CameraControls extends Component {
 	public static final int DRAG_SENSITIVITY = 200;
 	private static final float SCROLL_SENSITIVITY = .1f;
 	private static final float MOUSE_SHIFT_SENSITIVITY = 50;
-	private final transient Camera camera;
+	private transient final Camera camera;
 	private transient boolean isGoingToStartPosition;
 	private transient float lerpTime = 0;
 
@@ -21,7 +21,8 @@ public class CameraControls extends Component {
 		this.camera = camera;
 	}
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_MIDDLE)) {
 			this.dragCamera(deltaTime);
 		}
@@ -43,11 +44,9 @@ public class CameraControls extends Component {
 
 		if (this.isGoingToStartPosition) {
 			this.camera.position.lerp(new Vector2f(), this.lerpTime);
-			this.camera.setZoom(this.camera.getZoom() +
-					((1.0f - this.camera.getZoom()) * this.lerpTime));
+			this.camera.setZoom(this.camera.getZoom() + ((1.0f - this.camera.getZoom()) * this.lerpTime));
 			this.lerpTime += 0.1f * deltaTime;
-			if (Math.abs(this.camera.position.x) <= 5.0f &&
-					Math.abs(this.camera.position.y) <= 5.0f) {
+			if (Math.abs(this.camera.position.x) <= 5.0f && Math.abs(this.camera.position.y) <= 5.0f) {
 				this.lerpTime = 0.0f;
 				this.camera.position.set(0f, 0f);
 				this.camera.setZoom(1.0f);

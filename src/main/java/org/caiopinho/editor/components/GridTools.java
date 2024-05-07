@@ -19,7 +19,8 @@ public class GridTools extends Component {
 	private int gridSize = 30;
 	private boolean enabled = true;
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (this.enabled) {
 			this.drawGrid();
 		}

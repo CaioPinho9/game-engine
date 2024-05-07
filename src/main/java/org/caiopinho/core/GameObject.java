@@ -10,7 +10,9 @@ import org.caiopinho.component.Component;
 import org.caiopinho.math.SquarePhysics;
 import org.joml.Vector2f;
 
-@Getter @Setter public class GameObject {
+@Getter
+@Setter
+public class GameObject {
 
 	private static int ID_COUNTER = 0;
 	public Transform transform;
@@ -20,7 +22,9 @@ import org.joml.Vector2f;
 	private int zIndex;
 
 	@Getter private boolean serializable = true;
-	@Getter @Setter private boolean selectable = true;
+	@Getter
+	@Setter
+	private boolean selectable = true;
 	private float SELECTION_SIZE = 1;
 
 	public GameObject(String name, Transform transform, int zIndex) {
@@ -84,7 +88,8 @@ import org.joml.Vector2f;
 		ID_COUNTER = maxId;
 	}
 
-	@Override public boolean equals(Object obj) {
+	@Override
+	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
 		}

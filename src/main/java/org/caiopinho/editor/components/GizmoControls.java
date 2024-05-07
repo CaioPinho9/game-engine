@@ -27,21 +27,25 @@ import org.joml.Vector4f;
 
 public class GizmoControls extends Component {
 	public static final Vector4f SELECTION_COLOR = new Vector4f(1, 0, 0, 1);
+
 	private transient final Scene scene;
 	private transient final Camera camera;
 	private transient final List<Gizmo> gizmos = new ArrayList<>();
+
 	@Getter private transient Gizmo gizmoVertical;
 	@Getter private transient Gizmo gizmoHorizontal;
 	@Getter private transient Gizmo gizmoCircle;
 
-	private transient final List<GameObject> selectQueue;
+	@Getter private transient float gizmoOffset;
+
 	private transient boolean justSelected;
 	private transient boolean justDropped;
 	private transient boolean justDoubleClicked;
-	@Getter private boolean fixedMode;
-	@Getter transient private float gizmoOffset;
-	private transient GameObject target;
 
+	private transient GameObject target;
+	private transient final List<GameObject> selectQueue;
+
+	@Getter private boolean fixedMode;
 	private transient GizmoMode activeGizmoMode;
 
 	public GizmoControls(Camera camera, GridTools gridTools, Scene scene) {
@@ -61,14 +65,16 @@ public class GizmoControls extends Component {
 		this.gizmos.add(this.gizmoCircle);
 	}
 
-	@Override public void start() {
+	@Override
+	public void start() {
 		super.start();
 		for (Gizmo gizmo : this.gizmos) {
 			gizmo.start();
 		}
 	}
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (this.target != null) {
 			this.followTarget();
 			this.changeGizmoMode();

@@ -21,12 +21,14 @@ public class SpriteRenderer extends Component {
 	private transient boolean isDirty = true;
 	private transient Transform lastTransform;
 
-	@Override public void start() {
+	@Override
+	public void start() {
 		this.transform = this.gameObject.transform;
 		this.lastTransform = this.gameObject.transform.copy();
 	}
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (!this.lastTransform.equals(this.gameObject.transform)) {
 			this.gameObject.transform.copy(this.lastTransform);
 			this.isDirty = true;
@@ -42,12 +44,7 @@ public class SpriteRenderer extends Component {
 
 	public Vector2f[] getTexCoords() {
 		if (this.sprite == null) {
-			return new Vector2f[] {
-					new Vector2f(0, 0),
-					new Vector2f(0, 0),
-					new Vector2f(0, 0),
-					new Vector2f(0, 0)
-			};
+			return new Vector2f[] { new Vector2f(0, 0), new Vector2f(0, 0), new Vector2f(0, 0), new Vector2f(0, 0) };
 		}
 		return this.sprite.getTexCoords();
 	}
@@ -77,7 +74,8 @@ public class SpriteRenderer extends Component {
 		this.isDirty = false;
 	}
 
-	@Override public void imgui() {
+	@Override
+	public void imgui() {
 		ImGui.text("Color Picker");
 		// Temporary storage for color editing
 		float[] newColor = { this.color.x, this.color.y, this.color.z, this.color.w };

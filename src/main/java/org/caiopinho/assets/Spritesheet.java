@@ -18,12 +18,7 @@ public class Spritesheet {
 			float topY = (currentY + spriteHeight) / (float) texture.getHeight();
 			float bottomY = currentY / (float) texture.getHeight();
 
-			Vector2f[] texCoords = new Vector2f[] {
-					new Vector2f(rightX, topY),
-					new Vector2f(rightX, bottomY),
-					new Vector2f(leftX, bottomY),
-					new Vector2f(leftX, topY)
-			};
+			Vector2f[] texCoords = new Vector2f[] { new Vector2f(rightX, topY), new Vector2f(rightX, bottomY), new Vector2f(leftX, bottomY), new Vector2f(leftX, topY) };
 			Sprite sprite = new Sprite();
 			sprite.setTexture(texture);
 			sprite.setTexCoords(texCoords);

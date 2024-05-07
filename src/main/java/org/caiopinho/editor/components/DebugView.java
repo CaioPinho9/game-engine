@@ -24,7 +24,8 @@ public class DebugView extends Component {
 		this.scene = scene;
 	}
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (this.enabled) {
 			this.drawDebugView();
 		}
