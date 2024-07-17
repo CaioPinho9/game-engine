@@ -30,7 +30,7 @@ public class CameraControls extends Component {
 		if (MouseListener.getScrollY() != 0.0f) {
 			float zoom = this.camera.getZoom();
 
-			float addValue = -MouseListener.getScrollY() * SCROLL_SENSITIVITY * zoom;
+			float addValue = (float) (-MouseListener.getScrollY() * SCROLL_SENSITIVITY * zoom);
 
 			Vector2f viewCenterBeforeZoom = this.camera.calculateViewCenter();
 
@@ -60,7 +60,7 @@ public class CameraControls extends Component {
 		Vector2f position = this.camera.getPosition();
 		float zoom = this.camera.getZoom();
 
-		Vector2f mousePosition = new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY());
+		Vector2f mousePosition = new Vector2f((float) MouseListener.getOrthoX(), (float) MouseListener.getOrthoY());
 
 		Vector2f viewCenterAfterZoom = this.camera.calculateViewCenter();
 

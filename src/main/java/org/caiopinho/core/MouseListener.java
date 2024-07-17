@@ -9,19 +9,25 @@ import lombok.Setter;
 
 import org.caiopinho.renderer.Window;
 import org.joml.Matrix4f;
+import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class MouseListener {
 
 	private double scrollX = 0, scrollY = 0;
-	private double positionX = 0, positionY = 0, lastPositionX = 0, lastPositionY = 0;
+	private double positionX = 0;
+	private double positionY = 0;
+	private double lastPositionX = 0;
+	private double lastPositionY = 0;
+	private double worldPositionX = 0;
+	private double worldPositionY = 0;
 	private final boolean[] mouseButtonPressed = new boolean[5];
-	private boolean isDragging = false;
+	private boolean[] isDragging = new boolean[5];
 
-	// Variables for double-click detection
+	// Variables for float-click detection
 	private final long[] lastClickTime = new long[5];
-	private final static long DOUBLE_CLICK_INTERVAL = 300; // 300 milliseconds for double-click
+	private final static long DOUBLE_CLICK_INTERVAL = 300; // 300 milliseconds for float-click
 	private final boolean[] mouseClicked = new boolean[5];
 
 	@Setter private static Vector2f gameViewportSize;
@@ -49,11 +55,13 @@ public class MouseListener {
 		mouseListener.positionX = newPositionX;
 		mouseListener.positionY = newPositionY;
 
-		mouseListener.isDragging = false;
-		for (boolean button : mouseListener.mouseButtonPressed) {
-			if (button) {
-				mouseListener.isDragging = true;
-				break;
+		mouseListener.worldPositionX = mouseListener.calculateOrthoX();
+		mouseListener.worldPositionY = mouseListener.calculateOrthoY();
+
+		mouseListener.cleanDragging();
+		for (int button = 0; button < mouseListener.mouseButtonPressed.length; button++) {
+			if (mouseListener.mouseButtonPressed[button]) {
+				mouseListener.isDragging[button] = true;
 			}
 		}
 	}
@@ -63,15 +71,15 @@ public class MouseListener {
 
 		if (button < mouseListener.mouseButtonPressed.length) {
 			if (action == GLFW_PRESS) {
-				long currentTime = System.currentTimeMillis();// Reset the double-click flag for this button
+				long currentTime = System.currentTimeMillis();// Reset the float-click flag for this button
 
-				// Check for double-click
+				// Check for float-click
 				mouseListener.mouseClicked[button] = currentTime - mouseListener.lastClickTime[button] <= DOUBLE_CLICK_INTERVAL; // Double-click detected
 				mouseListener.lastClickTime[button] = currentTime; // Update last click time
 				mouseListener.mouseButtonPressed[button] = true;
 			} else if (action == GLFW_RELEASE) {
 				mouseListener.mouseButtonPressed[button] = false;
-				mouseListener.isDragging = false;
+				mouseListener.isDragging[button] = false;
 			}
 		}
 	}
@@ -108,27 +116,37 @@ public class MouseListener {
 	}
 
 	public static float getOrthoX() {
-		float currentX = ((getX() - gameViewportPosition.x) / gameViewportSize.x) * 2 - 1;
-		Vector4f tmp = new Vector4f(currentX, 0, 0, 1);
-		Matrix4f viewProjection = new Matrix4f();
-		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjection);
-		tmp.mul(viewProjection);
-		currentX = tmp.x;
-		return currentX;
+		return (float) get().worldPositionX;
 	}
 
 	public static float getOrthoY() {
-		float currentY = -(((getY() - gameViewportPosition.y) / gameViewportSize.y) * 2 - 1);
-		Vector4f tmp = new Vector4f(0, currentY, 0, 1);
-		Matrix4f viewProjection = new Matrix4f();
-		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjection);
-		tmp.mul(viewProjection);
-		currentY = tmp.y;
-		return currentY;
+		return (float) get().worldPositionY;
 	}
 
-	public static Vector2f getOrtho() {
+	public static Vector2f getOrtho2f() {
 		return new Vector2f(getOrthoX(), getOrthoY());
+	}
+
+	public static Vector2d getOrtho2d() {
+		return new Vector2d(getOrthoX(), getOrthoY());
+	}
+
+	private float calculateOrthoX() {
+		float currentX = ((getX() - gameViewportPosition.x) / gameViewportSize.x) * 2 - 1;
+		Vector4f tmpX = new Vector4f((float) currentX, 0, 0, 1);
+		Matrix4f viewProjectionX = new Matrix4f();
+		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjectionX);
+		tmpX.mul(viewProjectionX);
+		return tmpX.x;
+	}
+
+	private float calculateOrthoY() {
+		float currentY = -(((getY() - gameViewportPosition.y) / gameViewportSize.y) * 2 - 1);
+		Vector4f tmpY = new Vector4f(0, (float) currentY, 0, 1);
+		Matrix4f viewProjectionY = new Matrix4f();
+		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjectionY);
+		tmpY.mul(viewProjectionY);
+		return tmpY.y;
 	}
 
 	public static float getScrollX() {
@@ -139,8 +157,8 @@ public class MouseListener {
 		return (float) get().scrollY;
 	}
 
-	public static boolean isDragging() {
-		return get().isDragging;
+	private void cleanDragging() {
+		isDragging = new boolean[5];
 	}
 
 	public static boolean isButtonDown(int button) {
@@ -155,11 +173,11 @@ public class MouseListener {
 	}
 
 	public static boolean isButtonPressed(int button) {
-		return isButtonDown(button) && get().isDragging;
+		return isButtonDown(button) && get().isDragging[button];
 	}
 
 	public static boolean isButtonReleased(int button) {
-		return isButtonUp(button) && !get().isDragging;
+		return isButtonUp(button) && !get().isDragging[button];
 	}
 
 	public static boolean isDoubleClick(int button) {

@@ -12,6 +12,10 @@ public class Transform {
 		this.init(new Vector2f(), new Vector2f(), 0, 0);
 	}
 
+	public Transform(Transform transform) {
+		this.init(new Vector2f(transform.position), new Vector2f(transform.scale), transform.rotation, transform.zIndex);
+	}
+
 	public Transform(Vector2f position) {
 		this.init(position, new Vector2f(), 0, 0);
 	}
@@ -52,6 +56,6 @@ public class Transform {
 		if (!(object instanceof Transform transform)) {
 			return false;
 		}
-		return this.position.equals(transform.position) && this.scale.equals(transform.scale);
+		return this.position.equals(transform.position) && this.scale.equals(transform.scale) && this.rotation == transform.rotation;
 	}
 }

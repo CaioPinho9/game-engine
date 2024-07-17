@@ -33,21 +33,17 @@ public class TranslateGizmo extends Gizmo {
 
 	@Override
 	public void use() {
-		this.setDragging(this.isDragging() || this.isPointInsideBoxSelection(MouseListener.getOrtho()));
-
-		if (this.isDragging()) {
-			if (this.fixedMode) {
-				if (this.isVertical) {
-					this.target.transform.position.y = this.calculateGridCoordinate(MouseListener.getOrthoY());
-				} else {
-					this.target.transform.position.x = this.calculateGridCoordinate(MouseListener.getOrthoX());
-				}
+		if (this.fixedMode) {
+			if (this.isVertical) {
+				this.target.transform.position.y = this.calculateGridCoordinate(MouseListener.getOrthoY());
 			} else {
-				if (this.isVertical) {
-					this.target.transform.position.y = MouseListener.getOrthoY() - this.gizmoOffset;
-				} else {
-					this.target.transform.position.x = MouseListener.getOrthoX() - this.gizmoOffset;
-				}
+				this.target.transform.position.x = this.calculateGridCoordinate(MouseListener.getOrthoX());
+			}
+		} else {
+			if (this.isVertical) {
+				this.target.transform.position.y = MouseListener.getOrthoY() - this.gizmoOffset;
+			} else {
+				this.target.transform.position.x = MouseListener.getOrthoX() - this.gizmoOffset;
 			}
 		}
 	}

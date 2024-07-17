@@ -23,6 +23,7 @@ import org.caiopinho.editor.gizmos.TranslateGizmo;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class GizmoControls extends Component {
@@ -89,9 +90,11 @@ public class GizmoControls extends Component {
 		if (this.target != null) {
 			drawGameObjectSelectionSquare(this.target, SELECTION_COLOR);
 
+			this.checkActiveGizmo();
+
 			this.useGizmos();
 
-			if (!this.justSelected && !this.isAnyGizmoDragging() && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+			if (!this.justSelected && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && !this.isAnyGizmoDragging()) {
 				this.placeGameObject();
 			}
 		}
@@ -99,14 +102,26 @@ public class GizmoControls extends Component {
 		this.resetFlags();
 	}
 
-	private void useGizmos() {
-		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+	private void checkActiveGizmo() {
+		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && !isAnyGizmoDragging()) {
 			for (Gizmo gizmo : this.gizmos) {
-				gizmo.use();
+				gizmo.setDragging(gizmo.isActive() && gizmo.isPointInsideBoxSelection(new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY())));
 			}
-		} else {
+		}
+
+		if (MouseListener.isButtonReleased(GLFW_MOUSE_BUTTON_LEFT)) {
 			for (Gizmo gizmo : this.gizmos) {
 				gizmo.setDragging(false);
+			}
+		}
+	}
+
+	private void useGizmos() {
+		if (MouseListener.isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+			for (Gizmo gizmo : this.gizmos) {
+				if (gizmo.isDragging()) {
+					gizmo.use();
+				}
 			}
 		}
 	}
@@ -171,7 +186,7 @@ public class GizmoControls extends Component {
 				}
 
 				// Check if is inside the box
-				if (gameObject.isPointInsideBoxSelection(MouseListener.getOrtho())) {
+				if (gameObject.isPointInsideBoxSelection(new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY()))) {
 					// If the game object is not in the select queue, add it, this is done so the queue remains in the same order as before
 					if (this.selectQueue.contains(gameObject)) {
 						continue;

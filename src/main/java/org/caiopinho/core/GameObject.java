@@ -103,12 +103,7 @@ public class GameObject {
 
 	public boolean isPointInsideBoxSelection(Vector2f point) {
 		Vector2f boxPosition = new Vector2f(this.transform.position).add(new Vector2f(this.transform.scale).mul(-.5f));
-		return (SquarePhysics.isPointInsideRectangle(point, new Transform(boxPosition, this.getBoxSelectionScale())));
+		return (SquarePhysics.isPointInsideRectangle(point, new Transform(boxPosition, this.transform.scale, this.transform.rotation)));
 	}
 
-	public Vector2f getBoxSelectionScale() {
-		Vector2f scale = new Vector2f(this.SELECTION_SIZE, this.SELECTION_SIZE);
-		scale.mul(this.transform.scale);
-		return scale;
-	}
 }
