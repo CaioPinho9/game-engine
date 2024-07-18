@@ -6,6 +6,8 @@ import org.caiopinho.core.MouseListener;
 import org.joml.Vector2f;
 
 public class RotationGizmo extends Gizmo {
+	float lastAngle = 0;
+	float fixedIncrement = 15.0f;
 
 	public RotationGizmo(String name) {
 		super(name, GizmoMode.ROTATE);
@@ -25,18 +27,39 @@ public class RotationGizmo extends Gizmo {
 
 	@Override
 	public void use() {
-		if (this.fixedMode) {
-		} else {
-			float tan = (float) ((MouseListener.getOrthoY() - this.target.transform.position.y) / (MouseListener.getOrthoX() - this.target.transform.position.x));
+		float mouseX = MouseListener.getOrthoX();
+		float mouseY = MouseListener.getOrthoY();
 
-			float rotation = (float) Math.toDegrees(Math.atan(tan));
+		// Get the target's position
+		float targetX = this.target.transform.position.x;
+		float targetY = this.target.transform.position.y;
 
-			if (rotation < 0) {
-				rotation += 180;
-			}
+		// Calculate the angle between the target and the mouse position
+		float deltaX = mouseX - targetX;
+		float deltaY = mouseY - targetY;
 
-			this.target.transform.rotation = rotation;
-			System.out.println(this.target.transform.rotation);
+		// Calculate the current angle
+		float currentAngle = (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
+
+		// Calculate the angle difference
+		float angleDifference = currentAngle - lastAngle;
+
+		if (fixedMode) {
+			// Snap the rotation to the nearest fixed increment
+			angleDifference = Math.round(angleDifference / fixedIncrement) * fixedIncrement;
+			this.target.transform.rotation = Math.round(this.target.transform.rotation / fixedIncrement) * fixedIncrement;
 		}
+
+		// Update the target's rotation incrementally
+		this.target.transform.rotation += angleDifference;
+
+		// Wrap the rotation to keep it between 0 and 360 degrees
+		this.target.transform.rotation %= 360;
+		if (this.target.transform.rotation < 0) {
+			this.target.transform.rotation += 360;
+		}
+
+		// Update the last angle
+		lastAngle = this.target.transform.rotation;
 	}
 }
