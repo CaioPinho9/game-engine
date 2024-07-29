@@ -20,6 +20,7 @@ import org.caiopinho.editor.gizmos.Gizmo;
 import org.caiopinho.editor.gizmos.GizmoMode;
 import org.caiopinho.editor.gizmos.RotationGizmo;
 import org.caiopinho.editor.gizmos.TranslateGizmo;
+import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
@@ -36,8 +37,6 @@ public class GizmoControls extends Component {
 	@Getter private transient Gizmo gizmoVertical;
 	@Getter private transient Gizmo gizmoHorizontal;
 	@Getter private transient Gizmo gizmoCircle;
-
-	@Getter private transient float gizmoOffset;
 
 	private transient boolean justSelected;
 	private transient boolean justDropped;
@@ -105,7 +104,17 @@ public class GizmoControls extends Component {
 	private void checkActiveGizmo() {
 		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && !isAnyGizmoDragging()) {
 			for (Gizmo gizmo : this.gizmos) {
+				boolean wasDragging = gizmo.isDragging();
 				gizmo.setDragging(gizmo.isActive() && gizmo.isPointInsideBoxSelection(new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY())));
+				if (wasDragging || !gizmo.isDragging() || !(gizmo instanceof TranslateGizmo)) {
+					continue;
+				}
+
+				if (((TranslateGizmo) gizmo).isVertical()) {
+					gizmo.setGizmoOffset(MouseListener.getOrthoY() - gizmo.transform.position.y + gizmo.transform.scale.y / 2);
+				} else {
+					gizmo.setGizmoOffset(MouseListener.getOrthoX() - gizmo.transform.position.x + gizmo.transform.scale.x / 2);
+				}
 			}
 		}
 

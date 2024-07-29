@@ -15,7 +15,7 @@ public abstract class Gizmo extends GameObject {
 	@Getter private boolean active = true;
 	@Setter protected GameObject target;
 	@Setter protected boolean fixedMode;
-	protected float gizmoOffset;
+	@Setter protected float gizmoOffset;
 	protected GizmoMode mode;
 
 	public Gizmo(String name, Transform transform, GizmoMode mode) {

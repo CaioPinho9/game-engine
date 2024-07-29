@@ -41,5 +41,4 @@ public class MathHelper {
 
 		return newVector;
 	}
-
 }

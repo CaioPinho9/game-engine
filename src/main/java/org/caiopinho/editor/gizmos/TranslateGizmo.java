@@ -1,5 +1,7 @@
 package org.caiopinho.editor.gizmos;
 
+import lombok.Getter;
+
 import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.MouseListener;
@@ -8,6 +10,7 @@ import org.caiopinho.editor.components.GridTools;
 import org.joml.Vector2f;
 
 public class TranslateGizmo extends Gizmo {
+	@Getter
 	private final boolean isVertical;
 	private final GridTools gridTools;
 
@@ -28,7 +31,6 @@ public class TranslateGizmo extends Gizmo {
 		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * cameraZoom * SCALE;
 		this.transform.scale = new Vector2f(scale, scale);
 		this.transform.position.add(this.isVertical ? 0 : this.transform.scale.y / 2, this.isVertical ? this.transform.scale.y / 2 : 0);
-		this.gizmoOffset = this.transform.scale.x / 1.5f;
 	}
 
 	@Override
