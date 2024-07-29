@@ -14,6 +14,7 @@ import org.caiopinho.editor.components.CameraControls;
 import org.caiopinho.editor.components.DebugView;
 import org.caiopinho.editor.components.GizmoControls;
 import org.caiopinho.editor.components.GridTools;
+import org.caiopinho.editor.gizmos.Gizmo;
 import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.debug.DebugDraw;
@@ -39,9 +40,10 @@ import imgui.ImVec2;
 
 		GridTools gridTools = new GridTools();
 		GizmoControls gizmoControls = new GizmoControls(this.camera, gridTools, this);
-		this.addGameObjectToScene(gizmoControls.getGizmoVertical());
-		this.addGameObjectToScene(gizmoControls.getGizmoHorizontal());
-		this.addGameObjectToScene(gizmoControls.getGizmoCircle());
+
+		for (Gizmo gizmo : gizmoControls.getGizmos()) {
+			this.addGameObjectToScene(gizmo);
+		}
 
 		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
 		this.levelEditor.setSelectable(false);

@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_1;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_2;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_3;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ import org.caiopinho.core.MouseListener;
 import org.caiopinho.editor.gizmos.Gizmo;
 import org.caiopinho.editor.gizmos.GizmoMode;
 import org.caiopinho.editor.gizmos.RotationGizmo;
+import org.caiopinho.editor.gizmos.ScaleGizmo;
 import org.caiopinho.editor.gizmos.TranslateGizmo;
-import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.Window;
 import org.caiopinho.scene.Scene;
@@ -32,36 +33,50 @@ public class GizmoControls extends Component {
 
 	private transient final Scene scene;
 	private transient final Camera camera;
-	private transient final List<Gizmo> gizmos = new ArrayList<>();
+	@Getter private transient final List<Gizmo> gizmos = new ArrayList<>();
 
-	@Getter private transient Gizmo gizmoVertical;
-	@Getter private transient Gizmo gizmoHorizontal;
-	@Getter private transient Gizmo gizmoCircle;
+	@Getter private transient final Gizmo gizmoTranslateVertical;
+	@Getter private transient final Gizmo gizmoTranslateHorizontal;
+	@Getter private transient final Gizmo gizmoScaleVertical;
+	@Getter private transient final Gizmo gizmoScaleHorizontal;
+	@Getter private transient final Gizmo gizmoCircle;
 
 	private transient boolean justSelected;
 	private transient boolean justDropped;
 	private transient boolean justDoubleClicked;
+	private transient boolean wasControlPressed = false;
+	private transient boolean wasShiftPressed = false;
+	private transient long lastControlToggleTime = 0;
+	private transient long lastShiftToggleTime = 0;
+	private static final long TOGGLE_DELAY = 100;
+
 
 	private transient GameObject target;
 	private transient final List<GameObject> selectQueue;
 
-	@Getter private boolean fixedMode;
+	private boolean fixedMode;
+	private boolean aspectRatioLockMode;
 	private transient GizmoMode activeGizmoMode;
 
 	public GizmoControls(Camera camera, GridTools gridTools, Scene scene) {
 		this.camera = camera;
 		this.scene = scene;
 		this.fixedMode = false;
+		this.aspectRatioLockMode = false;
 		this.target = null;
 		this.activeGizmoMode = GizmoMode.TRANSLATE;
 		this.selectQueue = new ArrayList<>();
 
-		this.gizmoVertical = new TranslateGizmo("GizmoVertical", true, gridTools);
-		this.gizmoHorizontal = new TranslateGizmo("GizmoHorizontal", false, gridTools);
+		this.gizmoTranslateVertical = new TranslateGizmo("GizmoTranslateVertical", true, gridTools);
+		this.gizmoTranslateHorizontal = new TranslateGizmo("GizmoTranslateHorizontal", false, gridTools);
+		this.gizmoScaleVertical = new ScaleGizmo("GizmoScaleVertical", true, gridTools);
+		this.gizmoScaleHorizontal = new ScaleGizmo("GizmoScaleHorizontal", false, gridTools);
 		this.gizmoCircle = new RotationGizmo("GizmoCircle");
 
-		this.gizmos.add(this.gizmoVertical);
-		this.gizmos.add(this.gizmoHorizontal);
+		this.gizmos.add(this.gizmoTranslateVertical);
+		this.gizmos.add(this.gizmoTranslateHorizontal);
+		this.gizmos.add(this.gizmoScaleVertical);
+		this.gizmos.add(this.gizmoScaleHorizontal);
 		this.gizmos.add(this.gizmoCircle);
 	}
 
@@ -79,6 +94,7 @@ public class GizmoControls extends Component {
 			this.followTarget();
 			this.changeGizmoMode();
 			this.changeFixedMode();
+			this.changeAspectRatioLockMode();
 		}
 
 		if (!this.justDropped) {
@@ -259,16 +275,48 @@ public class GizmoControls extends Component {
 	}
 
 	private void changeFixedMode() {
-		boolean oldFixed = this.fixedMode;
-		this.fixedMode = KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
-		if (oldFixed != this.fixedMode) {
-			this.toggleFixedMode();
+		long currentTime = System.currentTimeMillis();
+		boolean isControlPressed = KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
+
+		// Check if the key state has changed from not pressed to pressed
+		if (isControlPressed && !wasControlPressed) {
+			if (currentTime - lastControlToggleTime > TOGGLE_DELAY) {
+				this.fixedMode = !this.fixedMode;
+				this.toggleFixedMode();
+				lastControlToggleTime = currentTime;
+			}
 		}
+
+		// Update the previously pressed state
+		wasControlPressed = isControlPressed;
+	}
+
+	private void changeAspectRatioLockMode() {
+		long currentTime = System.currentTimeMillis();
+		boolean isShiftPressed = KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT);
+
+		// Check if the key state has changed from not pressed to pressed
+		if (isShiftPressed && !wasShiftPressed) {
+			if (currentTime - lastShiftToggleTime > TOGGLE_DELAY) {
+				this.aspectRatioLockMode = !this.aspectRatioLockMode;
+				this.toggleAspectRatioLockMode();
+				lastShiftToggleTime = currentTime;
+			}
+		}
+
+		// Update the previously pressed state
+		wasShiftPressed = isShiftPressed;
 	}
 
 	private void toggleFixedMode() {
 		for (Gizmo gizmo : this.gizmos) {
 			gizmo.setFixedMode(this.fixedMode);
+		}
+	}
+
+	private void toggleAspectRatioLockMode() {
+		for (Gizmo gizmo : this.gizmos) {
+			gizmo.setAspectRatioLockMode(this.aspectRatioLockMode);
 		}
 	}
 }

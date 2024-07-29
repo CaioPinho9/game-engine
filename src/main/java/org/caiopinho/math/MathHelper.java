@@ -41,4 +41,8 @@ public class MathHelper {
 
 		return newVector;
 	}
+
+	public static float lerp(float start, float end, float factor) {
+		return start + factor * (end - start);
+	}
 }

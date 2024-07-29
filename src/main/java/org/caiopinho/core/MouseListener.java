@@ -30,8 +30,8 @@ public class MouseListener {
 	private final static long DOUBLE_CLICK_INTERVAL = 300; // 300 milliseconds for float-click
 	private final boolean[] mouseClicked = new boolean[5];
 
-	@Setter private static Vector2f gameViewportSize;
-	@Setter private static Vector2f gameViewportPosition;
+	@Setter private static Vector2f gameViewportSize = new Vector2f();
+	@Setter private static Vector2f gameViewportPosition = new Vector2f();
 
 	private static MouseListener instance = null;
 

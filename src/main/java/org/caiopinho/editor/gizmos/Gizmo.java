@@ -9,12 +9,14 @@ import org.caiopinho.core.Transform;
 import org.joml.Vector2f;
 
 public abstract class Gizmo extends GameObject {
-	protected static final float SCALE = .5f;
+	protected static final float ASPECT_RATIO = .42f;
+	protected static final float SCALE = 100f;
 	private static final int Z_INDEX = 10;
 	@Setter private boolean dragging = false;
 	@Getter private boolean active = true;
 	@Setter protected GameObject target;
 	@Setter protected boolean fixedMode;
+	@Setter protected boolean aspectRatioLockMode;
 	@Setter protected float gizmoOffset;
 	protected GizmoMode mode;
 

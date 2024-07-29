@@ -21,7 +21,7 @@ public class RotationGizmo extends Gizmo {
 	@Override
 	public void followTarget(float cameraZoom) {
 		this.target.transform.copy(this.transform);
-		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * cameraZoom * SCALE;
+		float scale = cameraZoom * SCALE;
 		this.transform.scale = new Vector2f(scale, scale);
 	}
 

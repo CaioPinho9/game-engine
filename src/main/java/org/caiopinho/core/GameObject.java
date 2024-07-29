@@ -13,6 +13,7 @@ import org.joml.Vector2f;
 @Getter
 @Setter
 public class GameObject {
+	protected static final float MIN_SCALE_OBJECT = 10f;
 
 	private static int ID_COUNTER = 0;
 	public Transform transform;
@@ -25,7 +26,6 @@ public class GameObject {
 	@Getter
 	@Setter
 	private boolean selectable = true;
-	private float SELECTION_SIZE = 1;
 
 	public GameObject(String name, Transform transform, int zIndex) {
 		this.name = name;

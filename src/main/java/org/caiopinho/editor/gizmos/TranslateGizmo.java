@@ -28,8 +28,8 @@ public class TranslateGizmo extends Gizmo {
 	@Override
 	public void followTarget(float cameraZoom) {
 		this.target.transform.copy(this.transform);
-		float scale = Math.min(this.target.transform.scale.x, this.target.transform.scale.y) * cameraZoom * SCALE;
-		this.transform.scale = new Vector2f(scale, scale);
+		float scale = cameraZoom * SCALE;
+		this.transform.scale = new Vector2f(scale * ASPECT_RATIO, scale);
 		this.transform.position.add(this.isVertical ? 0 : this.transform.scale.y / 2, this.isVertical ? this.transform.scale.y / 2 : 0);
 	}
 
