@@ -43,8 +43,6 @@ public class ScaleGizmo extends Gizmo {
 		} else {
 			handleDynamicMode();
 		}
-
-		clampScale();
 	}
 
 	private void handleFixedMode() {
@@ -100,23 +98,18 @@ public class ScaleGizmo extends Gizmo {
 		}
 
 		if (isVertical) {
-			valueY = (float) (MouseListener.getDeltaY() * Math.log(target.transform.scale.y));
+			valueY = (float) (MouseListener.getDeltaY() * Math.max(Math.log(Math.abs(target.transform.scale.y)), .1f));
 			if (aspectRatioLockMode) {
 				valueX = valueY * aspectRatio;
 			}
 		} else {
-			valueX = (float) (MouseListener.getDeltaX() * -Math.log(target.transform.scale.x));
+			valueX = (float) (MouseListener.getDeltaX() * -Math.max(Math.log(Math.abs(target.transform.scale.x)), .1f));
 			if (aspectRatioLockMode) {
 				valueY = valueX / aspectRatio;
 			}
 		}
 
 		target.transform.scale.add(valueX, valueY);
-	}
-
-	private void clampScale() {
-		target.transform.scale.x = Math.max(target.transform.scale.x, MIN_SCALE_OBJECT);
-		target.transform.scale.y = Math.max(target.transform.scale.y, MIN_SCALE_OBJECT);
 	}
 
 	private float calculateGridCoordinate(float coordinate) {
