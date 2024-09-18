@@ -38,7 +38,8 @@ public class Batch<T> implements Comparable<Batch<?>> {
 		throw new UnsupportedOperationException("This method should be overridden");
 	}
 
-	@Override public int compareTo(Batch o) {
+	@Override
+	public int compareTo(Batch o) {
 		return Integer.compare(this.getZIndex(), o.getZIndex());
 	}
 }

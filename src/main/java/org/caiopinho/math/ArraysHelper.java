@@ -8,7 +8,7 @@ public class ArraysHelper {
 	// Checks if the array contains the specified element.
 	public static <T> boolean contains(T[] array, T element) {
 		for (T item : array) {
-			if (item == element || (item != null && item.equals(element))) {
+			if (Objects.equals(item, element)) {
 				return true;
 			}
 		}
@@ -46,9 +46,9 @@ public class ArraysHelper {
 		}
 	}
 
-	public static<T> int indexOf(SpriteRenderer[] elements, T value) {
+	public static <T> int indexOf(SpriteRenderer[] elements, T value) {
 		for (int i = 0; i < elements.length; i++) {
-			if (Objects.equals(elements[i],value)) {
+			if (Objects.equals(elements[i], value)) {
 				return i;
 			}
 		}

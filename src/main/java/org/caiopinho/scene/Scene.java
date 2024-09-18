@@ -66,6 +66,12 @@ public abstract class Scene {
 		}
 	}
 
+	public <T extends GameObject> void addGameObjectToScene(List<T> gameObjects) {
+		for (T go : gameObjects) {
+			this.addGameObjectToScene(go);
+		}
+	}
+
 	public void save() {
 		List<GameObject> serializableGameObjects = this.gameObjects.stream()
 				.filter(GameObject::isSerializable)

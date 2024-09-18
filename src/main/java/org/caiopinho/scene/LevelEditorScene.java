@@ -14,7 +14,6 @@ import org.caiopinho.editor.components.CameraControls;
 import org.caiopinho.editor.components.DebugView;
 import org.caiopinho.editor.components.GizmoControls;
 import org.caiopinho.editor.components.GridTools;
-import org.caiopinho.editor.gizmos.Gizmo;
 import org.caiopinho.math.MathHelper;
 import org.caiopinho.renderer.Camera;
 import org.caiopinho.renderer.debug.DebugDraw;
@@ -28,7 +27,8 @@ import imgui.ImVec2;
 	private Spritesheet sprites;
 	private GameObject levelEditor;
 
-	@Override public void init() {
+	@Override
+	public void init() {
 		this.camera = new Camera(new Vector2f());
 
 		// Add sprite without gameobject to renderer
@@ -40,10 +40,7 @@ import imgui.ImVec2;
 
 		GridTools gridTools = new GridTools();
 		GizmoControls gizmoControls = new GizmoControls(this.camera, gridTools, this);
-
-		for (Gizmo gizmo : gizmoControls.getGizmos()) {
-			this.addGameObjectToScene(gizmo);
-		}
+		this.addGameObjectToScene(gizmoControls.getGizmos());
 
 		this.levelEditor = new GameObject("LevelEditor", new Transform(), 0);
 		this.levelEditor.setSelectable(false);
@@ -102,7 +99,8 @@ import imgui.ImVec2;
 	float angle = 0;
 	float percent = 0;
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		this.angle += 6 * deltaTime;
 		this.percent += .05f * deltaTime;
 		this.percent %= 1;
@@ -128,7 +126,8 @@ import imgui.ImVec2;
 		super.update(deltaTime);
 	}
 
-	@Override protected void loadResources() {
+	@Override
+	protected void loadResources() {
 		AssetPool.getShader("assets/shaders/default.glsl");
 		AssetPool.getTexture("assets/textures/logo.png");
 		AssetPool.getTexture("assets/textures/ubuntu dices.png");
@@ -138,7 +137,8 @@ import imgui.ImVec2;
 		AssetPool.getTexture("assets/textures/gizmo_rotation.png");
 	}
 
-	@Override public void imgui() {
+	@Override
+	public void imgui() {
 		ImGui.begin("Level Editor");
 		this.levelEditor.imgui();
 		ImGui.end();

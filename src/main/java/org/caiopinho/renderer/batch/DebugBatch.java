@@ -40,7 +40,8 @@ public class DebugBatch extends Batch<Line2D> {
 		this.lineWidth = lineWidth;
 	}
 
-	@Override public void addElement(Line2D line) {
+	@Override
+	public void addElement(Line2D line) {
 		if (line != null) {
 			if (!ArraysHelper.contains(this.elements, line)) {
 				this.elements[this.elementCount] = line;
@@ -75,7 +76,8 @@ public class DebugBatch extends Batch<Line2D> {
 		}
 	}
 
-	@Override public void render() {
+	@Override
+	public void render() {
 		if (this.elementCount == 0) {
 			return;
 		}

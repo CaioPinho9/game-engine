@@ -15,7 +15,8 @@ import com.google.gson.JsonParseException;
 
 public class GameObjectSerializer implements JsonDeserializer<GameObject> {
 
-	@Override public GameObject deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+	@Override
+	public GameObject deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 		JsonObject jsonObject = jsonElement.getAsJsonObject();
 
 		String name = jsonObject.get("name").getAsString();
