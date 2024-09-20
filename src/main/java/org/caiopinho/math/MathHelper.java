@@ -45,4 +45,13 @@ public class MathHelper {
 	public static float lerp(float start, float end, float factor) {
 		return start + factor * (end - start);
 	}
+
+	public static float angleBetweenTwoPoints(Vector2f point1, Vector2f point2) {
+		// Calculate the angle between the target and the mouse position
+		float deltaX = point1.x - point2.x;
+		float deltaY = point1.y - point2.y;
+
+		// Calculate the current angle
+		return (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
+	}
 }

@@ -3,6 +3,7 @@ package org.caiopinho.editor.gizmos;
 import org.caiopinho.assets.AssetPool;
 import org.caiopinho.component.SpriteRenderer;
 import org.caiopinho.core.MouseListener;
+import org.caiopinho.math.MathHelper;
 import org.joml.Vector2f;
 
 public class RotationGizmo extends Gizmo {
@@ -27,22 +28,8 @@ public class RotationGizmo extends Gizmo {
 
 	@Override
 	public void use() {
-		float mouseX = MouseListener.getOrthoX();
-		float mouseY = MouseListener.getOrthoY();
-
-		// Get the target's position
-		float targetX = this.target.transform.position.x;
-		float targetY = this.target.transform.position.y;
-
-		// Calculate the angle between the target and the mouse position
-		float deltaX = mouseX - targetX;
-		float deltaY = mouseY - targetY;
-
-		// Calculate the current angle
-		float currentAngle = (float) Math.toDegrees(Math.atan2(deltaY, deltaX));
-
-		// Calculate the angle difference
-		float angleDifference = currentAngle - lastAngle;
+		float currentAngle = MathHelper.angleBetweenTwoPoints(this.target.transform.position, MouseListener.getOrtho());
+		float angleDifference = currentAngle - this.lastAngle;
 
 		if (fixedMode) {
 			// Snap the rotation to the nearest fixed increment
@@ -60,6 +47,6 @@ public class RotationGizmo extends Gizmo {
 		}
 
 		// Update the last angle
-		lastAngle = this.target.transform.rotation;
+		this.lastAngle = this.target.transform.rotation;
 	}
 }

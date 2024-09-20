@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import org.caiopinho.renderer.Window;
 import org.joml.Matrix4f;
-import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -123,17 +122,14 @@ public class MouseListener {
 		return (float) get().worldPositionY;
 	}
 
-	public static Vector2f getOrtho2f() {
-		return new Vector2f(getOrthoX(), getOrthoY());
-	}
-
-	public static Vector2d getOrtho2d() {
-		return new Vector2d(getOrthoX(), getOrthoY());
+	public static Vector2f getOrtho() {
+		MouseListener mouseListener = get();
+		return new Vector2f((float) mouseListener.worldPositionX, (float) mouseListener.worldPositionY);
 	}
 
 	private float calculateOrthoX() {
 		float currentX = ((getX() - gameViewportPosition.x) / gameViewportSize.x) * 2 - 1;
-		Vector4f tmpX = new Vector4f((float) currentX, 0, 0, 1);
+		Vector4f tmpX = new Vector4f(currentX, 0, 0, 1);
 		Matrix4f viewProjectionX = new Matrix4f();
 		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjectionX);
 		tmpX.mul(viewProjectionX);
@@ -142,7 +138,7 @@ public class MouseListener {
 
 	private float calculateOrthoY() {
 		float currentY = -(((getY() - gameViewportPosition.y) / gameViewportSize.y) * 2 - 1);
-		Vector4f tmpY = new Vector4f(0, (float) currentY, 0, 1);
+		Vector4f tmpY = new Vector4f(0, currentY, 0, 1);
 		Matrix4f viewProjectionY = new Matrix4f();
 		Window.getScene().getCamera().getInverseView().mul(Window.getScene().getCamera().getInverseProjection(), viewProjectionY);
 		tmpY.mul(viewProjectionY);
