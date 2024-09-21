@@ -31,10 +31,10 @@ public class RotationGizmo extends Gizmo {
 		float currentAngle = MathHelper.angleBetweenTwoPoints(this.target.transform.position, MouseListener.getOrtho());
 		float angleDifference = currentAngle - this.lastAngle;
 
-		if (fixedMode) {
+		if (this.fixedMode) {
 			// Snap the rotation to the nearest fixed increment
-			angleDifference = Math.round(angleDifference / fixedIncrement) * fixedIncrement;
-			this.target.transform.rotation = Math.round(this.target.transform.rotation / fixedIncrement) * fixedIncrement;
+			angleDifference = Math.round(angleDifference / this.fixedIncrement) * this.fixedIncrement;
+			this.target.transform.rotation = Math.round(this.target.transform.rotation / this.fixedIncrement) * this.fixedIncrement;
 		}
 
 		// Update the target's rotation incrementally

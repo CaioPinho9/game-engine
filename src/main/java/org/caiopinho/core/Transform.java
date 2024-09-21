@@ -1,8 +1,9 @@
 package org.caiopinho.core;
 
+import org.caiopinho.component.Component;
 import org.joml.Vector2f;
 
-public class Transform {
+public class Transform extends Component {
 	public Vector2f position;
 	public int zIndex;
 	public Vector2f scale;
@@ -57,5 +58,9 @@ public class Transform {
 			return false;
 		}
 		return this.position.equals(transform.position) && this.scale.equals(transform.scale) && this.rotation == transform.rotation;
+	}
+
+	@Override public void update(float deltaTime) {
+
 	}
 }

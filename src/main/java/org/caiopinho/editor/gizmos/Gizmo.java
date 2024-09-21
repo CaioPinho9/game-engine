@@ -11,24 +11,32 @@ import org.joml.Vector2f;
 public abstract class Gizmo extends GameObject {
 	protected static final float ASPECT_RATIO = .42f;
 	protected static final float SCALE = 100f;
-	private static final int Z_INDEX = 10;
+	protected static final int Z_INDEX = 10;
 	@Setter private boolean dragging = false;
 	@Getter private boolean active = true;
 	@Setter protected GameObject target;
 	@Setter protected boolean fixedMode;
 	@Setter protected boolean aspectRatioLockMode;
 	@Setter protected float gizmoOffset;
+	@Getter
+	protected boolean isVertical;
 	protected GizmoMode mode;
 
+	public Gizmo(String name, Transform transform, boolean isVertical, GizmoMode mode) {
+		super(name, transform);
+		this.isVertical = isVertical;
+		this.mode = mode;
+	}
+
 	public Gizmo(String name, Transform transform, GizmoMode mode) {
-		super(name, transform, Z_INDEX);
+		super(name, transform);
 		this.setSelectable(false);
 		this.setSerializable(false);
 		this.mode = mode;
 	}
 
 	public Gizmo(String name, GizmoMode mode) {
-		super(name, new Transform(new Vector2f(), new Vector2f(1, 1)), Z_INDEX);
+		super(name, new Transform(new Vector2f(), new Vector2f(1, 1), 0, Z_INDEX));
 		this.setSelectable(false);
 		this.setSerializable(false);
 		this.mode = mode;
@@ -52,7 +60,12 @@ public abstract class Gizmo extends GameObject {
 		return this.dragging && this.active;
 	}
 
-	public abstract void followTarget(float cameraZoom);
+	public void followTarget(float cameraZoom) {
+		this.target.transform.copy(this.transform);
+		float scale = cameraZoom * SCALE;
+		this.transform.scale = new Vector2f(scale * ASPECT_RATIO, scale);
+		this.transform.position.add(this.isVertical ? 0 : this.transform.scale.y / 2, this.isVertical ? this.transform.scale.y / 2 : 0);
+	}
 
 	public abstract void use();
 }

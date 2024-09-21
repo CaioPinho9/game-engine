@@ -20,19 +20,25 @@ public class GameObject {
 	private int uid = -1;
 	private String name;
 	private List<Component> components;
-	private int zIndex;
 
 	@Getter private boolean serializable = true;
 	@Getter
 	@Setter
 	private boolean selectable = true;
 
-	public GameObject(String name, Transform transform, int zIndex) {
+	public GameObject(String name) {
+		this.init(name, new Transform());
+	}
+
+	public GameObject(String name, Transform transform) {
+		this.init(name, transform);
+	}
+
+	private void init(String name, Transform transform) {
 		this.name = name;
 		this.components = new ArrayList<>();
 		this.transform = transform;
-		this.zIndex = zIndex;
-		transform.zIndex = zIndex;
+		this.addComponent(transform);
 
 		this.uid = ID_COUNTER++;
 	}

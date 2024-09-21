@@ -50,7 +50,6 @@ public class GizmoControls extends Component {
 	private transient long lastShiftToggleTime = 0;
 	private static final long TOGGLE_DELAY = 100;
 
-
 	private transient GameObject target;
 	private transient final List<GameObject> selectQueue;
 
@@ -109,7 +108,7 @@ public class GizmoControls extends Component {
 
 			this.useGizmos();
 
-			if (!this.justSelected && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && !this.isAnyGizmoDragging()) {
+			if (!this.justSelected && MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && this.isNoneGizmoDragging()) {
 				this.placeGameObject();
 			}
 		}
@@ -118,19 +117,9 @@ public class GizmoControls extends Component {
 	}
 
 	private void checkActiveGizmo() {
-		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && !isAnyGizmoDragging()) {
+		if (MouseListener.isButtonDown(GLFW_MOUSE_BUTTON_LEFT) && this.isNoneGizmoDragging()) {
 			for (Gizmo gizmo : this.gizmos) {
-				boolean wasDragging = gizmo.isDragging();
 				gizmo.setDragging(gizmo.isActive() && gizmo.isPointInsideBoxSelection(new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY())));
-				if (wasDragging || !gizmo.isDragging() || !(gizmo instanceof TranslateGizmo)) {
-					continue;
-				}
-
-				if (((TranslateGizmo) gizmo).isVertical()) {
-					gizmo.setGizmoOffset(MouseListener.getOrthoY() - gizmo.transform.position.y + gizmo.transform.scale.y / 2);
-				} else {
-					gizmo.setGizmoOffset(MouseListener.getOrthoX() - gizmo.transform.position.x + gizmo.transform.scale.x / 2);
-				}
 			}
 		}
 
@@ -181,13 +170,13 @@ public class GizmoControls extends Component {
 		}
 	}
 
-	public boolean isAnyGizmoDragging() {
+	public boolean isNoneGizmoDragging() {
 		for (Gizmo gizmo : this.gizmos) {
 			if (gizmo.isDragging()) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public void setHoldingGameObject(GameObject gameObject) {
@@ -220,7 +209,7 @@ public class GizmoControls extends Component {
 					boolean added = false;
 					for (int i = 0; i < this.selectQueue.size(); i++) {
 						GameObject object = this.selectQueue.get(i);
-						if (object.getZIndex() <= gameObject.getZIndex()) {
+						if (object.transform.zIndex <= gameObject.transform.zIndex) {
 							this.selectQueue.add(i, gameObject);
 							added = true;
 							break;
@@ -279,16 +268,16 @@ public class GizmoControls extends Component {
 		boolean isControlPressed = KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL);
 
 		// Check if the key state has changed from not pressed to pressed
-		if (isControlPressed && !wasControlPressed) {
-			if (currentTime - lastControlToggleTime > TOGGLE_DELAY) {
+		if (isControlPressed && !this.wasControlPressed) {
+			if (currentTime - this.lastControlToggleTime > TOGGLE_DELAY) {
 				this.fixedMode = !this.fixedMode;
 				this.toggleFixedMode();
-				lastControlToggleTime = currentTime;
+				this.lastControlToggleTime = currentTime;
 			}
 		}
 
 		// Update the previously pressed state
-		wasControlPressed = isControlPressed;
+		this.wasControlPressed = isControlPressed;
 	}
 
 	private void changeAspectRatioLockMode() {
@@ -296,16 +285,16 @@ public class GizmoControls extends Component {
 		boolean isShiftPressed = KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT);
 
 		// Check if the key state has changed from not pressed to pressed
-		if (isShiftPressed && !wasShiftPressed) {
-			if (currentTime - lastShiftToggleTime > TOGGLE_DELAY) {
+		if (isShiftPressed && !this.wasShiftPressed) {
+			if (currentTime - this.lastShiftToggleTime > TOGGLE_DELAY) {
 				this.aspectRatioLockMode = !this.aspectRatioLockMode;
 				this.toggleAspectRatioLockMode();
-				lastShiftToggleTime = currentTime;
+				this.lastShiftToggleTime = currentTime;
 			}
 		}
 
 		// Update the previously pressed state
-		wasShiftPressed = isShiftPressed;
+		this.wasShiftPressed = isShiftPressed;
 	}
 
 	private void toggleFixedMode() {
