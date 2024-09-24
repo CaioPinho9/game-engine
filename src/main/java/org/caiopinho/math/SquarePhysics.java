@@ -1,7 +1,6 @@
 package org.caiopinho.math;
 
 import org.caiopinho.core.Transform;
-import org.caiopinho.renderer.debug.DebugDraw;
 import org.joml.Vector2f;
 
 // TODO: Temporary class

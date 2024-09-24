@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import org.caiopinho.assets.Shader;
 
-public class Batch<T> implements Comparable<Batch<?>> {
+public abstract class Batch<T> implements Comparable<Batch<?>> {
 	protected final T[] elements;
 
 	protected float[] vertices;
@@ -30,13 +30,9 @@ public class Batch<T> implements Comparable<Batch<?>> {
 		this.hasSpace = true;
 	}
 
-	public void render() {
-		throw new UnsupportedOperationException("This method should be overridden");
-	}
+	public abstract void render();
 
-	public void addElement(T element) {
-		throw new UnsupportedOperationException("This method should be overridden");
-	}
+	public abstract void addElement(T element);
 
 	@Override
 	public int compareTo(Batch o) {

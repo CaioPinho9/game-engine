@@ -31,7 +31,7 @@ import imgui.ImVec2;
 	public void init() {
 		this.camera = new Camera(new Vector2f());
 
-		// Add sprite without gameobject to renderer
+		// Add sprite without game object to renderer
 		SpriteRenderer spriteRenderer0 = new SpriteRenderer();
 		spriteRenderer0.setColor(new Vector4f(1, 0, 0, .8f));
 		spriteRenderer0.setTransform(new Transform(new Vector2f(0, 210), new Vector2f(100, 100)));

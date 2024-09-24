@@ -94,7 +94,7 @@ public class ImGuiHelper {
 		}
 	}
 
-	private static void handleVector3fField(String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+	private static void handleVector3fField(String name, Object rawValue, FieldConfig config) {
 		Vector3f value = (Vector3f) rawValue;
 		float[] arr = new float[] { value.x, value.y, value.z };
 		if (config != null) {
@@ -109,7 +109,7 @@ public class ImGuiHelper {
 		}
 	}
 
-	private static void handleVector4fField(String name, Object rawValue, FieldConfig config) throws IllegalAccessException {
+	private static void handleVector4fField(String name, Object rawValue, FieldConfig config) {
 		Vector4f value = (Vector4f) rawValue;
 		float[] arr = new float[] { value.x, value.y, value.z, value.w };
 		if (config != null) {

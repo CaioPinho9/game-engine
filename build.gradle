@@ -10,8 +10,7 @@ repositories {
     mavenCentral()
 }
 
-task run(type: JavaExec) {
-    main = 'org.caiopinho.Main'
+tasks.register('run', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -39,7 +38,7 @@ switch (OperatingSystem.current()) {
 
 dependencies {
     // GSON
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // ImgGUI
     implementation "io.imgui.java:binding:$imguiVersion"

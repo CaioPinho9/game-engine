@@ -7,8 +7,8 @@ import org.caiopinho.math.MathHelper;
 import org.joml.Vector2f;
 
 public class RotationGizmo extends Gizmo {
-	float lastAngle = 0;
-	float fixedIncrement = 15.0f;
+	private float lastAngle = 0;
+	private final float FIXED_INCREMENT = 15.0f;
 
 	public RotationGizmo(String name) {
 		super(name, GizmoMode.ROTATE);
@@ -33,8 +33,8 @@ public class RotationGizmo extends Gizmo {
 
 		if (this.fixedMode) {
 			// Snap the rotation to the nearest fixed increment
-			angleDifference = Math.round(angleDifference / this.fixedIncrement) * this.fixedIncrement;
-			this.target.transform.rotation = Math.round(this.target.transform.rotation / this.fixedIncrement) * this.fixedIncrement;
+			angleDifference = Math.round(angleDifference / this.FIXED_INCREMENT) * this.FIXED_INCREMENT;
+			this.target.transform.rotation = Math.round(this.target.transform.rotation / this.FIXED_INCREMENT) * this.FIXED_INCREMENT;
 		}
 
 		// Update the target's rotation incrementally

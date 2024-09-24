@@ -154,7 +154,7 @@ public class MouseListener {
 	}
 
 	private void cleanDragging() {
-		isDragging = new boolean[5];
+		this.isDragging = new boolean[5];
 	}
 
 	public static boolean isButtonDown(int button) {

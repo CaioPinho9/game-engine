@@ -20,7 +20,7 @@ public abstract class Gizmo extends GameObject {
 	@Setter protected float gizmoOffset;
 	@Getter
 	protected boolean isVertical;
-	protected GizmoMode mode;
+	protected final GizmoMode mode;
 
 	public Gizmo(String name, Transform transform, boolean isVertical, GizmoMode mode) {
 		super(name, transform);
