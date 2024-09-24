@@ -18,10 +18,10 @@ import imgui.ImGui;
 
 public abstract class Scene {
 	@Getter protected Camera camera;
-	@Getter protected Renderer renderer = new Renderer();
+	@Getter protected final Renderer renderer = new Renderer();
 	private boolean isRunning;
 	protected boolean wasLoaded;
-	@Getter protected List<GameObject> gameObjects = new ArrayList<>();
+	@Getter protected final List<GameObject> gameObjects = new ArrayList<>();
 
 	public GameObject activeGameObject = null;
 	private final FileController<GameObject> fileController = new FileController<>();
@@ -63,6 +63,12 @@ public abstract class Scene {
 		if (this.isRunning) {
 			gameObject.start();
 			this.renderer.add(gameObject);
+		}
+	}
+
+	public <T extends GameObject> void addGameObjectToScene(List<T> gameObjects) {
+		for (T go : gameObjects) {
+			this.addGameObjectToScene(go);
 		}
 	}
 

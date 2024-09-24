@@ -1,8 +1,9 @@
 package org.caiopinho.core;
 
+import org.caiopinho.component.Component;
 import org.joml.Vector2f;
 
-public class Transform {
+public class Transform extends Component {
 	public Vector2f position;
 	public int zIndex;
 	public Vector2f scale;
@@ -10,6 +11,10 @@ public class Transform {
 
 	public Transform() {
 		this.init(new Vector2f(), new Vector2f(), 0, 0);
+	}
+
+	public Transform(Transform transform) {
+		this.init(new Vector2f(transform.position), new Vector2f(transform.scale), transform.rotation, transform.zIndex);
 	}
 
 	public Transform(Vector2f position) {
@@ -44,13 +49,18 @@ public class Transform {
 		transform.scale.set(this.scale);
 	}
 
-	@Override public boolean equals(Object object) {
+	@Override
+	public boolean equals(Object object) {
 		if (object == null) {
 			return false;
 		}
 		if (!(object instanceof Transform transform)) {
 			return false;
 		}
-		return this.position.equals(transform.position) && this.scale.equals(transform.scale);
+		return this.position.equals(transform.position) && this.scale.equals(transform.scale) && this.rotation == transform.rotation;
+	}
+
+	@Override public void update(float deltaTime) {
+
 	}
 }

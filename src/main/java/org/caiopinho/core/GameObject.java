@@ -10,25 +10,31 @@ import org.caiopinho.component.Component;
 import org.caiopinho.math.SquarePhysics;
 import org.joml.Vector2f;
 
-@Getter @Setter public class GameObject {
-
+@Getter
+@Setter
+public class GameObject {
 	private static int ID_COUNTER = 0;
 	public Transform transform;
 	private int uid = -1;
 	private String name;
 	private List<Component> components;
-	private int zIndex;
 
 	@Getter private boolean serializable = true;
-	@Getter @Setter private boolean selectable = true;
-	private float SELECTION_SIZE = 1;
+	@Getter
+	@Setter
+	private boolean selectable = true;
 
-	public GameObject(String name, Transform transform, int zIndex) {
+	public GameObject(String name) {
+		this.name = name;
+		this.components = new ArrayList<>();
+		this.uid = ID_COUNTER++;
+	}
+
+	public GameObject(String name, Transform transform) {
 		this.name = name;
 		this.components = new ArrayList<>();
 		this.transform = transform;
-		this.zIndex = zIndex;
-		transform.zIndex = zIndex;
+		this.addComponent(transform);
 
 		this.uid = ID_COUNTER++;
 	}
@@ -84,7 +90,8 @@ import org.joml.Vector2f;
 		ID_COUNTER = maxId;
 	}
 
-	@Override public boolean equals(Object obj) {
+	@Override
+	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
 		}
@@ -98,12 +105,7 @@ import org.joml.Vector2f;
 
 	public boolean isPointInsideBoxSelection(Vector2f point) {
 		Vector2f boxPosition = new Vector2f(this.transform.position).add(new Vector2f(this.transform.scale).mul(-.5f));
-		return (SquarePhysics.isPointInsideRectangle(point, new Transform(boxPosition, this.getBoxSelectionScale())));
+		return (SquarePhysics.isPointInsideRectangle(point, new Transform(boxPosition, this.transform.scale, this.transform.rotation)));
 	}
 
-	public Vector2f getBoxSelectionScale() {
-		Vector2f scale = new Vector2f(this.SELECTION_SIZE, this.SELECTION_SIZE);
-		scale.mul(this.transform.scale);
-		return scale;
-	}
 }

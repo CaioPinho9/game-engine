@@ -77,7 +77,8 @@ public class RenderBatch extends Batch<SpriteRenderer> {
 		OpenGLHelper.addVertexAttribPointer(3, TEXTURE_ID_SIZE, VERTEX_SIZE_BYTES, TEXTURE_ID_OFFSET);
 	}
 
-	@Override public void render() {
+	@Override
+	public void render() {
 		boolean rebufferData = false;
 		for (int i = 0; i < this.elementCount; i++) {
 			SpriteRenderer spriteRenderer = this.elements[i];
@@ -150,7 +151,8 @@ public class RenderBatch extends Batch<SpriteRenderer> {
 		elements[offset + 5] = vertex + 1;
 	}
 
-	@Override public void addElement(SpriteRenderer spriteRenderer) {
+	@Override
+	public void addElement(SpriteRenderer spriteRenderer) {
 		// Get index and add renderObject
 		int index = this.elementCount;
 		this.elements[index] = spriteRenderer;

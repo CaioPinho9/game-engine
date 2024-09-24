@@ -10,6 +10,10 @@ repositories {
     mavenCentral()
 }
 
+tasks.register('run', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -34,7 +38,7 @@ switch (OperatingSystem.current()) {
 
 dependencies {
     // GSON
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     // ImgGUI
     implementation "io.imgui.java:binding:$imguiVersion"

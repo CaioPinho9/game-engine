@@ -14,7 +14,7 @@ public class Camera {
 	public Vector2f position;
 	private float zoom;
 	// TODO: Fix projection
-	private Vector2f projectionSize = new Vector2f(32 * 38, 32 * 21);
+	private transient Vector2f projectionSize = new Vector2f(32 * 38, 32 * 21);
 
 	public Camera(Vector2f position) {
 		this.position = position;

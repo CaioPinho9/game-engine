@@ -19,7 +19,8 @@ public class GridTools extends Component {
 	private int gridSize = 30;
 	private boolean enabled = true;
 
-	@Override public void update(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (this.enabled) {
 			this.drawGrid();
 		}
@@ -41,8 +42,8 @@ public class GridTools extends Component {
 		float width = (projectionSize.x * zoom) + this.gridSize * 2;
 		float height = (projectionSize.y * zoom) + this.gridSize * 2;
 
-		int x = firstX;
-		int y = firstY;
+		int x = firstX + this.gridSize / 2;
+		int y = firstY + this.gridSize / 2;
 		for (int i = 0; i < maxLineCount; i++) {
 			if (i < lineVerticalCount) {
 				DebugDraw.addLine2D(new Vector2f(x, firstY), new Vector2f(x, firstY + height), this.COLOR, 1, this.width, this.zIndex);
