@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import org.caiopinho.math.MathHelper;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -39,6 +40,8 @@ public class ImGuiHelper {
 				handleFloatField(field, object, buttonName, rawValue, config);
 			} else if (type == boolean.class) {
 				handleBooleanField(field, object, buttonName, rawValue);
+			} else if (type == Vector2f.class) {
+				handleVector2fField(buttonName, rawValue, config);
 			} else if (type == Vector3f.class) {
 				handleVector3fField(buttonName, rawValue, config);
 			} else if (type == Vector4f.class) {
@@ -91,6 +94,21 @@ public class ImGuiHelper {
 
 		if (ImGui.checkbox(name, value)) {
 			field.setBoolean(object, !value);
+		}
+	}
+
+	private static void handleVector2fField(String buttonName, Object rawValue, FieldConfig config) {
+		Vector2f value = (Vector2f) rawValue;
+		float[] arr = new float[] { value.x, value.y };
+		if (config != null) {
+			if (ImGui.dragFloat2(buttonName, arr, getRange(config), config.getMin(), config.getMax())) {
+				arr = MathHelper.clamp(arr, config.getMin(), config.getMax());
+				value.set(arr[0], arr[1]);
+			}
+			return;
+		}
+		if (ImGui.dragFloat2(buttonName, arr)) {
+			value.set(arr[0], arr[1]);
 		}
 	}
 

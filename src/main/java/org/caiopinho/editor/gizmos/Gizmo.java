@@ -24,14 +24,9 @@ public abstract class Gizmo extends GameObject {
 
 	public Gizmo(String name, Transform transform, boolean isVertical, GizmoMode mode) {
 		super(name, transform);
-		this.isVertical = isVertical;
-		this.mode = mode;
-	}
-
-	public Gizmo(String name, Transform transform, GizmoMode mode) {
-		super(name, transform);
 		this.setSelectable(false);
 		this.setSerializable(false);
+		this.isVertical = isVertical;
 		this.mode = mode;
 	}
 
