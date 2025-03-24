@@ -29,17 +29,21 @@ public class CameraControls extends Component {
 
 		if (MouseListener.getScrollY() != 0.0f) {
 			float zoom = this.camera.getZoom();
-
 			float addValue = -MouseListener.getScrollY() * SCROLL_SENSITIVITY * zoom;
 
 			Vector2f viewCenterBeforeZoom = this.camera.calculateViewCenter();
-
 			this.camera.addZoom(addValue);
-			this.centralizeTowardMouse(viewCenterBeforeZoom);
+
+			if (MouseListener.getScrollY() > 0) {
+				centralizeTowardMouse(viewCenterBeforeZoom);
+			} else {
+				centralizeTowardCenter(viewCenterBeforeZoom);
+			}
 		}
 
 		if (KeyListener.isKeyPressed(GLFW_KEY_HOME)) {
 			this.isGoingToStartPosition = true;
+			System.out.println("isGoingToStartPosition");
 		}
 
 		if (this.isGoingToStartPosition) {
@@ -56,8 +60,14 @@ public class CameraControls extends Component {
 
 	}
 
+	private void centralizeTowardCenter(Vector2f viewCenterBeforeZoom) {
+		Vector2f viewCenterAfterZoom = this.camera.calculateViewCenter();
+		Vector2f centerShift = new Vector2f(viewCenterBeforeZoom).sub(viewCenterAfterZoom);
+
+		this.camera.position.add(centerShift);
+	}
+
 	private void centralizeTowardMouse(Vector2f viewCenterBeforeZoom) {
-		Vector2f position = this.camera.getPosition();
 		float zoom = this.camera.getZoom();
 
 		Vector2f mousePosition = new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY());
@@ -68,7 +78,7 @@ public class CameraControls extends Component {
 
 		Vector2f mouseShift = this.calculateMouseShift(mousePosition, zoom);
 
-		position.add(centerShift.add(mouseShift));
+		this.camera.position.add(centerShift.add(mouseShift));
 	}
 
 	private Vector2f calculateMouseShift(Vector2f mousePosition, float zoom) {
